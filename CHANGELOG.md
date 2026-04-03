@@ -16,3 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI pipeline (test, lint, docs).
 - Automatic versioning with `bump-my-version`.
 - Makefile for common development tasks.
+- **M0: grades** — grade conversion between UIAA, French, YDS, V-Scale, Font (Draper 2015).
+- **M0: models** — Pydantic v2 data models (ClimberProfile, MVC7Test, SessionLog, Protocol, Injury).
+- **M1: strength** — MVC-7 ↔ grade correlation (Lattice n≈901), Rohmert curve, RFD, power-to-weight.
+- User Guide: Getting Started, Hangboard Training, Grade Prediction.
+- Science Pages: Rohmert Curve, Critical Force, Grade Conversion.

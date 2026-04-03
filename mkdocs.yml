@@ -47,13 +47,21 @@ extra_javascript:
 
 nav:
   - Home: index.md
+  - User Guide:
+    - Getting Started: user-guide/getting-started.md
+    - Hangboard Training: user-guide/hangboard-training.md
+    - Grade Prediction: user-guide/grade-prediction.md
+  - Science:
+    - Rohmert Curve: science/rohmert-curve.md
+    - Critical Force: science/critical-force.md
+    - Grade Conversion: science/grade-conversion.md
   - Design: design.md
   - Requirements: requirements.md
   - API Reference:
     - Grades: api/grades.md
     - Models: api/models.md
+    - Strength: api/strength.md
   # Upcoming modules (uncomment as implemented):
-  #  - Strength: api/strength.md
   #  - Endurance: api/endurance.md
   #  - Load: api/load.md
   #  - Protocols: api/protocols.md

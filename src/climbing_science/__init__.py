@@ -15,15 +15,24 @@ from climbing_science.models import (
     MVC7Test,
     SessionLog,
 )
+from climbing_science.strength import (
+    grade_to_mvc7,
+    mvc7_to_grade,
+    power_to_weight,
+    rfd_from_curve,
+    rohmert_conversion,
+)
 
 __all__ = [
     "__version__",
+    # grades
     "Grade",
     "GradeSystem",
     "compare",
     "convert",
     "difficulty_index",
     "parse",
+    # models
     "AssessmentResult",
     "ClimberLevel",
     "ClimberProfile",
@@ -34,4 +43,10 @@ __all__ = [
     "GripType",
     "MVC7Test",
     "SessionLog",
+    # strength
+    "grade_to_mvc7",
+    "mvc7_to_grade",
+    "power_to_weight",
+    "rfd_from_curve",
+    "rohmert_conversion",
 ]

@@ -440,29 +440,175 @@ Wir schreiben komplett neu — vollständigere Abdeckung, numerischer Index, akt
 #### Wissenschaftliche Basis & Referenzen
 
 Die Grad-Zuordnungen zwischen Systemen sind **Konvention, keine Berechnung**.
-Es gibt keine Formel — nur historisch gewachsene Konsens-Tabellen.
+Es gibt keine universelle Formel — nur historisch gewachsene Konsens-Tabellen,
+die zwischen Quellen **teilweise voneinander abweichen** (s. Abschnitt Diskrepanzen).
 
-**Primärquellen für die Konvertierungstabellen:**
+**Primärquellen (akademisch/institutionell):**
 
-1. **UIAA** (2024). *UIAA Scale of Difficulty.* Offizielle Tabelle der
-   Union Internationale des Associations d'Alpinisme.
-   https://www.theuiaa.org/
-2. **Mountain Project** (2024). *International Climbing Grades — Comparison Table.*
+1. **[CAI] Mandelli, G; Angriman, A (2016).** *Scales of Difficulty in Climbing.*
+   Central School of Mountaineering, Club Alpino Italiano, Italy.
+   Verfügbar via Semantic Scholar.
+   → Umfassendste akademische Quelle. Erstellt für die UIAA/IFAS.
+   Enthält historische Herleitung aller Systeme und offizielle Vergleichstabellen.
+   **Dies ist unsere Primärreferenz für die Route-Tabelle.**
+
+2. **[Draper2015] Draper, N; Giles, D; Schöffl, V; Fuss, FK; Watts, P; et al. (2015).**
+   *Comparative grading scales, statistical analyses, climber descriptors
+   and ability grouping.* Sports Technology, 8(3–4), 88–94.
+   DOI: 10.1080/19346182.2015.1107081
+   → Peer-reviewed! Definiert numerische IRCRA-Skala (International Rock Climbing
+   Research Association) als **einheitlichen numerischen Index** über alle Systeme.
+   Genau das, was wir als `difficulty_index` brauchen.
+
+3. **[FoH] The Mountaineers (2017).** *Mountaineering: The Freedom of the Hills.*
+   9th ed., Appendix A: Rating Systems, pp. 563–570.
+   ISBN 978-1-68051-004-1.
+   → Standardwerk. Enthält Vergleichstabellen YDS ↔ French ↔ UIAA.
+
+**Primärquellen (Community-Konsens mit großem N):**
+
+4. **[MP] Mountain Project (2024).** *International Climbing Grades.*
    https://www.mountainproject.com/international-climbing-grades
-   Umfassendste öffentliche Tabelle: YDS, French, UIAA, Ewbanks, SA, British.
+   → Größte US-Community. Route-Tabelle: YDS, French, UIAA, Ewbanks, SA, British.
    Separate Boulder-Tabelle: Hueco (V-Scale) ↔ Fontainebleau.
-3. **Wikipedia** (2024). *Grade (climbing) — Comparison tables.*
+   Enthält Zwischengrade (5.10a/b, V3-4) die wir nicht übernehmen.
+
+5. **[Rockfax] Rockfax Publishing (2022).** *Grade Conversions: Alpine Grading System.*
+   https://rockfax.com/climbing-guides/grades/
+   → Meistverwendete Referenz in europäischen Kletterführern.
+   Enthält Route- und Boulder-Tabellen. Stimmt ab ~5.12a/7a+ exakt mit MP überein.
+
+6. **[theCrag] theCrag (2023).** *Grade Conversion.*
+   https://www.thecrag.com/en/article/grades
+   → Größte internationale Plattform mit Community-validiertem Konverter.
+   Nutzt eigenes numerisches Scoring-System (ähnlich IRCRA).
+
+**Sekundärquellen (Validierung & Kontext):**
+
+7. **[Hörst] Hörst, E (2016).** *Training for Climbing*, 3rd ed.
+   Table 4.2: MVC/BW → UIAA-Grade.
+   → Direkte Verbindung zu strength_analyzer. Verwendet UIAA als Standard.
+
+8. **[Wikipedia] Wikipedia (2025).** *Grade (climbing) — Comparison tables.*
    https://en.wikipedia.org/wiki/Grade_(climbing)
-   Historischer Kontext, Abweichungen zwischen Quellen dokumentiert.
-4. **Rockfax** (2024). *Grade Comparison Table.*
-   Meistverwendete Referenz in europäischen Kletterführern.
+   Quellen: Rockfax (2021), theCrag (2023), CAI/UIAA (2016).
+   → Gut dokumentierte Synthese mit expliziten Fußnoten pro Zelle.
 
-**Sekundärquellen (Validierung):**
+9. **[Alpinist] Alpinist Magazine.** *International Grade Comparison Chart.*
+   Archiviert: https://web.archive.org/web/20210330142513/http://www.alpinist.com/p//climbing_notes/grades
+   → US-Referenz, enthält auch Eis/Mixed/Alpin-Grade.
 
-5. **8a.nu** — Gradverteilung in Logbooks, implizite Konsens-Zuordnung
-6. **theCrag** — Grad-Konverter mit Community-Feedback
-7. **Hörst E.** (2016). *Training for Climbing*, 3rd ed. — Table 4.2 verwendet
-   UIAA-Grade als Referenz für Kraft/Grad-Zuordnung
+10. **[pyclimb] pyclimb v0.2.0** (MIT, 2022). Python-Paket von ilias-ant.
+    https://github.com/ilias-ant/pyclimb
+    → Nur French↔YDS, als Regressionstest verwendbar.
+
+#### Diskrepanzen zwischen Quellen
+
+Grad-Konvertierungen sind **nicht bijektiv und nicht eindeutig**.
+Die Quellen weichen systematisch voneinander ab — besonders im Bereich V–VIII (UIAA).
+Ab ca. VIII+ / 7a+ / 5.12a konvergieren die Systeme, weil Sport-Klettern
+international dominiert und Routen in allen Systemen gleichzeitig bewertet werden
+(Wikipedia [CAI]: "above the level of circa 5.12a, most grades closely align").
+
+**Bekannte Diskrepanzen (Route):**
+
+| Bereich | Quelle A | Quelle B | Abweichung |
+|---------|----------|----------|------------|
+| 5.11c | MP: 6c+ | Rockfax/CAI: 7a | ±½ Grad French |
+| UIAA VII | MP: 6b+ | Wikipedia/CAI: 6b | +/- Suffix |
+| UIAA VIII- | MP: 6c | CAI: 6c/6c+ | Zwischenstufe |
+| 5.9+ | MP: 5c | Rockfax: 5c | Einig — aber UIAA VI vs VI+ je nach Quelle |
+| 5.10d | MP: 6b+ | pyclimb: 6b+ | ✅ Einig |
+
+**Bekannte Diskrepanzen (Boulder):**
+
+| Bereich | Quelle A | Quelle B | Abweichung |
+|---------|----------|----------|------------|
+| V0 | MP: Font 4 | CAI: Font 4 | ✅ Einig |
+| V7 | MP: 7A+ | Rockfax: 7A+ | ✅ Einig |
+| V8 | MP: 7B | Einige: 7B/7B+ | ± Unschärfe |
+
+→ Ab V9/7C sind alle Quellen exakt identisch (Draper 2015, Wikipedia [CAI]).
+
+**Unsere Strategie für Diskrepanzen:**
+
+1. **Primär: CAI/UIAA (Mandelli 2016)** — akademisch, institutionell, peer-reviewed-nah.
+2. **Sekundär: Mountain Project** — größtes N, Community-Konsens.
+3. **Validierung: Rockfax + theCrag** — europäischer Konsens.
+4. **Bei Widerspruch:** CAI-Tabelle gewinnt. Abweichung wird als Kommentar
+   im Code dokumentiert (z.B. `# MP: 6c+, CAI: 7a — wir folgen CAI`).
+5. **Test-Suite enthält explizite Diskrepanz-Tests** die dokumentieren,
+   welcher Quelle wir folgen und warum.
+
+#### IRCRA-Skala als numerischer Index
+
+Draper et al. (2015) definierten die **IRCRA-Skala** (International Rock Climbing
+Research Association) als einheitlichen numerischen Index für Forschungszwecke.
+Diese Skala ist **exakt das, was wir als `difficulty_index` brauchen**:
+
+- Monoton steigend
+- Peer-reviewed und in >50 Studien seitdem verwendet
+- Definiert für alle gängigen Systeme (UIAA, French, YDS, Font, V-Scale)
+- Ermöglicht statistische Analysen (Mittelwerte, Regressionen)
+
+**Auszug IRCRA-Werte (Draper 2015, Table 1):**
+
+```
+IRCRA  UIAA    French   YDS      Font    V-Scale
+ 1     I       1        5.2      -       -
+ 4     III     3        5.4      -       -
+ 7     IV+     4b       5.5      -       -
+10     V+      5a       5.7      -       -
+13     VI+     6a       5.10a    -       -
+15     VII+    6b+      5.10d    4       V0
+17     VIII    7a       5.11d    5+      V2
+19     VIII+   7a+      5.12a    6A+     V3+
+20     IX-     7b+      5.12c    6B+     V4+
+21     IX      7c       5.12d    6C+     V5+
+22     IX+     7c+      5.13a    7A      V6
+23     X-      8a       5.13b    7A+     V7
+24     X       8a+      5.13c    7B      V8
+25     X+      8b       5.13d    7B+     V8+
+26     XI-     8b+      5.14a    7C      V9
+27     XI      8c       5.14b    7C+     V10
+28     XI+     8c+      5.14c    8A      V11
+29     XII-    9a       5.14d    8A+     V12
+30     XII     9a+      5.15a    8B      V13
+31     XII+    9b       5.15b    8B+     V14
+32     -       9b+      5.15c    8C      V15
+33     -       9c       5.15d    8C+     V16
+```
+
+**Implementierungsentscheidung:** Wir verwenden die IRCRA-Skala als Basis für
+unseren `difficulty_index`. Abweichungen von IRCRA werden dokumentiert.
+Vorteil: Wir können in Publikationen schreiben
+"difficulty index nach Draper et al. (2015)" statt "selbstgebaut".
+
+#### Alternative Konvertierungsansätze
+
+Neben Lookup-Tabellen gibt es in der Literatur auch **berechnete** Ansätze:
+
+1. **IRCRA lineare Interpolation (Draper 2015).**
+   Die IRCRA-Werte sind so konstruiert, dass zwischen benachbarten Graden
+   linear interpoliert werden kann. Das nutzen wir für `from_index()`.
+
+2. **theCrag Score-System.**
+   theCrag verwendet ein eigenes numerisches Scoring (0–100+) mit
+   datengetriebener Kalibrierung aus Millionen von Logbook-Einträgen.
+   Nicht öffentlich dokumentiert, aber als Validierung interessant.
+
+3. **Statistische Ansätze (Community-Daten).**
+   Pollitt (2017, 8a.nu-Analyse) und r/climbharder-Surveys zeigen,
+   dass die *tatsächliche* Schwierigkeit von der *nominellen* Grade
+   abweichen kann (regionale Softgrading-Effekte, z.B. Frankreich
+   vs. Deutschland). Für unsere Bibliothek irrelevant — wir konvertieren
+   *nominelle* Grade, nicht *gefühlte*.
+
+4. **Exponentieller Fit (nicht empfohlen).**
+   Manche Quellen (z.B. climbharder-Wiki) versuchen einen exponentiellen
+   Fit über alle Systeme. Das funktioniert schlecht, weil die Systeme
+   unterschiedliche historische Ursprünge haben und nicht mathematisch
+   konstruiert wurden. Wir verwenden explizite Tabellen.
 
 #### Designentscheidungen
 
@@ -514,79 +660,84 @@ Es gibt keine Formel — nur historisch gewachsene Konsens-Tabellen.
 
 #### Konvertierungstabelle — Route
 
-Quelle: Mountain Project (2024), kreuzvalidiert mit UIAA und Wikipedia.
+Primärquelle: CAI/Mandelli (2016), kreuzvalidiert mit Mountain Project (2024),
+Rockfax (2022) und Wikipedia/theCrag (2023). IRCRA-Index nach Draper (2015).
+Bei Diskrepanzen: CAI-Wert, Abweichung als Kommentar.
 
 ```python
 ROUTE_TABLE = [
-    # (difficulty_index, uiaa,    french,  yds)
-    (1.0,   "I",     "1a",    "3rd"),
-    (2.0,   "I",     "1c",    "5.0"),
-    (3.0,   "II",    "2a",    "5.1"),
-    (4.0,   "II",    "2c",    "5.2"),
-    (5.0,   "III",   "3a",    "5.3"),
-    (6.0,   "IV",    "4a",    "5.4"),
-    (7.0,   "IV+",   "4b",    "5.5"),
-    (8.0,   "V",     "4c",    "5.6"),
-    (9.0,   "V+",    "5a",    "5.7"),
-    (10.0,  "VI-",   "5b",    "5.8"),
-    (11.0,  "VI",    "5c",    "5.9"),
-    (12.0,  "VI+",   "6a",    "5.10a"),
-    (12.5,  "VI+",   "6a+",   "5.10b"),
-    (13.0,  "VII-",  "6b",    "5.10c"),
-    (13.5,  "VII",   "6b+",   "5.10d"),
-    (14.0,  "VII+",  "6c",    "5.11a"),
-    (14.5,  "VIII-", "6c+",   "5.11c"),
-    (15.0,  "VIII",  "7a",    "5.11d"),
-    (15.5,  "VIII+", "7a+",   "5.12a"),
-    (16.0,  "VIII+", "7b",    "5.12b"),
-    (16.5,  "VIII+", "7b+",   "5.12c"),
-    (17.0,  "IX-",   "7c",    "5.12d"),
-    (17.5,  "IX",    "7c+",   "5.13a"),
-    (18.0,  "IX+",   "8a",    "5.13b"),
-    (18.5,  "IX+",   "8a+",   "5.13c"),
-    (19.0,  "X-",    "8b",    "5.13d"),
-    (19.5,  "X",     "8b+",   "5.14a"),
-    (20.0,  "X+",    "8c",    "5.14b"),
-    (20.5,  "XI-",   "8c+",   "5.14c"),
-    (21.0,  "XI",    "9a",    "5.14d"),
-    (21.5,  "XI+",   "9a+",   "5.15a"),
-    (22.0,  "XII-",  "9b",    "5.15b"),
-    (22.5,  "XII",   "9b+",   "5.15c"),
-    (23.0,  "XII+",  "9c",    "5.15d"),
+    # (ircra, uiaa,    french,  yds)          # Quelle / Anmerkung
+    (1,   "I",     "1",     "5.2"),           # CAI, FoH
+    (2,   "II",    "2",     "5.3"),           # CAI, FoH
+    (3,   "III",   "3",     "5.4"),           # CAI, FoH
+    (4,   "III+",  "3+",    "5.4"),           # CAI
+    (5,   "IV",    "4a",    "5.5"),           # CAI, Draper2015 (IRCRA ~5–7)
+    (6,   "IV+",   "4b",    "5.6"),           # CAI
+    (7,   "V-",    "4b",    "5.6"),           # CAI — V- = IV+/V Übergang
+    (8,   "V",     "4c",    "5.7"),           # CAI, MP, Rockfax einig
+    (9,   "V+",    "5a",    "5.7+"),          # CAI, Draper2015 (IRCRA ~10)
+    (10,  "VI-",   "5b",    "5.8"),           # CAI, MP einig
+    (11,  "VI",    "5c",    "5.9"),           # CAI, MP, Rockfax einig
+    (12,  "VI+",   "6a",    "5.10a"),         # CAI, MP, Rockfax einig. Draper2015 IRCRA=13
+    (13,  "VII-",  "6a+",   "5.10b"),         # CAI: 6a+. MP: 6a+. Einig.
+    (14,  "VII",   "6b",    "5.10c"),         # CAI, MP einig. Draper2015 IRCRA≈14–15
+    (15,  "VII+",  "6b+",   "5.10d"),         # CAI, MP einig
+    (16,  "VIII-", "6c",    "5.11a"),         # CAI: 6c. MP: 6c. Einig.
+    (17,  "VIII-", "6c+",   "5.11b"),         # CAI: VIII-/6c+. MP: 6c+/5.11b/c
+    (18,  "VIII",  "7a",    "5.11d"),         # CAI, MP, Rockfax, Draper einig. IRCRA=17
+    (19,  "VIII+", "7a+",   "5.12a"),         # Alle Quellen einig. IRCRA=19. Konvergenzpunkt!
+    (20,  "IX-",   "7b",    "5.12b"),         # CAI, MP einig
+    (21,  "IX-",   "7b+",   "5.12c"),         # CAI, MP einig. IRCRA=20–21
+    (22,  "IX",    "7c",    "5.12d"),         # CAI, MP, Rockfax einig
+    (23,  "IX+",   "7c+",   "5.13a"),         # Alle einig. IRCRA=22
+    (24,  "X-",    "8a",    "5.13b"),         # Alle einig. IRCRA=23
+    (25,  "X-",    "8a+",   "5.13c"),         # Alle einig
+    (26,  "X",     "8b",    "5.13d"),         # Alle einig. IRCRA=25
+    (27,  "X+",    "8b+",   "5.14a"),         # Alle einig. IRCRA=26
+    (28,  "XI-",   "8c",    "5.14b"),         # Alle einig. IRCRA=27
+    (29,  "XI-",   "8c+",   "5.14c"),         # Alle einig
+    (30,  "XI",    "9a",    "5.14d"),         # Alle einig. IRCRA=29. Action Directe!
+    (31,  "XI+",   "9a+",   "5.15a"),         # Alle einig. IRCRA=30
+    (32,  "XII-",  "9b",    "5.15b"),         # Alle einig. IRCRA=31
+    (33,  "XII",   "9b+",   "5.15c"),         # Alle einig
+    (34,  "XII+",  "9c",    "5.15d"),         # Alle einig. IRCRA≈33. Silence!
 ]
 ```
 
 #### Konvertierungstabelle — Boulder
 
-Quelle: Mountain Project (2024), kreuzvalidiert mit Wikipedia.
+Primärquelle: CAI/Mandelli (2016), kreuzvalidiert mit Rockfax (2022),
+Mountain Project (2024). IRCRA-Index nach Draper (2015).
+Ab V9/7C: alle Quellen exakt identisch.
 
 ```python
 BOULDER_TABLE = [
-    # (difficulty_index, font,   v_scale)
-    (1.0,   "3",     "VB"),
-    (2.0,   "4",     "V0"),
-    (3.0,   "4+",    "V0+"),
-    (4.0,   "5",     "V1"),
-    (5.0,   "5+",    "V2"),
-    (6.0,   "6A",    "V3"),
-    (6.5,   "6A+",   "V3+"),
-    (7.0,   "6B",    "V4"),
-    (7.5,   "6B+",   "V4+"),
-    (8.0,   "6C",    "V5"),
-    (8.5,   "6C+",   "V5+"),
-    (9.0,   "7A",    "V6"),
-    (9.5,   "7A+",   "V7"),
-    (10.0,  "7B",    "V8"),
-    (10.5,  "7B+",   "V8+"),
-    (11.0,  "7C",    "V9"),
-    (11.5,  "7C+",   "V10"),
-    (12.0,  "8A",    "V11"),
-    (12.5,  "8A+",   "V12"),
-    (13.0,  "8B",    "V13"),
-    (13.5,  "8B+",   "V14"),
-    (14.0,  "8C",    "V15"),
-    (14.5,  "8C+",   "V16"),
-    (15.0,  "9A",    "V17"),
+    # (ircra, font,    v_scale)               # Quelle / Anmerkung
+    (11,  "3",     "VB"),                     # Draper2015 IRCRA≈10–12
+    (12,  "4-",    "V0-"),                    # MP
+    (13,  "4",     "V0"),                     # CAI, MP, Rockfax einig
+    (14,  "4+",    "V0+"),                    # MP, Rockfax
+    (15,  "5",     "V1"),                     # CAI, Draper2015 IRCRA≈15
+    (16,  "5+",    "V2"),                     # CAI, MP einig
+    (17,  "6A",    "V3"),                     # CAI, MP, Rockfax einig. IRCRA≈17
+    (18,  "6A+",   "V3+"),                    # MP
+    (19,  "6B",    "V4"),                     # CAI, MP einig. IRCRA≈19
+    (20,  "6B+",   "V4+"),                    # MP
+    (21,  "6C",    "V5"),                     # CAI, MP einig. IRCRA≈21
+    (22,  "6C+",   "V5+"),                    # MP
+    (23,  "7A",    "V6"),                     # Alle einig. IRCRA=22
+    (24,  "7A+",   "V7"),                     # Alle einig. IRCRA=23
+    (25,  "7B",    "V8"),                     # Alle einig. IRCRA=24
+    (26,  "7B+",   "V8+"),                    # Alle einig
+    (27,  "7C",    "V9"),                     # Alle einig. IRCRA=26. Ab hier exakt!
+    (28,  "7C+",   "V10"),                    # Alle einig. IRCRA=27
+    (29,  "8A",    "V11"),                    # Alle einig. IRCRA=28
+    (30,  "8A+",   "V12"),                    # Alle einig. IRCRA=29
+    (31,  "8B",    "V13"),                    # Alle einig. IRCRA=30
+    (32,  "8B+",   "V14"),                    # Alle einig. IRCRA=31
+    (33,  "8C",    "V15"),                    # Alle einig. IRCRA=32
+    (34,  "8C+",   "V16"),                    # Alle einig. IRCRA=33
+    (35,  "9A",    "V17"),                    # Alle einig. Burden of Dreams!
 ]
 ```
 

@@ -7,11 +7,11 @@ Tests verify:
 - Boundary conditions and validation errors
 """
 
-import pytest
 from datetime import date
 
+import pytest
+
 from climbing_science.models import (
-    AssessmentResult,
     ClimberLevel,
     ClimberProfile,
     CriticalForceTest,
@@ -25,11 +25,9 @@ from climbing_science.models import (
     ProgressionRule,
     ProtocolDefinition,
     ProtocolParams,
-    PullUpTest,
     SessionLog,
     WeeklyVolume,
 )
-
 
 # ---------------------------------------------------------------------------
 # ClimberProfile

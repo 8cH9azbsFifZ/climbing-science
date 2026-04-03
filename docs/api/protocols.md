@@ -1,3 +1,3 @@
-# Protocols — API Reference
+# protocols — API Reference
 
-::: climbing_science.protocols
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

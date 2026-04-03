@@ -1,3 +1,3 @@
-# Load — API Reference
+# load — API Reference
 
-::: climbing_science.load
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

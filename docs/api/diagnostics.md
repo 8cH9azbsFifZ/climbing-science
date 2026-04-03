@@ -1,3 +1,3 @@
-# Diagnostics — API Reference
+# diagnostics — API Reference
 
-::: climbing_science.diagnostics
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

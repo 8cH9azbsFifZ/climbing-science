@@ -1,3 +1,3 @@
-# Strength — API Reference
+# strength — API Reference
 
-::: climbing_science.strength
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

@@ -7,14 +7,12 @@ Round-trip conversions ensure no information is lost.
 import pytest
 
 from climbing_science.grades import (
-    Grade,
     GradeSystem,
     compare,
     convert,
     difficulty_index,
     parse,
 )
-
 
 # ---------------------------------------------------------------------------
 # difficulty_index
@@ -52,7 +50,7 @@ class TestDifficultyIndex:
         french_grades = ["4a", "5a", "6a", "6c+", "7a", "7c", "8a", "8c", "9a"]
         indices = [difficulty_index(g, GradeSystem.FRENCH) for g in french_grades]
         for i in range(len(indices) - 1):
-            assert indices[i] < indices[i + 1], f"{french_grades[i]} >= {french_grades[i+1]}"
+            assert indices[i] < indices[i + 1], f"{french_grades[i]} >= {french_grades[i + 1]}"
 
     def test_unknown_grade_raises(self):
         with pytest.raises(ValueError, match="not found"):

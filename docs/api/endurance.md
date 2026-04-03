@@ -1,3 +1,3 @@
-# Endurance — API Reference
+# endurance — API Reference
 
-::: climbing_science.endurance
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

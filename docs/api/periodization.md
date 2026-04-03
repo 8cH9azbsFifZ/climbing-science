@@ -1,3 +1,3 @@
-# Periodization — API Reference
+# periodization — API Reference
 
-::: climbing_science.periodization
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

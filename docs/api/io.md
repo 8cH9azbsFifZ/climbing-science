@@ -1,3 +1,3 @@
-# IO — API Reference
+# io — API Reference
 
-::: climbing_science.io
+> **Status:** Not yet implemented. See [Requirements](../requirements.md) for planned features.

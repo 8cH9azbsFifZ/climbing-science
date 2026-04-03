@@ -56,7 +56,7 @@
 |----|------------|-------------------|-----------|
 | FR-06.1 | Protocol registry | ≥20 hangboard protocols with full parameters | diverse |
 | FR-06.2 | Protocol selection | Input: weakness + level + equipment → protocol | Coaching logic |
-| FR-06.3 | Standard notation | `3x MAXHang @20mm W+10kg 10(3):180s` format | — |
+| FR-06.3 | Standard notation | `3x MAXHang @20 mm W+10kg 10(3):180s` format | — |
 | FR-06.4 | Week-by-week progression | Volume/intensity progression per protocol | López 4-week cycle |
 
 ### FR-07: Periodization (M5)

@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import Optional
 
 __all__ = [
     "GradeSystem",
@@ -46,7 +45,7 @@ class GradeSystem(str, Enum):
 # at the lower end, and vice versa.
 # ---------------------------------------------------------------------------
 
-_GRADE_TABLE: list[tuple[int, str, str, str, Optional[str], Optional[str]]] = [
+_GRADE_TABLE: list[tuple[int, str, str, str, str | None, str | None]] = [
     # idx, uiaa,  french, yds,     v_scale, font
     (10, "III", "2", "5.3", None, None),
     (14, "IV", "3", "5.5", None, None),
@@ -158,8 +157,7 @@ def _find_row(grade_str: str, system: GradeSystem) -> int:
     idx = lookup.get(normalised)
     if idx is None:
         raise ValueError(
-            f"Grade '{grade_str}' not found in {system.value} system. "
-            f"Known grades: {', '.join(k for k in lookup)}"
+            f"Grade '{grade_str}' not found in {system.value} system. Known grades: {', '.join(k for k in lookup)}"
         )
     return idx
 
@@ -216,9 +214,7 @@ def convert(grade_str: str, from_system: GradeSystem, to_system: GradeSystem) ->
     target_col = _SYSTEM_COL[to_system]
     result = _GRADE_TABLE[row_idx][target_col]
     if result is None:
-        raise ValueError(
-            f"No {to_system.value} equivalent for {grade_str} ({from_system.value})"
-        )
+        raise ValueError(f"No {to_system.value} equivalent for {grade_str} ({from_system.value})")
     return result
 
 

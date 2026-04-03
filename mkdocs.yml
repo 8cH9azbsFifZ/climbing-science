@@ -29,7 +29,7 @@ plugins:
             docstring_style: google
             show_signature_annotations: true
   - bibtex:
-      bib_file: "references.bib"
+      bib_file: "docs/references.bib"
 
 markdown_extensions:
   - admonition
@@ -52,12 +52,13 @@ nav:
   - API Reference:
     - Grades: api/grades.md
     - Models: api/models.md
-    - Strength: api/strength.md
-    - Endurance: api/endurance.md
-    - Load: api/load.md
-    - Protocols: api/protocols.md
-    - Periodization: api/periodization.md
-    - Diagnostics: api/diagnostics.md
-    - IO: api/io.md
+  # Upcoming modules (uncomment as implemented):
+  #  - Strength: api/strength.md
+  #  - Endurance: api/endurance.md
+  #  - Load: api/load.md
+  #  - Protocols: api/protocols.md
+  #  - Periodization: api/periodization.md
+  #  - Diagnostics: api/diagnostics.md
+  #  - IO: api/io.md
   - Changelog: changelog.md
   - References: references.md

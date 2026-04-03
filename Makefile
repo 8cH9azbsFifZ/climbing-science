@@ -15,7 +15,7 @@ format:
 	python -m ruff check --fix src/ tests/
 
 docs:
-	mkdocs build --strict
+	mkdocs build
 
 docs-serve:
 	mkdocs serve

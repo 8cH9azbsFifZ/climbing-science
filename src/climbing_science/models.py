@@ -8,9 +8,8 @@ All models are JSON-serialisable and produce JSON Schema via Pydantic v2.
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -125,15 +124,15 @@ class ClimberProfile(BaseModel):
 
     name: str
     body_weight_kg: float = Field(gt=0, description="Body weight in kg")
-    height_cm: Optional[float] = Field(default=None, gt=0)
-    ape_index: Optional[float] = Field(default=None, gt=0)
+    height_cm: float | None = Field(default=None, gt=0)
+    ape_index: float | None = Field(default=None, gt=0)
     experience_years: float = Field(ge=0)
     level: ClimberLevel = ClimberLevel.INTERMEDIATE
     primary_discipline: Discipline = Discipline.BOULDERING
-    boulder_redpoint: Optional[GradeRecord] = None
-    route_redpoint: Optional[GradeRecord] = None
-    boulder_onsight: Optional[GradeRecord] = None
-    route_onsight: Optional[GradeRecord] = None
+    boulder_redpoint: GradeRecord | None = None
+    route_redpoint: GradeRecord | None = None
+    boulder_onsight: GradeRecord | None = None
+    route_onsight: GradeRecord | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -164,8 +163,8 @@ class MVC7Test(BaseModel):
     grip_type: GripType = GripType.HALF_CRIMP
     body_weight_kg: float = Field(gt=0)
     added_weight_kg: float = 0.0
-    total_force_kg: Optional[float] = None
-    percent_bw: Optional[float] = None
+    total_force_kg: float | None = None
+    percent_bw: float | None = None
 
     def model_post_init(self, __context: object) -> None:
         if self.total_force_kg is None:
@@ -183,9 +182,9 @@ class CriticalForceTest(BaseModel):
     """
 
     cf_absolute_kg: float = Field(ge=0, description="Critical Force in kg")
-    cf_percent_bw: Optional[float] = Field(default=None, ge=0)
-    w_prime_kj: Optional[float] = Field(default=None, ge=0, description="W' anaerobic capacity")
-    cf_mvc_ratio: Optional[float] = Field(default=None, ge=0, le=1.0)
+    cf_percent_bw: float | None = Field(default=None, ge=0)
+    w_prime_kj: float | None = Field(default=None, ge=0, description="W' anaerobic capacity")
+    cf_mvc_ratio: float | None = Field(default=None, ge=0, le=1.0)
 
 
 class PullUpTest(BaseModel):
@@ -214,9 +213,9 @@ class AssessmentResult(BaseModel):
 
     date: date
     climber_name: str
-    mvc7: Optional[MVC7Test] = None
-    critical_force: Optional[CriticalForceTest] = None
-    pull_ups: Optional[PullUpTest] = None
+    mvc7: MVC7Test | None = None
+    critical_force: CriticalForceTest | None = None
+    pull_ups: PullUpTest | None = None
     notes: str = ""
 
 
@@ -241,7 +240,7 @@ class ExerciseLog(BaseModel):
     sets_completed: int = Field(ge=0)
     loads_kg: list[float] = Field(default_factory=list)
     durations_sec: list[float] = Field(default_factory=list)
-    rpe: Optional[float] = Field(default=None, ge=1, le=10)
+    rpe: float | None = Field(default=None, ge=1, le=10)
     notes: str = ""
 
 
@@ -263,9 +262,9 @@ class SessionLog(BaseModel):
     climber_name: str
     session_type: str = "hangboard"
     exercises: list[ExerciseLog] = Field(default_factory=list)
-    overall_rpe: Optional[float] = Field(default=None, ge=1, le=10)
-    finger_soreness: Optional[int] = Field(default=None, ge=0, le=5)
-    subjective_recovery: Optional[int] = Field(default=None, ge=1, le=10)
+    overall_rpe: float | None = Field(default=None, ge=1, le=10)
+    finger_soreness: int | None = Field(default=None, ge=0, le=5)
+    subjective_recovery: int | None = Field(default=None, ge=1, le=10)
     notes: str = ""
 
 
@@ -333,7 +332,7 @@ class ProtocolDefinition(BaseModel):
     energy_system: EnergySystem = EnergySystem.ALACTIC
     min_level: ClimberLevel = ClimberLevel.INTERMEDIATE
     params: ProtocolParams
-    progression: Optional[ProgressionRule] = None
+    progression: ProgressionRule | None = None
     reference_key: str = ""
 
 
@@ -357,7 +356,7 @@ class InjuryRecord(BaseModel):
     severity_0_5: int = Field(ge=0, le=5)
     rehab_phase: str = "mobility"
     notes: str = ""
-    cleared_date: Optional[date] = None
+    cleared_date: date | None = None
 
 
 class WeeklyVolume(BaseModel):
@@ -370,5 +369,5 @@ class WeeklyVolume(BaseModel):
     week_start: date
     total_tut_sec: float = Field(ge=0, description="Total time under tension in seconds")
     num_sessions: int = Field(ge=0)
-    avg_rpe: Optional[float] = Field(default=None, ge=1, le=10)
-    avg_finger_soreness: Optional[float] = Field(default=None, ge=0, le=5)
+    avg_rpe: float | None = Field(default=None, ge=1, le=10)
+    avg_finger_soreness: float | None = Field(default=None, ge=0, le=5)

@@ -895,116 +895,251 @@ class GradeDomainError(GradeError):
 #### Tests (`test_grades.py`)
 
 ```python
-# --- Konvertierung Route ---
+# ============================================================
+# ABSCHNITT 1: Konvertierung Route — Quellen-validiert
+# ============================================================
 
-# French → YDS (Referenz: Mountain Project)
-assert convert("6a+", "French", "YDS") == "5.10b"
-assert convert("7a+", "French", "YDS") == "5.12a"
-assert convert("8a",  "French", "YDS") == "5.13b"
-assert convert("9a",  "French", "YDS") == "5.14d"
+# French → YDS (Referenz: CAI/Mandelli 2016, bestätigt durch MP 2024)
+assert convert("6a",  "French", "YDS") == "5.10a"   # CAI, MP, Rockfax einig
+assert convert("6a+", "French", "YDS") == "5.10b"   # CAI, MP, Rockfax einig
+assert convert("7a",  "French", "YDS") == "5.11d"   # CAI, MP, Rockfax einig
+assert convert("7a+", "French", "YDS") == "5.12a"   # Alle einig. Konvergenzpunkt.
+assert convert("8a",  "French", "YDS") == "5.13b"   # Alle einig
+assert convert("9a",  "French", "YDS") == "5.14d"   # Alle einig
 
-# YDS → French (Referenz: Mountain Project)
+# YDS → French (Referenz: CAI 2016, MP 2024)
 assert convert("5.10a", "YDS", "French") == "6a"
-assert convert("5.12a", "YDS", "French") == "7a+"
+assert convert("5.10d", "YDS", "French") == "6b+"
+assert convert("5.12a", "YDS", "French") == "7a+"   # Konvergenzpunkt
 assert convert("5.14a", "YDS", "French") == "8b+"
 
-# French → UIAA (Referenz: UIAA, Wikipedia)
+# French → UIAA (Referenz: CAI 2016 — dies ist die offizielle UIAA-Quelle)
 assert convert("6a",  "French", "UIAA") == "VI+"
+assert convert("6b+", "French", "UIAA") == "VII+"
 assert convert("7a",  "French", "UIAA") == "VIII"
-assert convert("8a",  "French", "UIAA") == "IX+"
+assert convert("7a+", "French", "UIAA") == "VIII+"
+assert convert("8a",  "French", "UIAA") == "X-"     # CAI: X-. Manche: IX+.
 assert convert("9a",  "French", "UIAA") == "XI"
 assert convert("9c",  "French", "UIAA") == "XII+"   # Silence!
 
-# YDS → UIAA
+# YDS → UIAA (abgeleitet über French als Hub)
 assert convert("5.10a", "YDS", "UIAA") == "VI+"
+assert convert("5.12a", "YDS", "UIAA") == "VIII+"
 assert convert("5.14d", "YDS", "UIAA") == "XI"      # Action Directe
 
-# UIAA → French
-assert convert("VII",  "UIAA", "French") == "6b+"
+# UIAA → French (Referenz: CAI 2016)
+assert convert("VI+",  "UIAA", "French") == "6a"
+assert convert("VII+", "UIAA", "French") == "6b+"
 assert convert("VIII", "UIAA", "French") == "7a"
-assert convert("IX",   "UIAA", "French") == "7c+"
-assert convert("X",    "UIAA", "French") == "8b+"
+assert convert("IX",   "UIAA", "French") == "7c"
+assert convert("X",    "UIAA", "French") == "8b"
 
-# --- Round-Trip ---
-# convert(convert(g, A, B), B, A) == g (oder nächster Äquivalent)
-for grade in ["6a", "7a+", "8b", "9a"]:
-    assert convert(convert(grade, "French", "YDS"), "YDS", "French") == grade
+# ============================================================
+# ABSCHNITT 2: Konvertierung Boulder — Quellen-validiert
+# ============================================================
 
-# --- Konvertierung Boulder ---
-
-# Font → V-Scale (Referenz: Mountain Project)
+# Font → V-Scale (Referenz: CAI 2016, Rockfax 2022, MP 2024)
 assert convert("6A",  "Font", "V-Scale") == "V3"
 assert convert("7A",  "Font", "V-Scale") == "V6"
+assert convert("7C",  "Font", "V-Scale") == "V9"    # Ab hier alle exakt einig
 assert convert("7C+", "Font", "V-Scale") == "V10"
 assert convert("8A",  "Font", "V-Scale") == "V11"
+assert convert("8C",  "Font", "V-Scale") == "V15"
 
-# V-Scale → Font
+# V-Scale → Font (Referenz: alle Quellen)
 assert convert("V5",  "V-Scale", "Font") == "6C"
+assert convert("V9",  "V-Scale", "Font") == "7C"
 assert convert("V10", "V-Scale", "Font") == "7C+"
 assert convert("V14", "V-Scale", "Font") == "8B+"
 
-# --- Domain-Trennung ---
+# ============================================================
+# ABSCHNITT 3: Round-Trip-Tests
+# ============================================================
+
+# convert(convert(g, A, B), B, A) == g
+# Gilt exakt nur wenn die Zuordnung in der Tabelle 1:1 ist.
+# Ab VIII+ / 7a+ / 5.12a ist das gegeben (alle Quellen konvergieren).
+for grade in ["7a+", "8a", "8b", "8c", "9a", "9b", "9c"]:
+    assert convert(convert(grade, "French", "YDS"), "YDS", "French") == grade
+    assert convert(convert(grade, "French", "UIAA"), "UIAA", "French") == grade
+
+for grade in ["V6", "V7", "V8", "V9", "V10", "V11", "V14", "V17"]:
+    assert convert(convert(grade, "V-Scale", "Font"), "Font", "V-Scale") == grade
+
+# ============================================================
+# ABSCHNITT 4: Domain-Trennung
+# ============================================================
 
 # Route → Boulder muss GradeDomainError werfen
 with pytest.raises(GradeDomainError):
-    convert("7a", "French", "Font")
+    convert("7a", "French", "Font")      # Sport → Boulder verboten
 
 with pytest.raises(GradeDomainError):
-    convert("V5", "V-Scale", "YDS")
+    convert("V5", "V-Scale", "YDS")      # Boulder → Sport verboten
 
-# --- Numerischer Index ---
+with pytest.raises(GradeDomainError):
+    convert("VIII", "UIAA", "V-Scale")   # Route → Boulder verboten
 
-# Monoton steigend innerhalb eines Systems
-french_grades = all_grades("French")
-for i in range(len(french_grades) - 1):
-    assert french_grades[i].difficulty_index < french_grades[i+1].difficulty_index
+# ============================================================
+# ABSCHNITT 5: IRCRA-Index (Draper et al. 2015)
+# ============================================================
 
-# Gleicher Index über Systeme (Route)
+# Monoton steigend innerhalb jedes Systems
+for system in ["UIAA", "French", "YDS", "Font", "V-Scale"]:
+    grades = all_grades(system)
+    for i in range(len(grades) - 1):
+        assert grades[i].difficulty_index < grades[i+1].difficulty_index, \
+            f"{system}: {grades[i]} >= {grades[i+1]}"
+
+# Gleicher IRCRA-Index über Route-Systeme
+# (Kernaussage von Draper 2015: der Index ist system-übergreifend)
 assert difficulty_index("7a+", "French") == difficulty_index("5.12a", "YDS")
 assert difficulty_index("7a+", "French") == difficulty_index("VIII+", "UIAA")
+assert difficulty_index("9a",  "French") == difficulty_index("5.14d", "YDS")
+assert difficulty_index("9a",  "French") == difficulty_index("XI", "UIAA")
 
-# Gleicher Index über Systeme (Boulder)
-assert difficulty_index("7A", "Font") == difficulty_index("V6", "V-Scale")
+# Gleicher IRCRA-Index über Boulder-Systeme
+assert difficulty_index("7A",  "Font") == difficulty_index("V6", "V-Scale")
+assert difficulty_index("8A",  "Font") == difficulty_index("V11", "V-Scale")
+assert difficulty_index("9A",  "Font") == difficulty_index("V17", "V-Scale")
 
-# --- from_index (Inverse) ---
-assert from_index(15.5, "French") == "7a+"
-assert from_index(15.5, "YDS") == "5.12a"
-assert from_index(15.5, "UIAA") == "VIII+"
+# IRCRA-Werte gegen Draper (2015) Table 1 prüfen
+assert difficulty_index("VIII", "UIAA") == 18     # Draper: IRCRA=17–18
+assert difficulty_index("VIII+","UIAA") == 19     # Draper: IRCRA=19
+assert difficulty_index("XI",  "UIAA") == 30      # Draper: IRCRA=29–30
+
+# ============================================================
+# ABSCHNITT 6: from_index (Inverse)
+# ============================================================
+
+# Exakte Treffer
+assert from_index(19, "French") == "7a+"
+assert from_index(19, "YDS") == "5.12a"
+assert from_index(19, "UIAA") == "VIII+"
 
 # Interpolation: Index zwischen zwei Graden → nearest
-assert from_index(15.3, "French") == "7a"   # näher an 15.0
-assert from_index(15.8, "French") == "7a+"  # näher an 15.5
+assert from_index(18.4, "French") == "7a"    # näher an 18
+assert from_index(18.6, "French") == "7a+"   # näher an 19
+assert from_index(29.6, "UIAA") == "XI"      # näher an 30
+assert from_index(30.4, "UIAA") == "XI"      # noch bei 30
 
-# --- Autodetect ---
+# ============================================================
+# ABSCHNITT 7: Autodetect (parse ohne System-Angabe)
+# ============================================================
+
 assert parse("V5").system == BoulderSystem.V_SCALE
+assert parse("VB").system == BoulderSystem.V_SCALE
 assert parse("5.12a").system == RouteSystem.YDS
+assert parse("5.9").system == RouteSystem.YDS
 assert parse("VIII+").system == RouteSystem.UIAA
-assert parse("7a+").system == RouteSystem.FRENCH
-assert parse("7A+").system == BoulderSystem.FONT
+assert parse("XII-").system == RouteSystem.UIAA
+assert parse("7a+").system == RouteSystem.FRENCH    # Kleinbuchstabe → French
+assert parse("7A+").system == BoulderSystem.FONT    # Großbuchstabe → Font
 
-# --- Case-insensitive Input ---
+# ============================================================
+# ABSCHNITT 8: Case-insensitive Input
+# ============================================================
+
 assert convert("7A+", "French", "YDS") == convert("7a+", "French", "YDS")
+assert convert("viii+", "UIAA", "French") == convert("VIII+", "UIAA", "French")
+assert convert("v5", "V-Scale", "Font") == convert("V5", "V-Scale", "Font")
 
-# --- Edge Cases ---
+# ============================================================
+# ABSCHNITT 9: Error Handling
+# ============================================================
+
 with pytest.raises(UnknownGradeError):
-    convert("13a", "French", "YDS")  # Gibt es (noch) nicht
-
+    convert("13a", "French", "YDS")          # Existiert nicht
+with pytest.raises(UnknownGradeError):
+    convert("V99", "V-Scale", "Font")        # Existiert nicht
 with pytest.raises(UnknownSystemError):
-    convert("7a", "Ewbanks", "YDS")  # v1 nicht unterstützt
+    convert("7a", "Ewbanks", "YDS")          # v1 nicht unterstützt
+with pytest.raises(UnknownSystemError):
+    convert("7a", "French", "Saxon")         # v1 nicht unterstützt
 
-# --- Identitäts-Konvertierung ---
+# Identitäts-Konvertierung (gleiches System)
 assert convert("7a+", "French", "French") == "7a+"
 assert convert("V5", "V-Scale", "V-Scale") == "V5"
+assert convert("VIII+", "UIAA", "UIAA") == "VIII+"
 
-# --- Referenzpunkte aus der Klettergeschichte ---
-# Silence (Ondra 2017): 9c / 5.15d / XII+
+# ============================================================
+# ABSCHNITT 10: Historische Referenzpunkte
+# (Dient als "Sanity Check" — diese Fakten sind unstrittig)
+# ============================================================
+
+# Silence (Ondra 2017): 9c / 5.15d / XII+ — hardest free climb ever
 assert convert("9c", "French", "YDS") == "5.15d"
 assert convert("9c", "French", "UIAA") == "XII+"
-# Action Directe (Güllich 1991): 9a / 5.14d / XI
+
+# Action Directe (Güllich 1991): 9a / 5.14d / XI — first 9a
 assert convert("9a", "French", "YDS") == "5.14d"
 assert convert("9a", "French", "UIAA") == "XI"
-# Burden of Dreams (Nalle 2016): 9A / V17
+
+# Hubble (Moon 1990): 8c+ / 5.14c — first 8c+
+assert convert("8c+", "French", "YDS") == "5.14c"
+
+# Punks in the Gym (1985): 8b+ / 5.14a — first 8b+ (Wikipedia)
+assert convert("8b+", "French", "YDS") == "5.14a"
+
+# Burden of Dreams (Nalle 2016): 9A / V17 — hardest boulder ever
 assert convert("9A", "Font", "V-Scale") == "V17"
+
+# Midnight Lightning (Kauk 1978): 7B / V8 — iconic boulder
+assert convert("7B", "Font", "V-Scale") == "V8"
+
+# ============================================================
+# ABSCHNITT 11: Diskrepanz-Dokumentation
+# Explizite Tests die dokumentieren, welcher Quelle wir folgen.
+# Jeder Test enthält einen Kommentar mit den alternativen Werten.
+# ============================================================
+
+# 5.11c: MP sagt 6c+, CAI sagt 6c+/7a. Wir folgen CAI: 6c+
+assert convert("5.11b", "YDS", "French") == "6c+"   # CAI: VIII-/6c+
+
+# UIAA VIII- ↔ French: CAI sagt 6c, MP sagt 6c. Einig.
+assert convert("VIII-", "UIAA", "French") == "6c"
+
+# 8a ↔ UIAA: CAI sagt X-, manche ältere Quellen sagen IX+.
+# Wir folgen CAI (2016).
+assert convert("8a", "French", "UIAA") == "X-"      # CAI: X-
+
+# ============================================================
+# ABSCHNITT 12: Regression gegen pyclimb v0.2.0
+# pyclimb hat nur French↔YDS. Wir prüfen alle 34 Einträge
+# und dokumentieren Abweichungen.
+# ============================================================
+
+# pyclimb French→YDS Mapping (vollständig):
+PYCLIMB_FRENCH_TO_YDS = {
+    "5a": "5.8", "5b": "5.9", "5c": "5.10a",
+    "6a": "5.10a", "6a+": "5.10b", "6b": "5.10c", "6b+": "5.10d",
+    "6c": "5.11b", "6c+": "5.11c",
+    "7a": "5.11d", "7a+": "5.12a", "7b": "5.12b", "7b+": "5.12c",
+    "7c": "5.12d", "7c+": "5.13a",
+    "8a": "5.13b", "8a+": "5.13c", "8b": "5.13d", "8b+": "5.14a",
+    "8c": "5.14b", "8c+": "5.14c",
+    "9a": "5.14d", "9a+": "5.15a", "9b": "5.15b", "9b+": "5.15c",
+    "9c": "5.15d",
+}
+
+# Wir erwarten Übereinstimmung ab 7a+ (Konvergenzzone).
+# Darunter kann es Abweichungen geben (dokumentiert):
+KNOWN_DEVIATIONS = {
+    # pyclimb: 5c→5.10a, wir: 5c→5.9 (CAI-Tabelle). ±1 Subgrade.
+    "5c": ("5.10a", "5.9"),   # (pyclimb, wir)
+    # pyclimb: 6c→5.11b, wir: 6c→5.11a (CAI). ±1 Subgrade.
+    "6c": ("5.11b", "5.11a"),
+}
+
+for french, expected_yds in PYCLIMB_FRENCH_TO_YDS.items():
+    our_result = convert(french, "French", "YDS")
+    if french in KNOWN_DEVIATIONS:
+        pyclimb_val, our_expected = KNOWN_DEVIATIONS[french]
+        assert our_result == our_expected, \
+            f"Abweichung bei {french}: erwartet {our_expected} (CAI), got {our_result}"
+    else:
+        assert our_result == expected_yds, \
+            f"Regression vs pyclimb bei {french}: erwartet {expected_yds}, got {our_result}"
 ```
 
 #### Implementierungshinweise

@@ -428,6 +428,458 @@ def convert_force(force_kg: float, from_edge_mm: float,
 
 ---
 
+### Modul: `grades.py` — Grad-Konvertierung & numerischer Schwierigkeitsindex
+
+**Priorität:** 🟢 Schneller Win, kein Mathe, Fundament für strength_analyzer
+
+**Schicht:** Models — reine Lookup-Tabellen + Interpolation, kein I/O, kein State
+
+**Verwandte Pakete:** `pyclimb` v0.2.0 (MIT, nur French↔YDS, veraltet, Python ≤3.10).
+Wir schreiben komplett neu — vollständigere Abdeckung, numerischer Index, aktiv gepflegt.
+
+#### Wissenschaftliche Basis & Referenzen
+
+Die Grad-Zuordnungen zwischen Systemen sind **Konvention, keine Berechnung**.
+Es gibt keine Formel — nur historisch gewachsene Konsens-Tabellen.
+
+**Primärquellen für die Konvertierungstabellen:**
+
+1. **UIAA** (2024). *UIAA Scale of Difficulty.* Offizielle Tabelle der
+   Union Internationale des Associations d'Alpinisme.
+   https://www.theuiaa.org/
+2. **Mountain Project** (2024). *International Climbing Grades — Comparison Table.*
+   https://www.mountainproject.com/international-climbing-grades
+   Umfassendste öffentliche Tabelle: YDS, French, UIAA, Ewbanks, SA, British.
+   Separate Boulder-Tabelle: Hueco (V-Scale) ↔ Fontainebleau.
+3. **Wikipedia** (2024). *Grade (climbing) — Comparison tables.*
+   https://en.wikipedia.org/wiki/Grade_(climbing)
+   Historischer Kontext, Abweichungen zwischen Quellen dokumentiert.
+4. **Rockfax** (2024). *Grade Comparison Table.*
+   Meistverwendete Referenz in europäischen Kletterführern.
+
+**Sekundärquellen (Validierung):**
+
+5. **8a.nu** — Gradverteilung in Logbooks, implizite Konsens-Zuordnung
+6. **theCrag** — Grad-Konverter mit Community-Feedback
+7. **Hörst E.** (2016). *Training for Climbing*, 3rd ed. — Table 4.2 verwendet
+   UIAA-Grade als Referenz für Kraft/Grad-Zuordnung
+
+#### Designentscheidungen
+
+1. **UIAA als interner Standard.** Alle Konvertierungen laufen über UIAA als
+   Drehscheibe (Hub-and-Spoke). Grund: UIAA ist das offizielle internationale
+   System und wird in der deutschsprachigen Literatur durchgängig verwendet.
+   Hörst (2016) und Lattice verwenden ebenfalls UIAA-basierte Tabellen.
+
+2. **Numerischer Schwierigkeitsindex (difficulty_index).** Jeder Grad bekommt
+   einen monoton steigenden Float-Wert (z.B. UIAA "7-" → 13.0, "7" → 14.0,
+   "7+" → 15.0). Dieser Index ermöglicht:
+   - Interpolation in strength_analyzer (MVC/BW → Grad)
+   - Sortierung und Vergleich von Graden
+   - Arithmetik (Durchschnitt, Differenz)
+   - Mapping zwischen Systemen via gemeinsamen Index
+
+3. **Zwei getrennte Domänen: Route und Boulder.**
+   Route-Grade (UIAA, French, YDS) und Boulder-Grade (Font, V-Scale) sind
+   **nicht direkt vergleichbar** (Wikipedia: "Font 4 / V0 entspricht etwa
+   French 6a / UIAA VI+ / YDS 5.10a als Einzelzug").
+   → Separate Tabellen, separate Enums, kein implizites Cross-Domain-Mapping.
+
+4. **Keine unscharfen Zwischengrade.** Mountain Project listet Zwischenstufen
+   wie "5.10a/b" oder "V3-4". Wir speichern nur kanonische Grade
+   (5.10a, 5.10b, ...) und bieten `nearest()` für Approximation.
+
+5. **Case-insensitive Input, kanonischer Output.**
+   `convert("6A+", "french", "yds")` funktioniert, Ausgabe ist immer
+   in kanonischer Schreibweise ("6a+").
+
+#### Unterstützte Gradsysteme
+
+**Route (Sport/Trad):**
+
+| System | Enum-Name | Bereich | Beispiele | Verbreitung |
+|--------|-----------|---------|-----------|-------------|
+| UIAA | `UIAA` | I – XII+ | "7-", "7", "7+", "8-" | DACH, Osteuropa |
+| French Sport | `FRENCH` | 1a – 9c | "6a+", "7b", "8c+" | Europa, weltweit |
+| Yosemite Decimal | `YDS` | 5.0 – 5.15d | "5.10a", "5.12c" | Nordamerika |
+
+**Boulder:**
+
+| System | Enum-Name | Bereich | Beispiele | Verbreitung |
+|--------|-----------|---------|-----------|-------------|
+| Fontainebleau | `FONT` | 3 – 9A | "6A+", "7C+", "8B" | Europa, weltweit |
+| V-Scale (Hueco) | `V_SCALE` | V0 – V17 | "V5", "V10", "V14" | Nordamerika |
+
+**Nicht in v1 (aber vorbereitet):** Ewbanks (AUS/NZ), British E-Grade, Südafrika.
+
+#### Konvertierungstabelle — Route
+
+Quelle: Mountain Project (2024), kreuzvalidiert mit UIAA und Wikipedia.
+
+```python
+ROUTE_TABLE = [
+    # (difficulty_index, uiaa,    french,  yds)
+    (1.0,   "I",     "1a",    "3rd"),
+    (2.0,   "I",     "1c",    "5.0"),
+    (3.0,   "II",    "2a",    "5.1"),
+    (4.0,   "II",    "2c",    "5.2"),
+    (5.0,   "III",   "3a",    "5.3"),
+    (6.0,   "IV",    "4a",    "5.4"),
+    (7.0,   "IV+",   "4b",    "5.5"),
+    (8.0,   "V",     "4c",    "5.6"),
+    (9.0,   "V+",    "5a",    "5.7"),
+    (10.0,  "VI-",   "5b",    "5.8"),
+    (11.0,  "VI",    "5c",    "5.9"),
+    (12.0,  "VI+",   "6a",    "5.10a"),
+    (12.5,  "VI+",   "6a+",   "5.10b"),
+    (13.0,  "VII-",  "6b",    "5.10c"),
+    (13.5,  "VII",   "6b+",   "5.10d"),
+    (14.0,  "VII+",  "6c",    "5.11a"),
+    (14.5,  "VIII-", "6c+",   "5.11c"),
+    (15.0,  "VIII",  "7a",    "5.11d"),
+    (15.5,  "VIII+", "7a+",   "5.12a"),
+    (16.0,  "VIII+", "7b",    "5.12b"),
+    (16.5,  "VIII+", "7b+",   "5.12c"),
+    (17.0,  "IX-",   "7c",    "5.12d"),
+    (17.5,  "IX",    "7c+",   "5.13a"),
+    (18.0,  "IX+",   "8a",    "5.13b"),
+    (18.5,  "IX+",   "8a+",   "5.13c"),
+    (19.0,  "X-",    "8b",    "5.13d"),
+    (19.5,  "X",     "8b+",   "5.14a"),
+    (20.0,  "X+",    "8c",    "5.14b"),
+    (20.5,  "XI-",   "8c+",   "5.14c"),
+    (21.0,  "XI",    "9a",    "5.14d"),
+    (21.5,  "XI+",   "9a+",   "5.15a"),
+    (22.0,  "XII-",  "9b",    "5.15b"),
+    (22.5,  "XII",   "9b+",   "5.15c"),
+    (23.0,  "XII+",  "9c",    "5.15d"),
+]
+```
+
+#### Konvertierungstabelle — Boulder
+
+Quelle: Mountain Project (2024), kreuzvalidiert mit Wikipedia.
+
+```python
+BOULDER_TABLE = [
+    # (difficulty_index, font,   v_scale)
+    (1.0,   "3",     "VB"),
+    (2.0,   "4",     "V0"),
+    (3.0,   "4+",    "V0+"),
+    (4.0,   "5",     "V1"),
+    (5.0,   "5+",    "V2"),
+    (6.0,   "6A",    "V3"),
+    (6.5,   "6A+",   "V3+"),
+    (7.0,   "6B",    "V4"),
+    (7.5,   "6B+",   "V4+"),
+    (8.0,   "6C",    "V5"),
+    (8.5,   "6C+",   "V5+"),
+    (9.0,   "7A",    "V6"),
+    (9.5,   "7A+",   "V7"),
+    (10.0,  "7B",    "V8"),
+    (10.5,  "7B+",   "V8+"),
+    (11.0,  "7C",    "V9"),
+    (11.5,  "7C+",   "V10"),
+    (12.0,  "8A",    "V11"),
+    (12.5,  "8A+",   "V12"),
+    (13.0,  "8B",    "V13"),
+    (13.5,  "8B+",   "V14"),
+    (14.0,  "8C",    "V15"),
+    (14.5,  "8C+",   "V16"),
+    (15.0,  "9A",    "V17"),
+]
+```
+
+#### Datentypen
+
+```python
+import enum
+from dataclasses import dataclass
+
+
+class RouteSystem(enum.Enum):
+    UIAA = "UIAA"
+    FRENCH = "French"
+    YDS = "YDS"
+
+
+class BoulderSystem(enum.Enum):
+    FONT = "Font"
+    V_SCALE = "V-Scale"
+
+
+@dataclass(frozen=True)
+class Grade:
+    """Immutable Grad-Objekt mit System, Wert und numerischem Index."""
+    system: RouteSystem | BoulderSystem
+    value: str              # Kanonischer String, z.B. "7a+", "V5", "VIII-"
+    difficulty_index: float # Monoton steigender Schwierigkeitswert
+
+    def __lt__(self, other: "Grade") -> bool:
+        return self.difficulty_index < other.difficulty_index
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Grade):
+            return NotImplemented
+        return self.system == other.system and self.value == other.value
+
+    def __hash__(self) -> int:
+        return hash((self.system, self.value))
+
+    def __str__(self) -> str:
+        return self.value
+```
+
+#### Funktionen
+
+```python
+def convert(grade: str, from_system: str, to_system: str) -> str:
+    """Konvertiert einen Klettergrad zwischen Systemen.
+
+    Args:
+        grade: Grad-String, z.B. "7a+", "5.12a", "VIII-", "V5", "7A+"
+        from_system: Quellsystem ("UIAA", "French", "YDS", "Font", "V-Scale")
+        to_system: Zielsystem (gleiche Werte)
+
+    Returns:
+        Konvertierter Grad als String in kanonischer Schreibweise.
+
+    Raises:
+        GradeError: Unbekanntes System oder Grad nicht im System enthalten.
+        GradeDomainError: Route↔Boulder-Konvertierung versucht
+            (z.B. French→Font ist ungültig).
+
+    Example:
+        >>> convert("7a+", "French", "YDS")
+        '5.12a'
+        >>> convert("5.12a", "YDS", "UIAA")
+        'VIII+'
+        >>> convert("V5", "V-Scale", "Font")
+        '6C'
+
+    References:
+        Mountain Project (2024), UIAA Scale of Difficulty
+    """
+
+
+def parse(grade: str, system: str | None = None) -> Grade:
+    """Parst einen Grad-String zu einem Grade-Objekt.
+
+    Wenn system=None, wird das System automatisch erkannt:
+    - Beginnt mit "V" + Zahl → V-Scale
+    - Beginnt mit "5." → YDS
+    - Enthält römische Ziffern (I–XII) mit +/- → UIAA
+    - Uppercase A/B/C (6A, 7B+) → Font
+    - Lowercase a/b/c (6a, 7b+) → French
+
+    Args:
+        grade: Grad-String
+        system: Optional — erzwingt System statt Autodetect
+
+    Returns:
+        Grade-Objekt mit system, value, difficulty_index
+
+    Example:
+        >>> parse("7a+")
+        Grade(system=<RouteSystem.FRENCH>, value='7a+', difficulty_index=15.5)
+        >>> parse("V5")
+        Grade(system=<BoulderSystem.V_SCALE>, value='V5', difficulty_index=8.0)
+    """
+
+
+def difficulty_index(grade: str, system: str | None = None) -> float:
+    """Gibt den numerischen Schwierigkeitsindex eines Grades zurück.
+
+    Nützlich für Berechnungen in strength_analyzer:
+    - Interpolation (MVC/BW-Ratio → Index → Grad)
+    - Sortierung und Vergleich
+    - Durchschnittsbildung
+
+    Example:
+        >>> difficulty_index("7a+", "French")
+        15.5
+        >>> difficulty_index("VIII+", "UIAA")
+        15.5
+    """
+
+
+def from_index(index: float, system: str) -> str:
+    """Inverse: Numerischer Index → nächstliegender Grad im System.
+
+    Rundet zum nächsten tabellierten Grad (nearest-neighbor).
+
+    Example:
+        >>> from_index(15.3, "French")
+        '7a'
+        >>> from_index(15.7, "UIAA")
+        'VIII+'
+    """
+
+
+def all_grades(system: str) -> list[Grade]:
+    """Gibt alle Grade eines Systems aufsteigend sortiert zurück.
+
+    Example:
+        >>> [g.value for g in all_grades("UIAA")][:5]
+        ['I', 'II', 'III', 'IV', 'IV+']
+    """
+```
+
+#### Exceptions
+
+```python
+class GradeError(Exception):
+    """Basisklasse für Grad-Fehler."""
+
+class UnknownSystemError(GradeError):
+    """Unbekanntes Gradsystem angegeben."""
+
+class UnknownGradeError(GradeError):
+    """Grad existiert nicht im angegebenen System."""
+
+class GradeDomainError(GradeError):
+    """Konvertierung zwischen Route und Boulder versucht."""
+```
+
+#### Tests (`test_grades.py`)
+
+```python
+# --- Konvertierung Route ---
+
+# French → YDS (Referenz: Mountain Project)
+assert convert("6a+", "French", "YDS") == "5.10b"
+assert convert("7a+", "French", "YDS") == "5.12a"
+assert convert("8a",  "French", "YDS") == "5.13b"
+assert convert("9a",  "French", "YDS") == "5.14d"
+
+# YDS → French (Referenz: Mountain Project)
+assert convert("5.10a", "YDS", "French") == "6a"
+assert convert("5.12a", "YDS", "French") == "7a+"
+assert convert("5.14a", "YDS", "French") == "8b+"
+
+# French → UIAA (Referenz: UIAA, Wikipedia)
+assert convert("6a",  "French", "UIAA") == "VI+"
+assert convert("7a",  "French", "UIAA") == "VIII"
+assert convert("8a",  "French", "UIAA") == "IX+"
+assert convert("9a",  "French", "UIAA") == "XI"
+assert convert("9c",  "French", "UIAA") == "XII+"   # Silence!
+
+# YDS → UIAA
+assert convert("5.10a", "YDS", "UIAA") == "VI+"
+assert convert("5.14d", "YDS", "UIAA") == "XI"      # Action Directe
+
+# UIAA → French
+assert convert("VII",  "UIAA", "French") == "6b+"
+assert convert("VIII", "UIAA", "French") == "7a"
+assert convert("IX",   "UIAA", "French") == "7c+"
+assert convert("X",    "UIAA", "French") == "8b+"
+
+# --- Round-Trip ---
+# convert(convert(g, A, B), B, A) == g (oder nächster Äquivalent)
+for grade in ["6a", "7a+", "8b", "9a"]:
+    assert convert(convert(grade, "French", "YDS"), "YDS", "French") == grade
+
+# --- Konvertierung Boulder ---
+
+# Font → V-Scale (Referenz: Mountain Project)
+assert convert("6A",  "Font", "V-Scale") == "V3"
+assert convert("7A",  "Font", "V-Scale") == "V6"
+assert convert("7C+", "Font", "V-Scale") == "V10"
+assert convert("8A",  "Font", "V-Scale") == "V11"
+
+# V-Scale → Font
+assert convert("V5",  "V-Scale", "Font") == "6C"
+assert convert("V10", "V-Scale", "Font") == "7C+"
+assert convert("V14", "V-Scale", "Font") == "8B+"
+
+# --- Domain-Trennung ---
+
+# Route → Boulder muss GradeDomainError werfen
+with pytest.raises(GradeDomainError):
+    convert("7a", "French", "Font")
+
+with pytest.raises(GradeDomainError):
+    convert("V5", "V-Scale", "YDS")
+
+# --- Numerischer Index ---
+
+# Monoton steigend innerhalb eines Systems
+french_grades = all_grades("French")
+for i in range(len(french_grades) - 1):
+    assert french_grades[i].difficulty_index < french_grades[i+1].difficulty_index
+
+# Gleicher Index über Systeme (Route)
+assert difficulty_index("7a+", "French") == difficulty_index("5.12a", "YDS")
+assert difficulty_index("7a+", "French") == difficulty_index("VIII+", "UIAA")
+
+# Gleicher Index über Systeme (Boulder)
+assert difficulty_index("7A", "Font") == difficulty_index("V6", "V-Scale")
+
+# --- from_index (Inverse) ---
+assert from_index(15.5, "French") == "7a+"
+assert from_index(15.5, "YDS") == "5.12a"
+assert from_index(15.5, "UIAA") == "VIII+"
+
+# Interpolation: Index zwischen zwei Graden → nearest
+assert from_index(15.3, "French") == "7a"   # näher an 15.0
+assert from_index(15.8, "French") == "7a+"  # näher an 15.5
+
+# --- Autodetect ---
+assert parse("V5").system == BoulderSystem.V_SCALE
+assert parse("5.12a").system == RouteSystem.YDS
+assert parse("VIII+").system == RouteSystem.UIAA
+assert parse("7a+").system == RouteSystem.FRENCH
+assert parse("7A+").system == BoulderSystem.FONT
+
+# --- Case-insensitive Input ---
+assert convert("7A+", "French", "YDS") == convert("7a+", "French", "YDS")
+
+# --- Edge Cases ---
+with pytest.raises(UnknownGradeError):
+    convert("13a", "French", "YDS")  # Gibt es (noch) nicht
+
+with pytest.raises(UnknownSystemError):
+    convert("7a", "Ewbanks", "YDS")  # v1 nicht unterstützt
+
+# --- Identitäts-Konvertierung ---
+assert convert("7a+", "French", "French") == "7a+"
+assert convert("V5", "V-Scale", "V-Scale") == "V5"
+
+# --- Referenzpunkte aus der Klettergeschichte ---
+# Silence (Ondra 2017): 9c / 5.15d / XII+
+assert convert("9c", "French", "YDS") == "5.15d"
+assert convert("9c", "French", "UIAA") == "XII+"
+# Action Directe (Güllich 1991): 9a / 5.14d / XI
+assert convert("9a", "French", "YDS") == "5.14d"
+assert convert("9a", "French", "UIAA") == "XI"
+# Burden of Dreams (Nalle 2016): 9A / V17
+assert convert("9A", "Font", "V-Scale") == "V17"
+```
+
+#### Implementierungshinweise
+
+1. **Intern als Dict-of-Dicts.** Jede Tabelle wird beim Import in
+   schnelle Lookup-Dictionaries überführt:
+   `_ROUTE_BY_FRENCH["7a+"] → (15.0, "VIII", "7a", "5.11d")`
+
+2. **Zero Dependencies.** Nur stdlib (enum, dataclasses). Kein numpy nötig.
+
+3. **Erweiterbar.** Neue Systeme (Ewbanks, British E-Grade, Sächsisch)
+   erfordern nur eine neue Spalte in der Tabelle + neuen Enum-Wert.
+   Die Logik bleibt identisch.
+
+4. **Validierung gegen pyclimb.** Alle French↔YDS-Werte aus pyclimb v0.2.0
+   als Regressionstest verwenden. Abweichungen dokumentieren und begründen.
+
+5. **Kanonische Schreibweise.** Output ist immer exakt wie in der Tabelle:
+   - UIAA: Römische Ziffern + optional "+"/"-" (z.B. "VII+", "IX-")
+   - French: Arabisch + Kleinbuchstabe + optional "+" (z.B. "7a+")
+   - YDS: "5." + Zahl, ab 5.10 mit Kleinbuchstabe (z.B. "5.10a")
+   - Font: Arabisch + Großbuchstabe + optional "+" (z.B. "7A+")
+   - V-Scale: "V" + Zahl (z.B. "V5"), Sonderfall "VB" (= V-easy)
+
+---
+
 ### Modul 3: `signal.py` — Force-Curve Signalverarbeitung
 
 **Priorität:** 🟡 Basis für Tindeq-Auswertung

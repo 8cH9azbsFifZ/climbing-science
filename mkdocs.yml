@@ -1,0 +1,63 @@
+site_name: climbing-science
+site_description: Open-source Python library for evidence-based climbing training analysis
+site_url: https://8cH9azbsFifZ.github.io/climbing-science/
+repo_url: https://github.com/8cH9azbsFifZ/climbing-science
+repo_name: 8cH9azbsFifZ/climbing-science
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: amber
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+    - toc.follow
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_root_heading: true
+            heading_level: 2
+            docstring_style: google
+            show_signature_annotations: true
+  - bibtex:
+      bib_file: "references.bib"
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+  - tables
+  - footnotes
+  - attr_list
+  - md_in_html
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Design: design.md
+  - Requirements: requirements.md
+  - API Reference:
+    - Grades: api/grades.md
+    - Models: api/models.md
+    - Strength: api/strength.md
+    - Endurance: api/endurance.md
+    - Load: api/load.md
+    - Protocols: api/protocols.md
+    - Periodization: api/periodization.md
+    - Diagnostics: api/diagnostics.md
+    - IO: api/io.md
+  - Changelog: changelog.md
+  - References: references.md

@@ -7,9 +7,9 @@
 
 ## Why this project exists
 
-1. **Open Source** — Existing climbing analysis tools hide behind paywalls or proprietary code. This library is open, peer-reviewable, and citable.
+1. **Open Source** — Existing climbing analysis tools hide behind paywalls or proprietary JavaScript. This library is open, peer-reviewable, and citable.
 2. **Reproducible** — Every formula traces back to a published reference (BibTeX in `docs/references.bib`), not a black-box implementation.
-3. **Validatable** — Unit tests verify results against published benchmarks (Giles et al., Levernier & Laffaye, Lattice Research).
+3. **Validatable** — Unit tests verify results against published benchmarks (Giles et al., Lattice Research, Levernier & Laffaye).
 4. **End-to-end** — Raw force-gauge data flows through a complete assessment pipeline: import → clean → analyse → report.
 5. **Dual purpose** — A Python library you can `pip install` *and* a mathematically rigorous, auto-generated reference manual.
 
@@ -19,16 +19,10 @@
 pip install -e .
 ```
 
-For development (includes docs, linting, testing, versioning):
+For development:
 
 ```bash
 pip install -e ".[dev]"
-```
-
-With plotting support:
-
-```bash
-pip install -e ".[plot]"
 ```
 
 ## Usage

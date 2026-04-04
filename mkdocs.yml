@@ -61,6 +61,7 @@ nav:
     - Grades: api/grades.md
     - Models: api/models.md
     - Strength: api/strength.md
+    - Endurance: api/endurance.md
   # Upcoming modules (uncomment as implemented):
   #  - Endurance: api/endurance.md
   #  - Load: api/load.md

@@ -2,6 +2,14 @@
 
 __version__ = "0.1.0"
 
+from climbing_science.endurance import (
+    cf_mvc_ratio,
+    classify_endurance,
+    critical_force,
+    interpret_cf_ratio,
+    time_to_failure,
+    w_prime_balance,
+)
 from climbing_science.grades import Grade, GradeSystem, compare, convert, difficulty_index, parse
 from climbing_science.models import (
     AssessmentResult,
@@ -49,4 +57,11 @@ __all__ = [
     "power_to_weight",
     "rfd_from_curve",
     "rohmert_conversion",
+    # endurance
+    "cf_mvc_ratio",
+    "classify_endurance",
+    "critical_force",
+    "interpret_cf_ratio",
+    "time_to_failure",
+    "w_prime_balance",
 ]

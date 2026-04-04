@@ -54,7 +54,9 @@ class BoulderSystem(str, Enum):
     V_SCALE = "V-Scale"
 
 
-GradeSystem = RouteSystem | BoulderSystem
+from typing import Union
+
+GradeSystem = Union[RouteSystem, BoulderSystem]
 
 _ROUTE_SYSTEMS = set(RouteSystem)
 _BOULDER_SYSTEMS = set(BoulderSystem)

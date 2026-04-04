@@ -21,7 +21,6 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
-
 __all__ = [
     "RouteSystem", "BoulderSystem", "GradeSystem", "Grade",
     "GradeError", "UnknownSystemError", "UnknownGradeError", "GradeDomainError",

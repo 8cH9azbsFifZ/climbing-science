@@ -11,6 +11,17 @@ from climbing_science.endurance import (
     w_prime_balance,
 )
 from climbing_science.grades import Grade, GradeSystem, compare, convert, difficulty_index, parse
+from climbing_science.load import (
+    acwr,
+    effort_level_to_mvc_pct,
+    margin_to_failure,
+    mvc_pct_to_rpe,
+    overtraining_check,
+    rpe_to_mvc_pct,
+    tut_per_session,
+    tut_per_set,
+    weekly_load,
+)
 from climbing_science.models import (
     AssessmentResult,
     ClimberLevel,
@@ -64,4 +75,14 @@ __all__ = [
     "interpret_cf_ratio",
     "time_to_failure",
     "w_prime_balance",
+    # load
+    "acwr",
+    "effort_level_to_mvc_pct",
+    "margin_to_failure",
+    "mvc_pct_to_rpe",
+    "overtraining_check",
+    "rpe_to_mvc_pct",
+    "tut_per_session",
+    "tut_per_set",
+    "weekly_load",
 ]

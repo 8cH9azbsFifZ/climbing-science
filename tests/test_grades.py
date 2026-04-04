@@ -27,50 +27,56 @@ from climbing_science.grades import (
 
 
 class TestRouteConversion:
-    @pytest.mark.parametrize("grade, from_sys, to_sys, expected", [
-        ("6a", "French", "YDS", "5.10a"),
-        ("6a+", "French", "YDS", "5.10b"),
-        ("7a", "French", "YDS", "5.11d"),
-        ("7a+", "French", "YDS", "5.12a"),
-        ("8a", "French", "YDS", "5.13b"),
-        ("9a", "French", "YDS", "5.14d"),
-        ("5.10a", "YDS", "French", "6a"),
-        ("5.10d", "YDS", "French", "6b+"),
-        ("5.12a", "YDS", "French", "7a+"),
-        ("5.14a", "YDS", "French", "8b+"),
-        ("6a", "French", "UIAA", "VI+"),
-        ("6b+", "French", "UIAA", "VII+"),
-        ("7a", "French", "UIAA", "VIII"),
-        ("7a+", "French", "UIAA", "VIII+"),
-        ("8a", "French", "UIAA", "X-"),
-        ("9a", "French", "UIAA", "XI"),
-        ("9c", "French", "UIAA", "XII+"),
-        ("5.10a", "YDS", "UIAA", "VI+"),
-        ("5.12a", "YDS", "UIAA", "VIII+"),
-        ("5.14d", "YDS", "UIAA", "XI"),
-        ("VI+", "UIAA", "French", "6a"),
-        ("VII+", "UIAA", "French", "6b+"),
-        ("VIII", "UIAA", "French", "7a"),
-        ("IX", "UIAA", "French", "7c"),
-        ("X", "UIAA", "French", "8b"),
-    ])
+    @pytest.mark.parametrize(
+        "grade, from_sys, to_sys, expected",
+        [
+            ("6a", "French", "YDS", "5.10a"),
+            ("6a+", "French", "YDS", "5.10b"),
+            ("7a", "French", "YDS", "5.11d"),
+            ("7a+", "French", "YDS", "5.12a"),
+            ("8a", "French", "YDS", "5.13b"),
+            ("9a", "French", "YDS", "5.14d"),
+            ("5.10a", "YDS", "French", "6a"),
+            ("5.10d", "YDS", "French", "6b+"),
+            ("5.12a", "YDS", "French", "7a+"),
+            ("5.14a", "YDS", "French", "8b+"),
+            ("6a", "French", "UIAA", "VI+"),
+            ("6b+", "French", "UIAA", "VII+"),
+            ("7a", "French", "UIAA", "VIII"),
+            ("7a+", "French", "UIAA", "VIII+"),
+            ("8a", "French", "UIAA", "X-"),
+            ("9a", "French", "UIAA", "XI"),
+            ("9c", "French", "UIAA", "XII+"),
+            ("5.10a", "YDS", "UIAA", "VI+"),
+            ("5.12a", "YDS", "UIAA", "VIII+"),
+            ("5.14d", "YDS", "UIAA", "XI"),
+            ("VI+", "UIAA", "French", "6a"),
+            ("VII+", "UIAA", "French", "6b+"),
+            ("VIII", "UIAA", "French", "7a"),
+            ("IX", "UIAA", "French", "7c"),
+            ("X", "UIAA", "French", "8b"),
+        ],
+    )
     def test_route_conversion(self, grade, from_sys, to_sys, expected):
         assert convert(grade, from_sys, to_sys) == expected
 
 
 class TestBoulderConversion:
-    @pytest.mark.parametrize("grade, from_sys, to_sys, expected", [
-        ("6A", "Font", "V-Scale", "V3"),
-        ("7A", "Font", "V-Scale", "V6"),
-        ("7C", "Font", "V-Scale", "V9"),
-        ("7C+", "Font", "V-Scale", "V10"),
-        ("8A", "Font", "V-Scale", "V11"),
-        ("8C", "Font", "V-Scale", "V15"),
-        ("V5", "V-Scale", "Font", "6C"),
-        ("V9", "V-Scale", "Font", "7C"),
-        ("V10", "V-Scale", "Font", "7C+"),
-        ("V14", "V-Scale", "Font", "8B+"),
-    ])
+    @pytest.mark.parametrize(
+        "grade, from_sys, to_sys, expected",
+        [
+            ("6A", "Font", "V-Scale", "V3"),
+            ("7A", "Font", "V-Scale", "V6"),
+            ("7C", "Font", "V-Scale", "V9"),
+            ("7C+", "Font", "V-Scale", "V10"),
+            ("8A", "Font", "V-Scale", "V11"),
+            ("8C", "Font", "V-Scale", "V15"),
+            ("V5", "V-Scale", "Font", "6C"),
+            ("V9", "V-Scale", "Font", "7C"),
+            ("V10", "V-Scale", "Font", "7C+"),
+            ("V14", "V-Scale", "Font", "8B+"),
+        ],
+    )
     def test_boulder_conversion(self, grade, from_sys, to_sys, expected):
         assert convert(grade, from_sys, to_sys) == expected
 
@@ -117,37 +123,56 @@ class TestIRCRAIndex:
         for i in range(len(grades) - 1):
             assert grades[i].difficulty_index < grades[i + 1].difficulty_index
 
-    @pytest.mark.parametrize("ga, sa, gb, sb", [
-        ("7a+", "French", "5.12a", "YDS"),
-        ("7a+", "French", "VIII+", "UIAA"),
-        ("9a", "French", "5.14d", "YDS"),
-        ("9a", "French", "XI", "UIAA"),
-        ("7A", "Font", "V6", "V-Scale"),
-        ("8A", "Font", "V11", "V-Scale"),
-        ("9A", "Font", "V17", "V-Scale"),
-    ])
+    @pytest.mark.parametrize(
+        "ga, sa, gb, sb",
+        [
+            ("7a+", "French", "5.12a", "YDS"),
+            ("7a+", "French", "VIII+", "UIAA"),
+            ("9a", "French", "5.14d", "YDS"),
+            ("9a", "French", "XI", "UIAA"),
+            ("7A", "Font", "V6", "V-Scale"),
+            ("8A", "Font", "V11", "V-Scale"),
+            ("9A", "Font", "V17", "V-Scale"),
+        ],
+    )
     def test_cross_system_equality(self, ga, sa, gb, sb):
         assert difficulty_index(ga, sa) == difficulty_index(gb, sb)
 
-    @pytest.mark.parametrize("grade, sys, ircra", [
-        ("VIII", "UIAA", 18), ("VIII+", "UIAA", 19), ("XI", "UIAA", 30),
-    ])
+    @pytest.mark.parametrize(
+        "grade, sys, ircra",
+        [
+            ("VIII", "UIAA", 18),
+            ("VIII+", "UIAA", 19),
+            ("XI", "UIAA", 30),
+        ],
+    )
     def test_known_values(self, grade, sys, ircra):
         assert difficulty_index(grade, sys) == ircra
 
 
 class TestFromIndex:
-    @pytest.mark.parametrize("idx, sys, expected", [
-        (19, "French", "7a+"), (19, "YDS", "5.12a"), (19, "UIAA", "VIII+"),
-        (23, "V-Scale", "V6"), (29, "Font", "8A"),
-    ])
+    @pytest.mark.parametrize(
+        "idx, sys, expected",
+        [
+            (19, "French", "7a+"),
+            (19, "YDS", "5.12a"),
+            (19, "UIAA", "VIII+"),
+            (23, "V-Scale", "V6"),
+            (29, "Font", "8A"),
+        ],
+    )
     def test_exact(self, idx, sys, expected):
         assert from_index(idx, sys) == expected
 
-    @pytest.mark.parametrize("idx, sys, expected", [
-        (18.4, "French", "7a"), (18.6, "French", "7a+"),
-        (29.6, "UIAA", "XI"), (30.4, "UIAA", "XI"),
-    ])
+    @pytest.mark.parametrize(
+        "idx, sys, expected",
+        [
+            (18.4, "French", "7a"),
+            (18.6, "French", "7a+"),
+            (29.6, "UIAA", "XI"),
+            (30.4, "UIAA", "XI"),
+        ],
+    )
     def test_nearest(self, idx, sys, expected):
         assert from_index(idx, sys) == expected
 
@@ -156,12 +181,19 @@ class TestFromIndex:
 
 
 class TestParse:
-    @pytest.mark.parametrize("grade, expected_sys", [
-        ("V5", BoulderSystem.V_SCALE), ("VB", BoulderSystem.V_SCALE),
-        ("5.12a", RouteSystem.YDS), ("5.9", RouteSystem.YDS),
-        ("VIII+", RouteSystem.UIAA), ("XII-", RouteSystem.UIAA),
-        ("7a+", RouteSystem.FRENCH), ("7A+", BoulderSystem.FONT),
-    ])
+    @pytest.mark.parametrize(
+        "grade, expected_sys",
+        [
+            ("V5", BoulderSystem.V_SCALE),
+            ("VB", BoulderSystem.V_SCALE),
+            ("5.12a", RouteSystem.YDS),
+            ("5.9", RouteSystem.YDS),
+            ("VIII+", RouteSystem.UIAA),
+            ("XII-", RouteSystem.UIAA),
+            ("7a+", RouteSystem.FRENCH),
+            ("7A+", BoulderSystem.FONT),
+        ],
+    )
     def test_detect(self, grade, expected_sys):
         assert parse(grade).system == expected_sys
 
@@ -250,19 +282,39 @@ class TestDiscrepancies:
 
 class TestPyclimbRegression:
     PYCLIMB = {
-        "5a": "5.8", "5b": "5.9", "5c": "5.10a",
-        "6a": "5.10a", "6a+": "5.10b", "6b": "5.10c", "6b+": "5.10d",
-        "6c": "5.11b", "6c+": "5.11c",
-        "7a": "5.11d", "7a+": "5.12a", "7b": "5.12b", "7b+": "5.12c",
-        "7c": "5.12d", "7c+": "5.13a",
-        "8a": "5.13b", "8a+": "5.13c", "8b": "5.13d", "8b+": "5.14a",
-        "8c": "5.14b", "8c+": "5.14c",
-        "9a": "5.14d", "9a+": "5.15a", "9b": "5.15b", "9b+": "5.15c",
+        "5a": "5.8",
+        "5b": "5.9",
+        "5c": "5.10a",
+        "6a": "5.10a",
+        "6a+": "5.10b",
+        "6b": "5.10c",
+        "6b+": "5.10d",
+        "6c": "5.11b",
+        "6c+": "5.11c",
+        "7a": "5.11d",
+        "7a+": "5.12a",
+        "7b": "5.12b",
+        "7b+": "5.12c",
+        "7c": "5.12d",
+        "7c+": "5.13a",
+        "8a": "5.13b",
+        "8a+": "5.13c",
+        "8b": "5.13d",
+        "8b+": "5.14a",
+        "8c": "5.14b",
+        "8c+": "5.14c",
+        "9a": "5.14d",
+        "9a+": "5.15a",
+        "9b": "5.15b",
+        "9b+": "5.15c",
         "9c": "5.15d",
     }
     DEVIATIONS = {
-        "5a": "5.7+", "5b": "5.8", "5c": "5.9",
-        "6c": "5.11a", "6c+": "5.11b",
+        "5a": "5.7+",
+        "5b": "5.8",
+        "5c": "5.9",
+        "6c": "5.11a",
+        "6c+": "5.11b",
     }
 
     @pytest.mark.parametrize("french", list(PYCLIMB.keys()))
@@ -308,9 +360,16 @@ class TestCompare:
 
 
 class TestAllGrades:
-    @pytest.mark.parametrize("sys, n", [
-        ("UIAA", 34), ("French", 34), ("YDS", 34), ("Font", 25), ("V-Scale", 25),
-    ])
+    @pytest.mark.parametrize(
+        "sys, n",
+        [
+            ("UIAA", 34),
+            ("French", 34),
+            ("YDS", 34),
+            ("Font", 25),
+            ("V-Scale", 25),
+        ],
+    )
     def test_count(self, sys, n):
         assert len(all_grades(sys)) == n
 

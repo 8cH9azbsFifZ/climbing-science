@@ -23,20 +23,34 @@ from enum import Enum
 from typing import Union
 
 __all__ = [
-    "RouteSystem", "BoulderSystem", "GradeSystem", "Grade",
-    "GradeError", "UnknownSystemError", "UnknownGradeError", "GradeDomainError",
-    "convert", "parse", "compare", "difficulty_index", "from_index", "all_grades",
+    "RouteSystem",
+    "BoulderSystem",
+    "GradeSystem",
+    "Grade",
+    "GradeError",
+    "UnknownSystemError",
+    "UnknownGradeError",
+    "GradeDomainError",
+    "convert",
+    "parse",
+    "compare",
+    "difficulty_index",
+    "from_index",
+    "all_grades",
 ]
 
 
 class GradeError(Exception):
     """Base class for grade-related errors."""
 
+
 class UnknownSystemError(GradeError):
     """Raised when the grading system is not recognised."""
 
+
 class UnknownGradeError(GradeError):
     """Raised when a grade string is not found in the specified system."""
+
 
 class GradeDomainError(GradeError):
     """Raised when converting between route and boulder domains."""
@@ -44,6 +58,7 @@ class GradeDomainError(GradeError):
 
 class RouteSystem(str, Enum):
     """Route (sport/trad) grading systems."""
+
     UIAA = "UIAA"
     FRENCH = "French"
     YDS = "YDS"
@@ -51,6 +66,7 @@ class RouteSystem(str, Enum):
 
 class BoulderSystem(str, Enum):
     """Boulder grading systems."""
+
     FONT = "Font"
     V_SCALE = "V-Scale"
 
@@ -80,44 +96,68 @@ def _is_boulder(system):
 
 # Route: (ircra, uiaa, french, yds)
 _ROUTE_TABLE = [
-    (1, "I", "1", "5.2"), (2, "II", "2", "5.3"),
-    (3, "III", "3", "5.4"), (4, "III+", "3+", "5.4+"),
-    (5, "IV", "4a", "5.5"), (6, "IV+", "4b", "5.6"),
-    (7, "V-", "4b+", "5.6+"), (8, "V", "4c", "5.7"),
-    (9, "V+", "5a", "5.7+"), (10, "VI-", "5b", "5.8"),
-    (11, "VI", "5c", "5.9"), (12, "VI+", "6a", "5.10a"),
-    (13, "VII-", "6a+", "5.10b"), (14, "VII", "6b", "5.10c"),
+    (1, "I", "1", "5.2"),
+    (2, "II", "2", "5.3"),
+    (3, "III", "3", "5.4"),
+    (4, "III+", "3+", "5.4+"),
+    (5, "IV", "4a", "5.5"),
+    (6, "IV+", "4b", "5.6"),
+    (7, "V-", "4b+", "5.6+"),
+    (8, "V", "4c", "5.7"),
+    (9, "V+", "5a", "5.7+"),
+    (10, "VI-", "5b", "5.8"),
+    (11, "VI", "5c", "5.9"),
+    (12, "VI+", "6a", "5.10a"),
+    (13, "VII-", "6a+", "5.10b"),
+    (14, "VII", "6b", "5.10c"),
     (15, "VII+", "6b+", "5.10d"),
-    (16, "VIII-", "6c", "5.11a"),    # CAI: 6c
-    (17, "VIII-", "6c+", "5.11b"),   # CAI: VIII-/6c+
+    (16, "VIII-", "6c", "5.11a"),  # CAI: 6c
+    (17, "VIII-", "6c+", "5.11b"),  # CAI: VIII-/6c+
     (18, "VIII", "7a", "5.11d"),
-    (19, "VIII+", "7a+", "5.12a"),   # Convergence point
-    (20, "IX-", "7b", "5.12b"), (21, "IX-", "7b+", "5.12c"),
+    (19, "VIII+", "7a+", "5.12a"),  # Convergence point
+    (20, "IX-", "7b", "5.12b"),
+    (21, "IX-", "7b+", "5.12c"),
     (22, "IX", "7c", "5.12d"),
     (23, "IX+", "7c+", "5.13a"),
-    (24, "X-", "8a", "5.13b"), (25, "X-", "8a+", "5.13c"),
+    (24, "X-", "8a", "5.13b"),
+    (25, "X-", "8a+", "5.13c"),
     (26, "X", "8b", "5.13d"),
     (27, "X+", "8b+", "5.14a"),
-    (28, "XI-", "8c", "5.14b"), (29, "XI-", "8c+", "5.14c"),
-    (30, "XI", "9a", "5.14d"),       # Action Directe
+    (28, "XI-", "8c", "5.14b"),
+    (29, "XI-", "8c+", "5.14c"),
+    (30, "XI", "9a", "5.14d"),  # Action Directe
     (31, "XI+", "9a+", "5.15a"),
-    (32, "XII-", "9b", "5.15b"), (33, "XII", "9b+", "5.15c"),
-    (34, "XII+", "9c", "5.15d"),     # Silence
+    (32, "XII-", "9b", "5.15b"),
+    (33, "XII", "9b+", "5.15c"),
+    (34, "XII+", "9c", "5.15d"),  # Silence
 ]
 
 # Boulder: (ircra, font, v_scale)
 _BOULDER_TABLE = [
-    (11, "3", "VB"), (12, "4-", "V0-"), (13, "4", "V0"), (14, "4+", "V0+"),
-    (15, "5", "V1"), (16, "5+", "V2"),
-    (17, "6A", "V3"), (18, "6A+", "V3+"),
-    (19, "6B", "V4"), (20, "6B+", "V4+"),
-    (21, "6C", "V5"), (22, "6C+", "V5+"),
-    (23, "7A", "V6"), (24, "7A+", "V7"),
-    (25, "7B", "V8"), (26, "7B+", "V8+"),
-    (27, "7C", "V9"), (28, "7C+", "V10"),
-    (29, "8A", "V11"), (30, "8A+", "V12"),
-    (31, "8B", "V13"), (32, "8B+", "V14"),
-    (33, "8C", "V15"), (34, "8C+", "V16"),
+    (11, "3", "VB"),
+    (12, "4-", "V0-"),
+    (13, "4", "V0"),
+    (14, "4+", "V0+"),
+    (15, "5", "V1"),
+    (16, "5+", "V2"),
+    (17, "6A", "V3"),
+    (18, "6A+", "V3+"),
+    (19, "6B", "V4"),
+    (20, "6B+", "V4+"),
+    (21, "6C", "V5"),
+    (22, "6C+", "V5+"),
+    (23, "7A", "V6"),
+    (24, "7A+", "V7"),
+    (25, "7B", "V8"),
+    (26, "7B+", "V8+"),
+    (27, "7C", "V9"),
+    (28, "7C+", "V10"),
+    (29, "8A", "V11"),
+    (30, "8A+", "V12"),
+    (31, "8B", "V13"),
+    (32, "8B+", "V14"),
+    (33, "8C", "V15"),
+    (34, "8C+", "V16"),
     (35, "9A", "V17"),
 ]
 
@@ -151,6 +191,7 @@ _PATTERNS = [
 @dataclass(frozen=True)
 class Grade:
     """An immutable climbing grade with system and IRCRA difficulty index."""
+
     system: RouteSystem | BoulderSystem
     value: str
     difficulty_index: int

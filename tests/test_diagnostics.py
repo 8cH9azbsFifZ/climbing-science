@@ -15,7 +15,7 @@ from climbing_science.diagnostics import (
     progress_delta,
     training_priority,
 )
-from climbing_science.grades import GradeSystem
+from climbing_science.grades import BoulderSystem, GradeSystem, RouteSystem
 
 
 class TestClassifyLevel:
@@ -31,31 +31,31 @@ class TestClassifyLevel:
     @pytest.mark.parametrize(
         "grade, system, expected",
         [
-            ("5a", GradeSystem.FRENCH, "beginner"),
-            ("5c", GradeSystem.FRENCH, "beginner"),
-            ("6a", GradeSystem.FRENCH, "intermediate"),
-            ("6b+", GradeSystem.FRENCH, "intermediate"),
-            ("6c+", GradeSystem.FRENCH, "intermediate"),
-            ("7a", GradeSystem.FRENCH, "advanced"),
-            ("7b", GradeSystem.FRENCH, "advanced"),
-            ("7c", GradeSystem.FRENCH, "elite"),
-            ("8a", GradeSystem.FRENCH, "elite"),
+            ("5a", RouteSystem.FRENCH, "beginner"),
+            ("5c", RouteSystem.FRENCH, "beginner"),
+            ("6a", RouteSystem.FRENCH, "intermediate"),
+            ("6b+", RouteSystem.FRENCH, "intermediate"),
+            ("6c+", RouteSystem.FRENCH, "intermediate"),
+            ("7a", RouteSystem.FRENCH, "advanced"),
+            ("7b", RouteSystem.FRENCH, "advanced"),
+            ("7c", RouteSystem.FRENCH, "elite"),
+            ("8a", RouteSystem.FRENCH, "elite"),
         ],
     )
     def test_french_grades(self, grade, system, expected):
         assert classify_level(grade, system) == expected
 
     def test_v_scale(self):
-        assert classify_level("V0", GradeSystem.V_SCALE) == "beginner"
-        assert classify_level("V5", GradeSystem.V_SCALE) == "intermediate"
-        assert classify_level("V8", GradeSystem.V_SCALE) == "advanced"
-        assert classify_level("V10", GradeSystem.V_SCALE) == "elite"
+        assert classify_level("V0", BoulderSystem.V_SCALE) == "beginner"
+        assert classify_level("V5", BoulderSystem.V_SCALE) == "intermediate"
+        assert classify_level("V8", BoulderSystem.V_SCALE) == "advanced"
+        assert classify_level("V10", BoulderSystem.V_SCALE) == "elite"
 
     def test_yds(self):
-        assert classify_level("5.10a", GradeSystem.YDS) == "beginner"
-        assert classify_level("5.12a", GradeSystem.YDS) == "intermediate"
-        assert classify_level("5.13a", GradeSystem.YDS) == "advanced"
-        assert classify_level("5.14a", GradeSystem.YDS) == "elite"
+        assert classify_level("5.10a", RouteSystem.YDS) == "beginner"
+        assert classify_level("5.12a", RouteSystem.YDS) == "intermediate"
+        assert classify_level("5.13a", RouteSystem.YDS) == "advanced"
+        assert classify_level("5.14a", RouteSystem.YDS) == "elite"
 
 
 class TestIdentifyWeakness:

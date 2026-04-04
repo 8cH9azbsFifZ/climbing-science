@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import math
 
-from climbing_science.grades import GradeSystem, convert, difficulty_index
+from climbing_science.grades import BoulderSystem, RouteSystem, convert, difficulty_index, from_index
 
 __all__ = [
     "mvc7_to_grade",
@@ -66,7 +66,7 @@ _MVC7_BENCHMARKS: list[tuple[str, float]] = [
 ]
 
 # Pre-compute difficulty indices for interpolation
-_BENCH_IDX: list[tuple[int, float]] = [(difficulty_index(g, GradeSystem.FRENCH), pct) for g, pct in _MVC7_BENCHMARKS]
+_BENCH_IDX: list[tuple[int, float]] = [(difficulty_index(g, RouteSystem.FRENCH), pct) for g, pct in _MVC7_BENCHMARKS]
 
 
 def _interpolate(x: float, points: list[tuple[float, float]]) -> float:
@@ -145,7 +145,7 @@ def _inverse_interpolate(y: float, points: list[tuple[float, float]]) -> float:
 
 def mvc7_to_grade(
     percent_bw: float,
-    system: GradeSystem = GradeSystem.FRENCH,
+    system=RouteSystem.FRENCH,
 ) -> str:
     """Estimate climbing grade from MVC-7 finger strength.
 
@@ -173,9 +173,9 @@ def mvc7_to_grade(
     Examples:
         >>> mvc7_to_grade(125.0)
         '6c+'
-        >>> mvc7_to_grade(140.0, GradeSystem.YDS)
+        >>> mvc7_to_grade(140.0, RouteSystem.YDS)
         '5.12d'
-        >>> mvc7_to_grade(160.0, GradeSystem.V_SCALE)
+        >>> mvc7_to_grade(160.0, BoulderSystem.V_SCALE)
         'V8+'
     """
     # Interpolate to get difficulty index
@@ -188,20 +188,21 @@ def mvc7_to_grade(
     best_grade = _MVC7_BENCHMARKS[0][0]
     best_dist = float("inf")
     for grade_str, _ in _MVC7_BENCHMARKS:
-        grade_idx = difficulty_index(grade_str, GradeSystem.FRENCH)
+        grade_idx = difficulty_index(grade_str, RouteSystem.FRENCH)
         dist = abs(grade_idx - idx)
         if dist < best_dist:
             best_dist = dist
             best_grade = grade_str
 
-    if system == GradeSystem.FRENCH:
+    if system == RouteSystem.FRENCH:
         return best_grade
-    return convert(best_grade, GradeSystem.FRENCH, system)
+    best_idx = difficulty_index(best_grade, RouteSystem.FRENCH)
+    return from_index(best_idx, system)
 
 
 def grade_to_mvc7(
     grade_str: str,
-    system: GradeSystem = GradeSystem.FRENCH,
+    system=RouteSystem.FRENCH,
 ) -> float:
     """Estimate required MVC-7 (%BW) for a target climbing grade.
 
@@ -223,9 +224,9 @@ def grade_to_mvc7(
     Examples:
         >>> grade_to_mvc7("7a")
         128.0
-        >>> grade_to_mvc7("V5", GradeSystem.V_SCALE)
+        >>> grade_to_mvc7("V5", BoulderSystem.V_SCALE)
         122.0
-        >>> grade_to_mvc7("5.13a", GradeSystem.YDS)
+        >>> grade_to_mvc7("5.13a", RouteSystem.YDS)
         147.0
     """
     idx = float(difficulty_index(grade_str, system))

@@ -13,7 +13,7 @@ Data sources:
 
 from __future__ import annotations
 
-from climbing_science.grades import GradeSystem, difficulty_index
+from climbing_science.grades import BoulderSystem, RouteSystem, difficulty_index
 
 __all__ = [
     "classify_level",
@@ -30,21 +30,21 @@ __all__ = [
 # Uses French sport grade as the canonical reference.
 #
 # Difficulty index thresholds (from grades.py):
-#   6a  = 42  → intermediate starts
-#   7a  = 59  → advanced starts
-#   7c  = 70  → elite starts
+#   6a  = 12  → intermediate starts
+#   7a  = 18  → advanced starts
+#   7c  = 22  → elite starts
 # ---------------------------------------------------------------------------
 
 _LEVEL_THRESHOLDS: list[tuple[int, str]] = [
-    (42, "intermediate"),  # 6a and above
-    (59, "advanced"),  # 7a and above
-    (70, "elite"),  # 7c and above
+    (12, "intermediate"),  # 6a and above
+    (18, "advanced"),  # 7a and above
+    (22, "elite"),  # 7c and above
 ]
 
 
 def classify_level(
     grade_str: str,
-    system: GradeSystem = GradeSystem.FRENCH,
+    system=RouteSystem.FRENCH,
 ) -> str:
     """Classify climber level from their hardest redpoint grade.
 
@@ -67,11 +67,11 @@ def classify_level(
         Lattice Training benchmarks.
 
     Examples:
-        >>> classify_level("6b", GradeSystem.FRENCH)
+        >>> classify_level("6b", RouteSystem.FRENCH)
         'intermediate'
-        >>> classify_level("V8", GradeSystem.V_SCALE)
+        >>> classify_level("V8", BoulderSystem.V_SCALE)
         'advanced'
-        >>> classify_level("5.13c", GradeSystem.YDS)
+        >>> classify_level("5.13c", RouteSystem.YDS)
         'elite'
     """
     idx = difficulty_index(grade_str, system)

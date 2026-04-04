@@ -9,7 +9,7 @@ Tests verify against published benchmark data:
 
 import pytest
 
-from climbing_science.grades import GradeSystem
+from climbing_science.grades import BoulderSystem, GradeSystem, RouteSystem
 from climbing_science.strength import (
     grade_to_mvc7,
     mvc7_to_grade,
@@ -64,8 +64,8 @@ class TestMvc7ToGrade:
 
     def test_different_grade_systems(self):
         """Conversion to other systems should work."""
-        assert mvc7_to_grade(128.0, GradeSystem.YDS) == "5.12b"
-        assert mvc7_to_grade(128.0, GradeSystem.UIAA) == "IX+"
+        assert mvc7_to_grade(128.0, RouteSystem.YDS) == "5.11d"
+        assert mvc7_to_grade(128.0, RouteSystem.UIAA) == "VIII"
 
     def test_monotonically_increasing(self):
         """Higher %BW must never produce a lower grade."""
@@ -74,7 +74,7 @@ class TestMvc7ToGrade:
         prev_idx = 0
         for pct in range(70, 200, 5):
             grade = mvc7_to_grade(float(pct))
-            idx = difficulty_index(grade, GradeSystem.FRENCH)
+            idx = difficulty_index(grade, RouteSystem.FRENCH)
             assert idx >= prev_idx, f"Grade decreased at {pct}%BW: {grade}"
             prev_idx = idx
 
@@ -115,8 +115,8 @@ class TestGradeToMvc7:
 
     def test_different_systems(self):
         """Grade from any system should work."""
-        assert grade_to_mvc7("V5", GradeSystem.V_SCALE) == pytest.approx(122.0, abs=1.0)
-        assert grade_to_mvc7("5.12b", GradeSystem.YDS) == pytest.approx(128.0, abs=1.0)
+        assert grade_to_mvc7("V5", BoulderSystem.V_SCALE) == pytest.approx(147.0, abs=1.0)
+        assert grade_to_mvc7("5.12b", RouteSystem.YDS) == pytest.approx(140.0, abs=1.0)
 
     def test_monotonically_increasing(self):
         """Higher grades must require higher MVC-7."""

@@ -78,12 +78,9 @@ from climbing_science.strength import (
 __all__ = [
     "__version__",
     # grades
-    "Grade",
-    "GradeSystem",
-    "compare",
-    "convert",
-    "difficulty_index",
-    "parse",
+    "BoulderSystem", "Grade", "GradeDomainError", "GradeError", "GradeSystem",
+    "RouteSystem", "UnknownGradeError", "UnknownSystemError",
+    "all_grades", "compare", "convert", "difficulty_index", "from_index", "parse",
     # models
     "AssessmentResult",
     "ClimberLevel",

@@ -6,50 +6,76 @@ The International Rock Climbing Research Association (IRCRA) published a positio
 statement (Draper et al. 2015) standardising the comparison of climbing grades
 across different systems worldwide.
 
-## Supported Systems
+Every grade in this library maps to an **IRCRA difficulty index** (integers 1-35),
+which serves as the canonical comparison axis.
+
+## Two Domains
+
+Climbing grades fall into two separate domains:
+
+### Route Grades (lead / top-rope)
 
 | System | Region | Range | Example |
 |--------|--------|-------|---------|
-| **French** | Europe (sport) | 1 – 9c | 7a, 8b+ |
-| **UIAA** | Central Europe | I – XIII | VII+, X- |
-| **YDS** | North America | 5.0 – 5.15d | 5.12a, 5.14c |
-| **V-Scale** (Hueco) | Worldwide (boulder) | V0 – V17 | V5, V10 |
-| **Font** (Fontainebleau) | Europe (boulder) | 3 – 9A | 7A, 8B+ |
+| **UIAA** | Central Europe | I - XII+ | VII+, X- |
+| **French** | Europe (sport) | 1 - 9c | 7a, 8b+ |
+| **YDS** | North America | 5.0 - 5.15d | 5.12a, 5.14c |
+
+### Boulder Grades
+
+| System | Region | Range | Example |
+|--------|--------|-------|---------|
+| **Font** (Fontainebleau) | Europe | 3 - 9A | 7A, 8B+ |
+| **V-Scale** (Hueco) | Worldwide | V0 - V17 | V5, V10 |
+
+!!! warning "Domain Separation"
+    Converting between route and boulder systems (e.g. French -> V-Scale)
+    raises a `GradeDomainError`. Use `from_index()` for cross-domain
+    difficulty comparison.
 
 ## Difficulty Index
 
-All grades map to an internal **difficulty index** (0–100), which serves as the
-canonical comparison axis. This allows cross-system comparison:
+All grades map to an **IRCRA difficulty index** (1-35), which allows
+cross-system comparison:
 
 ```python
 from climbing_science.grades import parse, compare
 
 # Are these the same difficulty?
-print(compare("V5", "6c+"))  # → 0 (equal)
-print(compare("8a", "V10"))  # → 0 (equal)
-print(compare("7a", "V5"))   # → 1 (7a is harder)
+print(compare("V5", "6c+"))  # compares by IRCRA index
+print(compare("8a", "V10"))  # cross-domain comparison works
 ```
 
-## French ↔ Font Disambiguation
+## French vs Font Disambiguation
 
 French sport grades and Fontainebleau boulder grades overlap in notation
 (both use numbers + letters). The library disambiguates by **case**:
 
-- **Lowercase** → French sport: `7a`, `6b+`, `8c`
-- **Uppercase** → Font boulder: `7A`, `6B+`, `8C`
+- **Lowercase** -> French sport: `7a`, `6b+`, `8c`
+- **Uppercase** -> Font boulder: `7A`, `6B+`, `8C`
 
 ## Usage
 
 ```python
-from climbing_science.grades import convert, GradeSystem
+from climbing_science.grades import convert, RouteSystem, BoulderSystem
 
-# French → YDS
-print(convert("7a", GradeSystem.FRENCH, GradeSystem.YDS))  # → 5.12b
+# Within route domain: French -> YDS
+print(convert("7a", "French", "YDS"))  # -> "5.11d"
 
-# V-Scale → UIAA
-print(convert("V10", GradeSystem.V_SCALE, GradeSystem.UIAA))  # → XI
+# Within boulder domain: V-Scale -> Font
+print(convert("V5", "V-Scale", "Font"))  # -> "7A"
+
+# Cross-domain via index
+from climbing_science.grades import from_index, difficulty_index
+idx = difficulty_index("7a", "French")
+print(from_index(idx, BoulderSystem.V_SCALE))  # approximate boulder equivalent
 ```
 
-## References
+## Primary Sources
 
-- Draper, N. et al. (2015). *Comparative grading scales, statistical analyses, climber descriptors and ability grouping: International Rock Climbing Research Association position statement.* Sports Technology, 8(3–4), 88–94. \[cite:draper2015\]
+| Source | Used for |
+|--------|----------|
+| Draper et al. 2015 | IRCRA numerical index (1-35) |
+| CAI / Mandelli 2016 | UIAA official conversion tables |
+| Mountain Project 2024 | Community consensus cross-check |
+| Rockfax 2022 | European standard cross-check |

@@ -9,7 +9,7 @@ Tests verify against published benchmark data:
 
 import pytest
 
-from climbing_science.grades import BoulderSystem, GradeSystem, RouteSystem
+from climbing_science.grades import BoulderSystem, RouteSystem
 from climbing_science.strength import (
     grade_to_mvc7,
     mvc7_to_grade,

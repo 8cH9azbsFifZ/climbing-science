@@ -13,7 +13,7 @@ Data sources:
 
 from __future__ import annotations
 
-from climbing_science.grades import BoulderSystem, RouteSystem, difficulty_index
+from climbing_science.grades import RouteSystem, difficulty_index
 
 __all__ = [
     "classify_level",

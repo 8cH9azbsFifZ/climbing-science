@@ -8,10 +8,21 @@ Tests verify against grade correspondence tables from:
 """
 
 import pytest
+
 from climbing_science.grades import (
-    BoulderSystem, Grade, GradeDomainError, GradeError, RouteSystem,
-    UnknownGradeError, UnknownSystemError,
-    all_grades, compare, convert, difficulty_index, from_index, parse,
+    BoulderSystem,
+    Grade,
+    GradeDomainError,
+    GradeError,
+    RouteSystem,
+    UnknownGradeError,
+    UnknownSystemError,
+    all_grades,
+    compare,
+    convert,
+    difficulty_index,
+    from_index,
+    parse,
 )
 
 
@@ -80,16 +91,20 @@ class TestRoundTrip:
 
 class TestDomainSeparation:
     def test_french_to_font(self):
-        with pytest.raises(GradeDomainError): convert("7a", "French", "Font")
+        with pytest.raises(GradeDomainError):
+            convert("7a", "French", "Font")
 
     def test_v_to_yds(self):
-        with pytest.raises(GradeDomainError): convert("V5", "V-Scale", "YDS")
+        with pytest.raises(GradeDomainError):
+            convert("V5", "V-Scale", "YDS")
 
     def test_uiaa_to_v(self):
-        with pytest.raises(GradeDomainError): convert("VIII", "UIAA", "V-Scale")
+        with pytest.raises(GradeDomainError):
+            convert("VIII", "UIAA", "V-Scale")
 
     def test_font_to_french(self):
-        with pytest.raises(GradeDomainError): convert("7A", "Font", "French")
+        with pytest.raises(GradeDomainError):
+            convert("7A", "Font", "French")
 
     def test_hierarchy(self):
         assert issubclass(GradeDomainError, GradeError)
@@ -159,7 +174,8 @@ class TestParse:
         assert g.system == BoulderSystem.V_SCALE and g.value == "V5"
 
     def test_unknown(self):
-        with pytest.raises(UnknownGradeError): parse("rainbow")
+        with pytest.raises(UnknownGradeError):
+            parse("rainbow")
 
 
 class TestCaseInsensitive:
@@ -175,16 +191,20 @@ class TestCaseInsensitive:
 
 class TestErrorHandling:
     def test_unknown_grade(self):
-        with pytest.raises(UnknownGradeError): convert("13a", "French", "YDS")
+        with pytest.raises(UnknownGradeError):
+            convert("13a", "French", "YDS")
 
     def test_unknown_v(self):
-        with pytest.raises(UnknownGradeError): convert("V99", "V-Scale", "Font")
+        with pytest.raises(UnknownGradeError):
+            convert("V99", "V-Scale", "Font")
 
     def test_unknown_from_sys(self):
-        with pytest.raises(UnknownSystemError): convert("7a", "Ewbanks", "YDS")
+        with pytest.raises(UnknownSystemError):
+            convert("7a", "Ewbanks", "YDS")
 
     def test_unknown_to_sys(self):
-        with pytest.raises(UnknownSystemError): convert("7a", "French", "Saxon")
+        with pytest.raises(UnknownSystemError):
+            convert("7a", "French", "Saxon")
 
     def test_hierarchy(self):
         assert issubclass(UnknownGradeError, GradeError)
@@ -256,7 +276,8 @@ class TestPyclimbRegression:
 
 class TestGradeObject:
     def test_frozen(self):
-        with pytest.raises(AttributeError): parse("7a+").value = "8a"
+        with pytest.raises(AttributeError):
+            parse("7a+").value = "8a"
 
     def test_ordering(self):
         a, b = parse("V3"), parse("V5")

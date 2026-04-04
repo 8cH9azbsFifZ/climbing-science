@@ -15,7 +15,7 @@ from climbing_science.diagnostics import (
     progress_delta,
     training_priority,
 )
-from climbing_science.grades import BoulderSystem, GradeSystem, RouteSystem
+from climbing_science.grades import BoulderSystem, RouteSystem
 
 
 class TestClassifyLevel:

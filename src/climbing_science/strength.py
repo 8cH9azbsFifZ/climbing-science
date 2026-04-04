@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import math
 
-from climbing_science.grades import BoulderSystem, RouteSystem, convert, difficulty_index, from_index
+from climbing_science.grades import RouteSystem, difficulty_index, from_index
 
 __all__ = [
     "mvc7_to_grade",

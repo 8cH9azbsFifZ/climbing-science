@@ -46,15 +46,15 @@ class TestClassifyLevel:
         assert classify_level(grade, system) == expected
 
     def test_v_scale(self):
-        assert classify_level("V0", BoulderSystem.V_SCALE) == "beginner"
-        assert classify_level("V5", BoulderSystem.V_SCALE) == "intermediate"
-        assert classify_level("V8", BoulderSystem.V_SCALE) == "advanced"
+        assert classify_level("V0", BoulderSystem.V_SCALE) == "intermediate"
+        assert classify_level("V5", BoulderSystem.V_SCALE) == "advanced"
+        assert classify_level("V8", BoulderSystem.V_SCALE) == "elite"
         assert classify_level("V10", BoulderSystem.V_SCALE) == "elite"
 
     def test_yds(self):
-        assert classify_level("5.10a", RouteSystem.YDS) == "beginner"
-        assert classify_level("5.12a", RouteSystem.YDS) == "intermediate"
-        assert classify_level("5.13a", RouteSystem.YDS) == "advanced"
+        assert classify_level("5.10a", RouteSystem.YDS) == "intermediate"
+        assert classify_level("5.12a", RouteSystem.YDS) == "advanced"
+        assert classify_level("5.13a", RouteSystem.YDS) == "elite"
         assert classify_level("5.14a", RouteSystem.YDS) == "elite"
 
 

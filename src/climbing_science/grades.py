@@ -20,7 +20,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Union
+
 
 __all__ = [
     "RouteSystem", "BoulderSystem", "GradeSystem", "Grade",
@@ -55,7 +55,7 @@ class BoulderSystem(str, Enum):
     V_SCALE = "V-Scale"
 
 
-GradeSystem = Union[RouteSystem, BoulderSystem]
+GradeSystem = RouteSystem | BoulderSystem
 
 _ROUTE_SYSTEMS = set(RouteSystem)
 _BOULDER_SYSTEMS = set(BoulderSystem)
@@ -151,24 +151,28 @@ _PATTERNS = [
 @dataclass(frozen=True)
 class Grade:
     """An immutable climbing grade with system and IRCRA difficulty index."""
-    system: Union[RouteSystem, BoulderSystem]
+    system: RouteSystem | BoulderSystem
     value: str
     difficulty_index: int
 
     def __lt__(self, other):
-        if not isinstance(other, Grade): return NotImplemented
+        if not isinstance(other, Grade):
+            return NotImplemented
         return self.difficulty_index < other.difficulty_index
 
     def __le__(self, other):
-        if not isinstance(other, Grade): return NotImplemented
+        if not isinstance(other, Grade):
+            return NotImplemented
         return self.difficulty_index <= other.difficulty_index
 
     def __gt__(self, other):
-        if not isinstance(other, Grade): return NotImplemented
+        if not isinstance(other, Grade):
+            return NotImplemented
         return self.difficulty_index > other.difficulty_index
 
     def __ge__(self, other):
-        if not isinstance(other, Grade): return NotImplemented
+        if not isinstance(other, Grade):
+            return NotImplemented
         return self.difficulty_index >= other.difficulty_index
 
     def __str__(self):
@@ -256,8 +260,10 @@ def parse(grade_str):
 def compare(a, b):
     """Compare two grades from any system by their IRCRA index."""
     ga, gb = parse(a), parse(b)
-    if ga.difficulty_index < gb.difficulty_index: return -1
-    if ga.difficulty_index > gb.difficulty_index: return 1
+    if ga.difficulty_index < gb.difficulty_index:
+        return -1
+    if ga.difficulty_index > gb.difficulty_index:
+        return 1
     return 0
 
 

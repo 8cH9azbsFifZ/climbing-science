@@ -20,6 +20,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from enum import Enum
+from typing import Union
 
 __all__ = [
     "RouteSystem", "BoulderSystem", "GradeSystem", "Grade",
@@ -53,8 +54,6 @@ class BoulderSystem(str, Enum):
     FONT = "Font"
     V_SCALE = "V-Scale"
 
-
-from typing import Union
 
 GradeSystem = Union[RouteSystem, BoulderSystem]
 

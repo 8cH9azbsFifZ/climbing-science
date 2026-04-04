@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **M2: endurance** — Critical Force regression (Jones 2010), W' balance (Skiba 2012), time-to-failure, endurance classification, CF/MVC ratio interpretation.
+- **M3: load** — TUT calculation, RPE↔%MVC conversion (López 2018), ACWR (Gabbett 2016), overtraining check, margin-to-failure.
+- **M4: protocols** — Registry of 20 hangboard protocols (López, Hörst, Anderson, Nelson, Lattice, etc.) covering all energy systems. Selection and formatting utilities.
+- **M5: periodization** — Macrocycle, mesocycle, and microcycle generation with deload weeks. López constraint validation (never increase vol+intensity+freq simultaneously).
+- **M6: diagnostics** — Level classification from redpoint grade (IRCRA/Draper 2015), weakness identification from assessment metrics, training priority decision tree, progress delta tracking.
+- **M7: io** — CSV force-gauge file parsing, SessionLog JSON round-trip, assessment Markdown and JSON export.
+- Full `__init__.py` re-exports for all 8 modules (grades, models, strength, endurance, load, protocols, periodization, diagnostics, io).
+- Comprehensive test suite: 246 tests, 94% coverage.
+- MkDocs nav updated with all API reference pages.
+
 ## [0.1.0] — 2026-04-03
 
 ### Added

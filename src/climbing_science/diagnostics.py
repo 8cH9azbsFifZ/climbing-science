@@ -30,17 +30,15 @@ __all__ = [
 # Uses French sport grade as the canonical reference.
 #
 # Difficulty index thresholds (from grades.py):
-#   6a  = 42
-#   6c+ = 54
-#   7b  = 65
-#   8a  = 76
+#   6a  = 42  → intermediate starts
+#   7a  = 59  → advanced starts
+#   7c  = 70  → elite starts
 # ---------------------------------------------------------------------------
 
 _LEVEL_THRESHOLDS: list[tuple[int, str]] = [
-    (42, "beginner"),  # below 6a
-    (54, "intermediate"),  # 6a – 6c+
-    (65, "advanced"),  # 7a – 7b
-    (76, "elite"),  # 7b+ – 8a+
+    (42, "intermediate"),  # 6a and above
+    (59, "advanced"),  # 7a and above
+    (70, "elite"),  # 7c and above
 ]
 
 

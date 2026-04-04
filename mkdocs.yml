@@ -63,12 +63,9 @@ nav:
     - Strength: api/strength.md
     - Endurance: api/endurance.md
     - Load: api/load.md
-  # Upcoming modules (uncomment as implemented):
-  #  - Endurance: api/endurance.md
-  #  - Load: api/load.md
-  #  - Protocols: api/protocols.md
-  #  - Periodization: api/periodization.md
-  #  - Diagnostics: api/diagnostics.md
-  #  - IO: api/io.md
+    - Protocols: api/protocols.md
+    - Periodization: api/periodization.md
+    - Diagnostics: api/diagnostics.md
+    - IO: api/io.md
   - Changelog: changelog.md
   - References: references.md

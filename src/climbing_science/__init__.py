@@ -2,6 +2,12 @@
 
 __version__ = "0.1.0"
 
+from climbing_science.diagnostics import (
+    classify_level,
+    identify_weakness,
+    progress_delta,
+    training_priority,
+)
 from climbing_science.endurance import (
     cf_mvc_ratio,
     classify_endurance,
@@ -10,7 +16,19 @@ from climbing_science.endurance import (
     time_to_failure,
     w_prime_balance,
 )
-from climbing_science.grades import Grade, GradeSystem, compare, convert, difficulty_index, parse
+from climbing_science.grades import (
+    Grade,
+    GradeSystem,
+    compare,
+    convert,
+    difficulty_index,
+    parse,
+)
+from climbing_science.io import (
+    export_assessment_json,
+    export_assessment_markdown,
+    read_force_csv,
+)
 from climbing_science.load import (
     acwr,
     effort_level_to_mvc_pct,
@@ -33,6 +51,21 @@ from climbing_science.models import (
     GripType,
     MVC7Test,
     SessionLog,
+)
+from climbing_science.periodization import (
+    MacroCycle,
+    MesoCycle,
+    MicroCycle,
+    generate_macrocycle,
+    generate_mesocycle,
+    generate_microcycle,
+    validate_constraints,
+)
+from climbing_science.protocols import (
+    format_notation,
+    get_protocol,
+    list_protocols,
+    select_protocols,
 )
 from climbing_science.strength import (
     grade_to_mvc7,
@@ -85,4 +118,26 @@ __all__ = [
     "tut_per_session",
     "tut_per_set",
     "weekly_load",
+    # protocols
+    "format_notation",
+    "get_protocol",
+    "list_protocols",
+    "select_protocols",
+    # periodization
+    "MacroCycle",
+    "MesoCycle",
+    "MicroCycle",
+    "generate_macrocycle",
+    "generate_mesocycle",
+    "generate_microcycle",
+    "validate_constraints",
+    # diagnostics
+    "classify_level",
+    "identify_weakness",
+    "progress_delta",
+    "training_priority",
+    # io
+    "export_assessment_json",
+    "export_assessment_markdown",
+    "read_force_csv",
 ]

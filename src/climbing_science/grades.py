@@ -55,7 +55,7 @@ class BoulderSystem(str, Enum):
     V_SCALE = "V-Scale"
 
 
-GradeSystem = Union[RouteSystem, BoulderSystem]
+GradeSystem = Union[RouteSystem, BoulderSystem]  # noqa: UP007  (runtime, not annotation)
 
 _ROUTE_SYSTEMS = set(RouteSystem)
 _BOULDER_SYSTEMS = set(BoulderSystem)

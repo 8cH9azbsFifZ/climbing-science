@@ -71,5 +71,10 @@ nav:
     - IO: api/io.md
     - Edge Depth: api/edge_depth.md
     - Signal: api/signal.md
+    - Adapters:
+      - Manual Input: api/adapter_manual.md
+      - Tindeq Progressor: api/adapter_tindeq.md
+    - Frontends:
+      - Notebook Helpers: api/frontend_notebook.md
   - Changelog: changelog.md
   - References: references.md

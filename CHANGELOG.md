@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.3.0] — 2026-04-05
+
+### Added
+
+- **edge_depth** — Edge depth correction based on Amca et al. (2012). Linear 2.5 %/mm model: `correction_factor`, `convert_force`, `normalize_to_reference`, `estimate_force_at_depth`. Full correction factor table in science docs.
+- **signal** — Force-curve signal processing (pure stdlib, no NumPy): `smooth` (moving avg / EMA), `detect_peaks`, `compute_rfd` (Levernier 2019), `best_n_second_average` (MVC-7 extraction), `compute_impulse`, `segment_repeaters` (7/3 protocol segmentation).
+- **adapters/manual** — Manual input adapter for climbers without a force gauge: `from_mvc7_test` (with Rohmert + edge depth normalisation), `from_repeater_test` (3-point CF protocol), `from_bodyweight_hang`, `quick_profile`.
+- **adapters/tindeq** — Tindeq Progressor JSON adapter: `load` / `load_all` (FFT format, simple format, bare array), `extract_mvc7`, `extract_peaks`. Auto-detects sample rate from timestamps.
+- **frontends/notebook** — Jupyter helpers (optional matplotlib): `plot_force_session`, `plot_rohmert_curve`, `plot_strength_benchmark`, `plot_protocol_comparison`, `session_to_dataframe`.
+- `[notebooks]` optional dependency group (matplotlib, pandas, jupyter).
+- Science docs for edge depth correction and signal processing with formulas and reference tables.
+- API docs for all new modules.
+- BibTeX entry for Amca et al. (2012).
+
 ## [0.2.0] — 2026-04-05
 
 ### Added

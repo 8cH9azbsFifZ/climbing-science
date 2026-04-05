@@ -19,17 +19,17 @@ and raw data from Tindeq/Climbro force measurements.
 
 ### What Exists Where
 
-| Capability                       | SC (JS/Web)    | iOS App (Swift) | Skills (Prose) | Python |
-| -------------------------------- | -------------- | --------------- | -------------- | ------ |
-| Rohmert curve (fatigue model)    | ✅ proprietary | ❌              | ✅ described   | ❌     |
-| Edge depth correction (Amca)     | ✅ proprietary | ❌              | ✅ described   | ❌     |
-| MVC-7 → grade prediction         | ✅ proprietary | ❌ (Phase 2c)   | ✅ table       | ❌     |
-| Critical Force (CF/W')           | ✅ proprietary | ❌ (Phase 3a)   | ✅ described   | ❌     |
-| Hangboard Load Calculator        | ✅ proprietary | ❌              | ✅ described   | ❌     |
-| Sport Climbing Level Calculator  | ✅ Premium     | ❌              | ❌             | ❌     |
-| RFD analysis                     | ✅ Premium     | ❌ (Phase 3a)   | ❌             | ❌     |
-| Tindeq JSON → Assessment         | ❌             | Raw data ✅     | ❌             | ❌     |
-| Force curve signal processing    | ❌             | ❌              | ❌             | ❌     |
+| Capability                       | Python |
+| -------------------------------- | ------ |
+| Rohmert curve (fatigue model)    | ❌     |
+| Edge depth correction (Amca)     | ❌     |
+| MVC-7 → grade prediction         | ❌     |
+| Critical Force (CF/W')           | ❌     |
+| Hangboard Load Calculator        | ❌     |
+| Sport Climbing Level Calculator  | ❌     |
+| RFD analysis                     | ❌     |
+| Tindeq JSON → Assessment         | ❌     |
+| Force curve signal processing    | ❌     |
 
 ### Core Gap
 

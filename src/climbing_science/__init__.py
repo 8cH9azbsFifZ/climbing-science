@@ -8,6 +8,16 @@ from climbing_science.diagnostics import (
     progress_delta,
     training_priority,
 )
+from climbing_science.edge_depth import (
+    CORRECTION_RATE,
+    MAX_EDGE_MM,
+    MIN_EDGE_MM,
+    REFERENCE_EDGE_MM,
+    convert_force,
+    correction_factor,
+    estimate_force_at_depth,
+    normalize_to_reference,
+)
 from climbing_science.endurance import (
     cf_mvc_ratio,
     classify_endurance,
@@ -67,6 +77,17 @@ from climbing_science.protocols import (
     list_protocols,
     select_protocols,
 )
+from climbing_science.signal import (
+    Peak,
+    RFDResult,
+    SegmentedRep,
+    best_n_second_average,
+    compute_impulse,
+    compute_rfd,
+    detect_peaks,
+    segment_repeaters,
+    smooth,
+)
 from climbing_science.strength import (
     grade_to_mvc7,
     mvc7_to_grade,
@@ -103,12 +124,31 @@ __all__ = [
     "GripType",
     "MVC7Test",
     "SessionLog",
+    # signal
+    "Peak",
+    "RFDResult",
+    "SegmentedRep",
+    "best_n_second_average",
+    "compute_impulse",
+    "compute_rfd",
+    "detect_peaks",
+    "segment_repeaters",
+    "smooth",
     # strength
     "grade_to_mvc7",
     "mvc7_to_grade",
     "power_to_weight",
     "rfd_from_curve",
     "rohmert_conversion",
+    # edge_depth
+    "CORRECTION_RATE",
+    "MAX_EDGE_MM",
+    "MIN_EDGE_MM",
+    "REFERENCE_EDGE_MM",
+    "convert_force",
+    "correction_factor",
+    "estimate_force_at_depth",
+    "normalize_to_reference",
     # endurance
     "cf_mvc_ratio",
     "classify_endurance",

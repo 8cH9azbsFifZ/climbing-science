@@ -55,6 +55,8 @@ nav:
     - Rohmert Curve: science/rohmert-curve.md
     - Critical Force: science/critical-force.md
     - Grade Conversion: science/grade-conversion.md
+    - Edge Depth Correction: science/edge-depth.md
+    - Signal Processing: science/signal-processing.md
   - Design: design.md
   - Requirements: requirements.md
   - API Reference:
@@ -67,5 +69,7 @@ nav:
     - Periodization: api/periodization.md
     - Diagnostics: api/diagnostics.md
     - IO: api/io.md
+    - Edge Depth: api/edge_depth.md
+    - Signal: api/signal.md
   - Changelog: changelog.md
   - References: references.md

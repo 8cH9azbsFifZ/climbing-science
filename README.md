@@ -7,6 +7,7 @@
 [![PyPI](https://img.shields.io/pypi/v/climbing-science)](https://pypi.org/project/climbing-science/)
 [![Python](https://img.shields.io/pypi/pyversions/climbing-science)](https://pypi.org/project/climbing-science/)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/8cH9azbsFifZ/climbing-science/main?labpath=notebooks%2Fgrade_conversion.ipynb)
 
 ## Why this project exists
 

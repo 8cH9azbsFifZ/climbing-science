@@ -57,4 +57,4 @@ All algorithms and formulas cite peer-reviewed sources. See [References](referen
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+GPL-3.0-or-later — see [LICENSE](LICENSE).

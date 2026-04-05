@@ -4,6 +4,9 @@
 
 [![CI](https://github.com/8cH9azbsFifZ/climbing-science/actions/workflows/ci.yml/badge.svg)](https://github.com/8cH9azbsFifZ/climbing-science/actions/workflows/ci.yml)
 [![Docs](https://github.com/8cH9azbsFifZ/climbing-science/actions/workflows/docs.yml/badge.svg)](https://8cH9azbsFifZ.github.io/climbing-science/)
+[![PyPI](https://img.shields.io/pypi/v/climbing-science)](https://pypi.org/project/climbing-science/)
+[![Python](https://img.shields.io/pypi/pyversions/climbing-science)](https://pypi.org/project/climbing-science/)
+[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 
 ## Why this project exists
 
@@ -63,4 +66,4 @@ All algorithms and formulas cite peer-reviewed sources. See [`docs/references.bi
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+GPL-3.0-or-later — see [LICENSE](LICENSE).

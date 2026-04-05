@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,10 +7,24 @@ name = "climbing-science"
 version = "0.1.0"
 description = "Open-source Python library for evidence-based climbing training analysis"
 readme = "README.md"
-license = "MIT"
+license = "GPL-3.0-or-later"
 requires-python = ">=3.9"
 authors = [
-    { name = "Gerolf Ziegenhain" },
+    { name = "Gerolf Ziegenhain", email = "gerolf.ziegenain@gmail.com" },
+]
+keywords = [
+    "climbing",
+    "science",
+    "hangboard",
+    "bouldering",
+    "finger-strength",
+    "training",
+    "sports-science",
+    "critical-force",
+    "periodization",
+    "mvc",
+    "rohmert",
+    "grade-conversion",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -22,6 +36,8 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Typing :: Typed",
 ]
 dependencies = [
     "pydantic>=2.0",
@@ -50,8 +66,11 @@ docs = [
 ]
 
 [project.urls]
+Homepage = "https://github.com/8cH9azbsFifZ/climbing-science"
 Repository = "https://github.com/8cH9azbsFifZ/climbing-science"
 Documentation = "https://8cH9azbsFifZ.github.io/climbing-science/"
+Issues = "https://github.com/8cH9azbsFifZ/climbing-science/issues"
+Changelog = "https://github.com/8cH9azbsFifZ/climbing-science/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

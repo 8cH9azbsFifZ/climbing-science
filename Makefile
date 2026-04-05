@@ -1,4 +1,4 @@
-.PHONY: test lint docs docs-serve bump-patch bump-minor clean install
+.PHONY: test lint docs docs-serve bump-patch bump-minor clean install build check-dist
 
 install:
 	pip install -e ".[dev]"
@@ -20,6 +20,13 @@ docs:
 docs-serve:
 	mkdocs serve
 
+build: clean
+	python -m build
+	twine check dist/*
+
+check-dist:
+	twine check dist/*
+
 bump-patch:
 	bump-my-version bump patch
 	@echo "--- Updating CHANGELOG.md ---"
@@ -31,5 +38,5 @@ bump-minor:
 	@echo "Remember to update CHANGELOG.md with changes for this version."
 
 clean:
-	rm -rf dist/ build/ *.egg-info site/ .pytest_cache .ruff_cache .mypy_cache
+	rm -rf dist/ build/ *.egg-info src/*.egg-info site/ .pytest_cache .ruff_cache .mypy_cache
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

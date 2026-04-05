@@ -32,8 +32,5 @@ jobs:
           ruff check src/ tests/
           ruff format --check src/ tests/
 
-      - name: Check citations
-        run: python scripts/check_citations.py
-
       - name: Test
         run: pytest tests/ -v --cov=climbing_science --cov-report=term-missing

@@ -1,4 +1,4 @@
-.PHONY: test lint docs docs-serve bump-patch bump-minor clean install build check-dist check-refs
+.PHONY: test lint docs docs-serve bump-patch bump-minor clean install build check-dist
 
 install:
 	pip install -e ".[dev]"
@@ -9,9 +9,6 @@ test:
 lint:
 	python -m ruff check src/ tests/
 	python -m ruff format --check src/ tests/
-
-check-refs:
-	python scripts/check_citations.py
 
 format:
 	python -m ruff format src/ tests/

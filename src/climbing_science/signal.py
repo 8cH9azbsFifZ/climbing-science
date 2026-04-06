@@ -593,8 +593,7 @@ def extract_ttf(
 
     if onset_idx is None:
         raise ValueError(
-            f"Force never reached threshold ({threshold:.1f} kg). "
-            f"Max force in signal: {max(values):.1f} kg."
+            f"Force never reached threshold ({threshold:.1f} kg). Max force in signal: {max(values):.1f} kg."
         )
 
     # Find failure: first time force stays below threshold for min_hold_s

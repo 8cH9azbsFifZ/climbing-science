@@ -32,6 +32,7 @@ class TestPlotForceSession:
 
     def test_with_peaks(self):
         from climbing_science.signal import Peak
+
         values = [0.0] * 100 + [50.0] * 600 + [0.0] * 100
         peaks = [Peak(start_idx=100, end_idx=699, peak_idx=400, peak_value=50.0, duration_s=7.5, mean_value=50.0)]
         fig = plot_force_session(values, peaks=peaks, show=False)

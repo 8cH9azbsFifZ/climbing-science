@@ -297,9 +297,7 @@ def compute_rfd(
             onset_idx = i
             break
     if onset_idx is None:
-        raise ValueError(
-            f"No force onset detected above {onset_threshold_kg} kg"
-        )
+        raise ValueError(f"No force onset detected above {onset_threshold_kg} kg")
 
     # Find peak (after onset)
     peak_val = values[onset_idx]
@@ -387,8 +385,7 @@ def best_n_second_average(
     n = len(values)
     if n < window:
         raise ValueError(
-            f"Signal ({n} samples = {n / sample_rate_hz:.2f} s) is shorter "
-            f"than requested window ({n_seconds} s)"
+            f"Signal ({n} samples = {n / sample_rate_hz:.2f} s) is shorter than requested window ({n_seconds} s)"
         )
 
     # Sliding window via running sum

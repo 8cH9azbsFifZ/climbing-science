@@ -1,6 +1,5 @@
 """Tests for climbing_science.signal — force-curve signal processing."""
 
-
 import pytest
 
 from climbing_science.signal import (
@@ -73,6 +72,7 @@ class TestSmooth:
 
     def test_reduces_noise(self):
         import random
+
         random.seed(42)
         base = _constant(50.0, 2.0)
         noisy = [v + random.gauss(0, 5) for v in base]

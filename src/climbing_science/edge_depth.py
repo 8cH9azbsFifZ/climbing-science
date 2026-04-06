@@ -51,6 +51,7 @@ MAX_EDGE_MM: float = 45.0
 # Validation helpers
 # ---------------------------------------------------------------------------
 
+
 def _validate_edge(edge_mm: float, name: str = "edge_mm") -> None:
     if edge_mm <= 0:
         raise ValueError(f"{name} must be > 0, got {edge_mm}")
@@ -64,6 +65,7 @@ def _validate_force(force_kg: float) -> None:
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
+
 
 def correction_factor(edge_mm: float, reference_mm: float = REFERENCE_EDGE_MM) -> float:
     """Multiplicative correction factor for edge depth.

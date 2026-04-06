@@ -1,6 +1,5 @@
 """Tests for climbing_science.edge_depth — edge depth correction."""
 
-
 import pytest
 
 from climbing_science.edge_depth import (

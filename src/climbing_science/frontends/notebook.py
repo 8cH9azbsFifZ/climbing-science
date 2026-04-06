@@ -35,11 +35,11 @@ def _require_matplotlib():
     """Import and return matplotlib.pyplot, raising clear error if missing."""
     try:
         import matplotlib.pyplot as plt
+
         return plt
     except ImportError:
         raise ImportError(
-            "matplotlib is required for plotting.  "
-            "Install it with:  pip install climbing-science[plot]"
+            "matplotlib is required for plotting.  Install it with:  pip install climbing-science[plot]"
         ) from None
 
 
@@ -47,12 +47,10 @@ def _require_pandas():
     """Import and return pandas, raising clear error if missing."""
     try:
         import pandas as pd
+
         return pd
     except ImportError:
-        raise ImportError(
-            "pandas is required for DataFrame export.  "
-            "Install it with:  pip install pandas"
-        ) from None
+        raise ImportError("pandas is required for DataFrame export.  Install it with:  pip install pandas") from None
 
 
 # ---------------------------------------------------------------------------
@@ -235,8 +233,12 @@ def plot_strength_benchmark(
     if mvc_bw_ratio is not None:
         ax.axvline(mvc_bw_ratio, color="#1E293B", linewidth=3, linestyle="--")
         ax.text(
-            mvc_bw_ratio, 0.4, f"You: {mvc_bw_ratio:.2f}",
-            ha="center", fontsize=11, fontweight="bold",
+            mvc_bw_ratio,
+            0.4,
+            f"You: {mvc_bw_ratio:.2f}",
+            ha="center",
+            fontsize=11,
+            fontweight="bold",
         )
 
     ax.set_xlabel("MVC / BW Ratio")

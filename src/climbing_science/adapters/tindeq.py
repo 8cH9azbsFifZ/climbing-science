@@ -88,9 +88,7 @@ def load(source: str | Path) -> TindeqSession:
     References:
         Tindeq Progressor specification (80 Hz, 0.1 kg resolution).
     """
-    if isinstance(source, Path) or (
-        isinstance(source, str) and not source.lstrip().startswith(("{", "["))
-    ):
+    if isinstance(source, Path) or (isinstance(source, str) and not source.lstrip().startswith(("{", "["))):
         path = Path(source)
         if not path.exists():
             raise FileNotFoundError(f"File not found: {path}")

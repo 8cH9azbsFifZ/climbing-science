@@ -25,11 +25,13 @@ def _fft_json(n_samples: int = 800, force_kg: float = 50.0, rate_hz: float = 80.
     samples = []
     for i in range(n_samples):
         samples.append({"timestamp": i * interval_us, "value": force_kg})
-    return json.dumps({
-        "testType": "MVC",
-        "holdType": "half_crimp",
-        "samples": samples,
-    })
+    return json.dumps(
+        {
+            "testType": "MVC",
+            "holdType": "half_crimp",
+            "samples": samples,
+        }
+    )
 
 
 def _simple_json(n_samples: int = 800, force_kg: float = 50.0, rate_hz: float = 80.0) -> str:

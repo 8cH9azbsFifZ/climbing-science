@@ -3,8 +3,17 @@
 Maps maximal voluntary contraction (7-second hang on 20 mm edge, half-crimp)
 to expected climbing grade and vice versa.
 
+Multiple prediction models are available via :class:`StrengthModel`:
+
+* **composite** — Merged route-grade benchmarks from Lattice Training
+  (n ≈ 901), StrengthClimbing.com, and r/climbharder survey (n = 555).
+* **maxtograde** — Crowd-sourced bouldering survey (n ≈ 2 000+, V1–V17),
+  cross-validated against Lattice benchmarks up to V13.
+
 Data sources:
     - Lattice Training (n ≈ 901 climbers), internal benchmarks
+    - MaxToGrade survey (:cite:`maxtograde2020`) — crowd-sourced (n ≈ 2 000+)
+    - Banaszczyk 2020 (:cite:`banaszczyk2020`) — cross-validation
     - Giles et al. 2006 (:cite:`giles2006`) — physiology of rock climbing
     - López-Rivera & González-Badillo 2012 (:cite:`lopezrivera2012`)
     - Levernier & Laffaye 2019 (:cite:`levernier2019`) — RFD in climbers
@@ -15,10 +24,12 @@ Data sources:
 from __future__ import annotations
 
 import math
+from enum import Enum
 
-from climbing_science.grades import RouteSystem, difficulty_index, from_index
+from climbing_science.grades import BoulderSystem, RouteSystem, difficulty_index, from_index
 
 __all__ = [
+    "StrengthModel",
     "mvc7_to_grade",
     "grade_to_mvc7",
     "rohmert_conversion",
@@ -27,19 +38,39 @@ __all__ = [
 ]
 
 
+class StrengthModel(str, Enum):
+    """Finger strength prediction model.
+
+    Selects the reference dataset used by :func:`mvc7_to_grade` and
+    :func:`grade_to_mvc7` for mapping MVC-7 %BW ↔ climbing grade.
+
+    Members:
+        COMPOSITE: Merged route-grade benchmarks (Lattice + SC + climbharder).
+        MAXTOGRADE: Crowd-sourced bouldering survey (n ≈ 2 000+, V1–V17).
+
+    References:
+        Lattice Training benchmarks (n ≈ 901),
+        MaxToGrade survey (:cite:`maxtograde2020`),
+        Banaszczyk 2020 (:cite:`banaszczyk2020`).
+    """
+
+    COMPOSITE = "composite"
+    MAXTOGRADE = "maxtograde"
+
+
 # ---------------------------------------------------------------------------
-# MVC-7 %BW ↔ Climbing Grade — Benchmark Table
+# MVC-7 %BW ↔ Climbing Grade — Benchmark Tables
 # ---------------------------------------------------------------------------
-# Composite data from multiple sources:
+
+# --- Composite model (route grades) ---------------------------------------
+# Merged from multiple sources:
 #   - Lattice Training (n ≈ 901), internal grade-strength correlations
 #   - StrengthClimbing.com aggregated survey data (n ≈ 2000)
 #   - r/climbharder 2017 survey (n = 555)
 #
 # Protocol: 20 mm edge, half-crimp, 7-second max hang
 # Values represent the MEDIAN %BW for climbers at each grade.
-#
 # Format: (french_grade, percent_bw)
-# Sorted by ascending difficulty.
 # ---------------------------------------------------------------------------
 
 _MVC7_BENCHMARKS: list[tuple[str, float]] = [
@@ -65,8 +96,53 @@ _MVC7_BENCHMARKS: list[tuple[str, float]] = [
     ("8c", 195.0),
 ]
 
-# Pre-compute difficulty indices for interpolation
 _BENCH_IDX: list[tuple[int, float]] = [(difficulty_index(g, RouteSystem.FRENCH), pct) for g, pct in _MVC7_BENCHMARKS]
+
+# --- MaxToGrade model (boulder grades) ------------------------------------
+# Crowd-sourced internet survey (n ≈ 2 000+, May 2020).
+# Bouldering-focused: maps MVC-7 %BW on 20 mm edge → V-grade.
+# Means consistent with Lattice Training benchmarks up to V13.
+# Above V13 extrapolated from elite data (Banaszczyk 2020).
+#
+# Sources:
+#   - toclimb8a.shinyapps.io/maxtograde/  (primary survey data)
+#   - Banaszczyk 2020, StrengthClimbing.com (cross-validation)
+#   - Lattice Training Instagram, Mar. 2020 (2-arm boulder benchmarks)
+# Format: (v_grade, percent_bw)
+# ---------------------------------------------------------------------------
+
+_MAXTOGRADE_BENCHMARKS: list[tuple[str, float]] = [
+    ("V1", 70.0),
+    ("V2", 80.0),
+    ("V3", 90.0),
+    ("V4", 105.0),
+    ("V5", 120.0),
+    ("V6", 130.0),
+    ("V7", 140.0),
+    ("V8", 148.0),
+    ("V9", 160.0),
+    ("V10", 170.0),
+    ("V11", 185.0),
+    ("V12", 195.0),
+    ("V13", 205.0),
+    ("V14", 218.0),
+    ("V15", 232.0),
+    ("V16", 248.0),
+    ("V17", 265.0),
+]
+
+_MAXTOGRADE_IDX: list[tuple[int, float]] = [
+    (difficulty_index(g, BoulderSystem.V_SCALE), pct) for g, pct in _MAXTOGRADE_BENCHMARKS
+]
+
+
+def _get_model_data(
+    model: StrengthModel,
+) -> tuple[list[tuple[int, float]], list[tuple[str, float]], RouteSystem | BoulderSystem]:
+    """Return (bench_idx, benchmarks, native_system) for a model."""
+    if model == StrengthModel.MAXTOGRADE:
+        return _MAXTOGRADE_IDX, _MAXTOGRADE_BENCHMARKS, BoulderSystem.V_SCALE
+    return _BENCH_IDX, _MVC7_BENCHMARKS, RouteSystem.FRENCH
 
 
 def _interpolate(x: float, points: list[tuple[float, float]]) -> float:
@@ -146,6 +222,8 @@ def _inverse_interpolate(y: float, points: list[tuple[float, float]]) -> float:
 def mvc7_to_grade(
     percent_bw: float,
     system=RouteSystem.FRENCH,
+    *,
+    model: StrengthModel = StrengthModel.COMPOSITE,
 ) -> str:
     """Estimate climbing grade from MVC-7 finger strength.
 
@@ -153,12 +231,12 @@ def mvc7_to_grade(
     7-second hang) expressed as percentage of body weight, returns the
     expected climbing grade.
 
-    Uses linear interpolation on composite benchmark data from Lattice
-    Training (n ≈ 901) and aggregated survey sources.
+    Uses linear interpolation on benchmark data from the selected model.
 
     Args:
         percent_bw: MVC-7 as percentage of body weight (e.g. 125.0 for 125%).
         system: Target grading system (default: French).
+        model: Prediction model to use (default: composite).
 
     Returns:
         Grade string in the requested system.
@@ -168,7 +246,8 @@ def mvc7_to_grade(
 
     References:
         Giles et al. 2006 (:cite:`giles2006`),
-        Lattice Training benchmark data (n ≈ 901).
+        Lattice Training benchmark data (n ≈ 901),
+        MaxToGrade survey (:cite:`maxtograde2020`).
 
     Examples:
         >>> mvc7_to_grade(125.0)
@@ -177,32 +256,38 @@ def mvc7_to_grade(
         '5.12d'
         >>> mvc7_to_grade(160.0, BoulderSystem.V_SCALE)
         'V8+'
+        >>> mvc7_to_grade(148.0, BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+        'V8'
     """
+    bench_idx, benchmarks, native_system = _get_model_data(model)
+
     # Interpolate to get difficulty index
     idx = _inverse_interpolate(
         percent_bw,
-        [(float(i), pct) for i, pct in _BENCH_IDX],
+        [(float(i), pct) for i, pct in bench_idx],
     )
 
-    # Find closest grade in the table
-    best_grade = _MVC7_BENCHMARKS[0][0]
+    # Find closest grade in the benchmark table
+    best_grade = benchmarks[0][0]
     best_dist = float("inf")
-    for grade_str, _ in _MVC7_BENCHMARKS:
-        grade_idx = difficulty_index(grade_str, RouteSystem.FRENCH)
+    for grade_str, _ in benchmarks:
+        grade_idx = difficulty_index(grade_str, native_system)
         dist = abs(grade_idx - idx)
         if dist < best_dist:
             best_dist = dist
             best_grade = grade_str
 
-    if system == RouteSystem.FRENCH:
+    if system == native_system:
         return best_grade
-    best_idx = difficulty_index(best_grade, RouteSystem.FRENCH)
+    best_idx = difficulty_index(best_grade, native_system)
     return from_index(best_idx, system)
 
 
 def grade_to_mvc7(
     grade_str: str,
     system=RouteSystem.FRENCH,
+    *,
+    model: StrengthModel = StrengthModel.COMPOSITE,
 ) -> float:
     """Estimate required MVC-7 (%BW) for a target climbing grade.
 
@@ -213,13 +298,15 @@ def grade_to_mvc7(
     Args:
         grade_str: Target grade (e.g. "7a", "V5", "5.12a").
         system: Grading system of the input.
+        model: Prediction model to use (default: composite).
 
     Returns:
         Required MVC-7 as percentage of body weight.
 
     References:
         Giles et al. 2006 (:cite:`giles2006`),
-        Lattice Training benchmark data (n ≈ 901).
+        Lattice Training benchmark data (n ≈ 901),
+        MaxToGrade survey (:cite:`maxtograde2020`).
 
     Examples:
         >>> grade_to_mvc7("7a")
@@ -228,10 +315,13 @@ def grade_to_mvc7(
         122.0
         >>> grade_to_mvc7("5.13a", RouteSystem.YDS)
         147.0
+        >>> grade_to_mvc7("V8", BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+        148.0
     """
+    bench_idx = _get_model_data(model)[0]
     idx = float(difficulty_index(grade_str, system))
     return round(
-        _interpolate(idx, [(float(i), pct) for i, pct in _BENCH_IDX]),
+        _interpolate(idx, [(float(i), pct) for i, pct in bench_idx]),
         1,
     )
 

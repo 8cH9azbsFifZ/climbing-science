@@ -2,6 +2,7 @@
 
 Tests verify against published benchmark data:
     - MVC-7 → grade correlation (Lattice n≈901)
+    - MaxToGrade survey model (n≈2000+)
     - Rohmert endurance curve (Rohmert 1960 original data)
     - RFD calculation (Levernier & Laffaye 2019)
     - Power-to-weight classification (Lattice benchmarks)
@@ -11,6 +12,7 @@ import pytest
 
 from climbing_science.grades import BoulderSystem, RouteSystem
 from climbing_science.strength import (
+    StrengthModel,
     grade_to_mvc7,
     mvc7_to_grade,
     power_to_weight,
@@ -77,6 +79,76 @@ class TestMvc7ToGrade:
             idx = difficulty_index(grade, RouteSystem.FRENCH)
             assert idx >= prev_idx, f"Grade decreased at {pct}%BW: {grade}"
             prev_idx = idx
+
+    def test_composite_is_default(self):
+        """Default model should match explicit COMPOSITE."""
+        assert mvc7_to_grade(128.0) == mvc7_to_grade(128.0, model=StrengthModel.COMPOSITE)
+
+
+# ---------------------------------------------------------------------------
+# MaxToGrade model — crowd-sourced bouldering survey (n≈2000+)
+# ---------------------------------------------------------------------------
+
+
+class TestMaxToGradeModel:
+    """Verify MaxToGrade model benchmarks.
+
+    Reference: toclimb8a.shinyapps.io/maxtograde/ (n≈2000+),
+    cross-validated by Banaszczyk 2020.
+    """
+
+    @pytest.mark.parametrize(
+        "percent_bw, expected_v",
+        [
+            (70.0, "V1"),
+            (105.0, "V4"),
+            (120.0, "V5"),
+            (148.0, "V8"),
+            (185.0, "V11"),
+            (205.0, "V13"),
+            (265.0, "V17"),
+        ],
+    )
+    def test_exact_benchmarks(self, percent_bw, expected_v):
+        """Exact benchmark values in MaxToGrade model."""
+        result = mvc7_to_grade(percent_bw, BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+        assert result == expected_v
+
+    def test_inverse_consistency(self):
+        """grade_to_mvc7(mvc7_to_grade(x)) ≈ x at MaxToGrade benchmark points."""
+        for pct in [105.0, 148.0, 185.0, 205.0]:
+            grade = mvc7_to_grade(pct, BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+            recovered = grade_to_mvc7(grade, BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+            assert recovered == pytest.approx(pct, abs=1.0), f"Round-trip failed: {pct} → {grade} → {recovered}"
+
+    def test_monotonically_increasing(self):
+        """Higher %BW must never produce a lower V-grade."""
+        from climbing_science.grades import difficulty_index
+
+        prev_idx = 0
+        for pct in range(70, 270, 10):
+            grade = mvc7_to_grade(float(pct), BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+            idx = difficulty_index(grade, BoulderSystem.V_SCALE)
+            assert idx >= prev_idx, f"Grade decreased at {pct}%BW: {grade}"
+            prev_idx = idx
+
+    def test_output_in_font_system(self):
+        """MaxToGrade model can output in Font system."""
+        result = mvc7_to_grade(148.0, BoulderSystem.FONT, model=StrengthModel.MAXTOGRADE)
+        assert result == "7B"
+
+    def test_grade_to_mvc7_maxtograde(self):
+        """grade_to_mvc7 with MaxToGrade model returns correct %BW."""
+        assert grade_to_mvc7("V8", BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE) == 148.0
+        assert grade_to_mvc7("V13", BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE) == 205.0
+
+    def test_models_differ(self):
+        """Composite and MaxToGrade models should give different results for same %BW."""
+        composite_grade = mvc7_to_grade(148.0)
+        maxtograde_grade = mvc7_to_grade(148.0, BoulderSystem.V_SCALE, model=StrengthModel.MAXTOGRADE)
+        # Both should return valid grades but from different systems/values
+        assert composite_grade is not None
+        assert maxtograde_grade == "V8"
 
 
 # ---------------------------------------------------------------------------

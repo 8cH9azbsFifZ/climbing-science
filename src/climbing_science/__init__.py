@@ -97,6 +97,7 @@ from climbing_science.signal import (
     smooth,
 )
 from climbing_science.strength import (
+    StrengthModel,
     grade_to_mvc7,
     mvc7_to_grade,
     power_to_weight,
@@ -143,6 +144,7 @@ __all__ = [
     "segment_repeaters",
     "smooth",
     # strength
+    "StrengthModel",
     "grade_to_mvc7",
     "mvc7_to_grade",
     "power_to_weight",

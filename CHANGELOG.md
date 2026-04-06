@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-04-06
+
+### Added
+
+- **frontends/cli** — Command-line interface with 4 subcommands: `grade` (convert between systems), `analyze` (MVC-7 strength analysis), `protocols` (list/filter hangboard protocols), `endurance` (Critical Force from 3-point test). Entry point: `climbing-science`.
+- **notebooks** — 6 new example notebooks: Personal Assessment (01), Rohmert Curve (02), Critical Force (03), Protocol Comparison (04), Session Deep Dive (05), Progress Tracker (06), Edge Depth Science (07).
+- 12 CLI tests covering all subcommands.
+
+### Fixed
+
+- **CLI** — Correct API usage for `power_to_weight()` (tuple return), `critical_force()` (tuple return), `interpret_cf_ratio()` (dict keys), grade system name mapping (`v` → `v-scale`).
+
+### Changed
+
+- **PLAN.md** — Updated to reflect actual implementation state: flat module structure, correct coverage numbers, 3 extra modules (diagnostics, periodization, io).
+- **CHANGELOG** — Added missing `[0.3.2]` section, cleaned up unreleased entries.
+
 ## [0.3.4] — 2026-04-06
 
 ### Added

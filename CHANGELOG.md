@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **strength** — `StrengthModel` enum with `COMPOSITE` (default, route-grade) and `MAXTOGRADE` (crowd-sourced bouldering survey, n ≈ 2 000+, V1–V17) prediction models. New `model` keyword parameter on `mvc7_to_grade()` and `grade_to_mvc7()`.
 - **references** — Added `maxtograde2020` and `banaszczyk2020` BibTeX entries.
 
+### Fixed
+
+- **PLAN** — Moved `fmax_right_kg`, `fmax_left_kg`, and `training_mode` from `AthleteProfile` to `TestResult`. Athlete profile now contains only immutable properties; measurement data belongs in test results.
+
 ## [0.3.1] — 2026-04-06
 
 ### Fixed

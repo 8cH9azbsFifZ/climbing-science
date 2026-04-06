@@ -83,8 +83,8 @@ all sources and all calculations.
 │                                                             │
 │  ForceSample(time_s, force_kg)                              │
 │  ForceSession(samples, metadata, segments?)                 │
-│  AthleteProfile(weight_kg, height_cm?, fmax_r, fmax_l, ..) │
-│  TestResult(mvc7_kg, cf_kg?, rfd?, grade_prediction?)       │
+│  AthleteProfile(weight_kg, height_cm?, arm_span?, sex?)     │
+│  TestResult(mvc7_r, mvc7_l, cf_kg?, rfd?, grade_pred?, ..)  │
 └──────────┬───────────────────────────────┬──────────────────┘
            │ uses                          │ uses
 ┌──────────▼──────────┐  ┌────────────────▼───────────────────┐
@@ -164,19 +164,18 @@ class ForceSession:
 
 @dataclass
 class AthleteProfile:
-    """Athlete profile — all calculations refer to this."""
+    """Athlete profile — immutable athlete properties only."""
     weight_kg: float
     height_cm: float | None = None
     arm_span_cm: float | None = None
     sex: str | None = None              # "M" | "F"
-    fmax_right_kg: float | None = None  # MVC-7 right hand
-    fmax_left_kg: float | None = None   # MVC-7 left hand
-    training_mode: int = 1              # 1=no HB, 2=Repeaters, 3=MaxHangs, 4=MaxHangs+added
 
 @dataclass
 class TestResult:
     """Result of an evaluation — device-agnostic."""
-    mvc7_kg: float | None = None
+    mvc7_right_kg: float | None = None  # MVC-7 right hand
+    mvc7_left_kg: float | None = None   # MVC-7 left hand
+    training_mode: int = 1              # 1=no HB, 2=Repeaters, 3=MaxHangs, 4=MaxHangs+added
     mvc_bw_ratio: float | None = None
     cf_kg: float | None = None
     w_prime_kgs: float | None = None

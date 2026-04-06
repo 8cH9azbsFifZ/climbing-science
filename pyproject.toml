@@ -70,6 +70,9 @@ docs = [
     "mkdocs-bibtex>=2.16",
 ]
 
+[project.scripts]
+climbing-science = "climbing_science.frontends.cli:main"
+
 [project.urls]
 Homepage = "https://github.com/8cH9azbsFifZ/climbing-science"
 Repository = "https://github.com/8cH9azbsFifZ/climbing-science"

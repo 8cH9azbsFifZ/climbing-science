@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] — 2026-04-06
+
+### Added
+
+- **notebooks** — 5 example notebooks: Rohmert curve, Edge Depth comparison, Protocol Comparison, Climbing Assessment, Critical Force analysis, Session Deep Dive.
+- **cli** — `climbing-science` CLI entry point with `grade`, `analyze`, and `protocols` subcommands.
+- **pre-commit** — `.pre-commit-config.yaml` for local ruff check + format enforcement.
+
+### Fixed
+
+- **signal** — ruff formatting fix in `signal.py` (f-string line join).
+
 ## [0.3.3] — 2026-04-06
 
 ### Added

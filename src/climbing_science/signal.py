@@ -46,7 +46,19 @@ __all__ = [
 
 @dataclass(frozen=True)
 class Peak:
-    """A detected force peak in a time series."""
+    """A detected force peak in a time series.
+
+    Attributes:
+        start_idx: Index where force first exceeds the threshold.
+        end_idx: Index where force drops below the threshold.
+        peak_idx: Index of the maximum force value.
+        peak_value: Maximum force in kg within this peak.
+        duration_s: Peak duration in seconds.
+        mean_value: Mean force in kg over the peak region.
+
+    References:
+        Levernier & Laffaye (2019) :cite:`levernier2019`
+    """
 
     start_idx: int
     end_idx: int

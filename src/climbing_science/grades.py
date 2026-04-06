@@ -57,7 +57,17 @@ class GradeDomainError(GradeError):
 
 
 class RouteSystem(str, Enum):
-    """Route (sport/trad) grading systems."""
+    """Route (sport/trad) grading systems.
+
+    Members:
+        UIAA: Union Internationale des Associations d'Alpinisme scale.
+        FRENCH: French sport-climbing scale (e.g. "7a+").
+        YDS: Yosemite Decimal System (e.g. "5.12a").
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA position statement.
+        Mandelli & CAI (2016) :cite:`mandelli2016` — CAI comparison table.
+    """
 
     UIAA = "UIAA"
     FRENCH = "French"
@@ -65,7 +75,15 @@ class RouteSystem(str, Enum):
 
 
 class BoulderSystem(str, Enum):
-    """Boulder grading systems."""
+    """Boulder grading systems.
+
+    Members:
+        FONT: Fontainebleau scale (e.g. "7A+").
+        V_SCALE: Hueco / V-Scale (e.g. "V7").
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA position statement.
+    """
 
     FONT = "Font"
     V_SCALE = "V-Scale"
@@ -190,7 +208,17 @@ _PATTERNS = [
 
 @dataclass(frozen=True)
 class Grade:
-    """An immutable climbing grade with system and IRCRA difficulty index."""
+    """An immutable climbing grade with system and IRCRA difficulty index.
+
+    Attributes:
+        system: The grading system this grade belongs to.
+        value: Human-readable grade string (e.g. "7a+", "V5").
+        difficulty_index: IRCRA numerical difficulty index for
+            cross-system comparison.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA scale definition.
+    """
 
     system: RouteSystem | BoulderSystem
     value: str
@@ -242,8 +270,33 @@ def _find_boulder_row(grade_str, system):
     return idx
 
 
-def difficulty_index(grade_str, system):
-    """Return the IRCRA difficulty index for a grade."""
+def difficulty_index(grade_str: str, system: str | GradeSystem) -> int:
+    """Return the IRCRA difficulty index for a grade.
+
+    The IRCRA index is a universal integer scale that enables comparison
+    across all grading systems within the same domain (route or boulder).
+
+    Args:
+        grade_str: Grade string (e.g. "7a+", "V5", "5.12a").
+        system: Grading system name or enum (e.g. "French",
+            ``RouteSystem.FRENCH``).
+
+    Returns:
+        Integer difficulty index on the IRCRA scale.
+
+    Raises:
+        UnknownSystemError: If *system* is not recognised.
+        UnknownGradeError: If *grade_str* is not found in *system*.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA scale definition.
+
+    Examples:
+        >>> difficulty_index("7a", "French")
+        18
+        >>> difficulty_index("V5", "V-Scale")
+        21
+    """
     sys = system if isinstance(system, (RouteSystem, BoulderSystem)) else _resolve_system(system)
     if _is_route(sys):
         row = _find_route_row(grade_str, sys)
@@ -253,8 +306,36 @@ def difficulty_index(grade_str, system):
         return _BOULDER_TABLE[row][0]
 
 
-def convert(grade_str, from_system, to_system):
-    """Convert a grade from one system to another."""
+def convert(grade_str: str, from_system: str | GradeSystem, to_system: str | GradeSystem) -> str:
+    """Convert a grade from one system to another.
+
+    Conversion is only permitted within the same domain (route ↔ route,
+    boulder ↔ boulder).  Cross-domain conversion raises
+    :class:`GradeDomainError`.
+
+    Args:
+        grade_str: Grade string to convert (e.g. "7a+").
+        from_system: Source grading system.
+        to_system: Target grading system.
+
+    Returns:
+        Equivalent grade string in *to_system*.
+
+    Raises:
+        GradeDomainError: If converting between route and boulder domains.
+        UnknownSystemError: If either system is not recognised.
+        UnknownGradeError: If *grade_str* is not found in *from_system*.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA comparison tables.
+        Mandelli & CAI (2016) :cite:`mandelli2016` — CAI grade mapping.
+
+    Examples:
+        >>> convert("7a", "French", "UIAA")
+        'VIII'
+        >>> convert("V5", "V-Scale", "Font")
+        '6C'
+    """
     from_sys = from_system if isinstance(from_system, (RouteSystem, BoulderSystem)) else _resolve_system(from_system)
     to_sys = to_system if isinstance(to_system, (RouteSystem, BoulderSystem)) else _resolve_system(to_system)
 
@@ -279,8 +360,31 @@ def convert(grade_str, from_system, to_system):
     return _BOULDER_TABLE[src_row][_BOULDER_COL[to_sys]]
 
 
-def parse(grade_str):
-    """Auto-detect the grading system and return a Grade object."""
+def parse(grade_str: str) -> Grade:
+    """Auto-detect the grading system and return a Grade object.
+
+    Uses regex pattern matching to identify the grading system from
+    the grade string alone.  Checks systems in order: YDS, V-Scale,
+    Font, French, UIAA.
+
+    Args:
+        grade_str: Grade string (e.g. "7a+", "V5", "5.12a", "VIII-").
+
+    Returns:
+        :class:`Grade` with detected system and IRCRA index.
+
+    Raises:
+        UnknownGradeError: If no grading system matches the input.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA system identifiers.
+
+    Examples:
+        >>> parse("7a+").system
+        <RouteSystem.FRENCH: 'French'>
+        >>> parse("V5").difficulty_index
+        21
+    """
     cleaned = grade_str.strip()
     for system, pattern in _PATTERNS:
         if pattern.match(cleaned):
@@ -298,8 +402,31 @@ def parse(grade_str):
     raise UnknownGradeError(f"Cannot auto-detect grading system for '{grade_str}'")
 
 
-def compare(a, b):
-    """Compare two grades from any system by their IRCRA index."""
+def compare(a: str, b: str) -> int:
+    """Compare two grades from any system by their IRCRA index.
+
+    Both grades are auto-detected via :func:`parse`, so they can be
+    from different systems (including cross-domain).
+
+    Args:
+        a: First grade string.
+        b: Second grade string.
+
+    Returns:
+        ``-1`` if *a* is easier, ``0`` if equal, ``1`` if *a* is harder.
+
+    Raises:
+        UnknownGradeError: If either grade cannot be parsed.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA difficulty scale.
+
+    Examples:
+        >>> compare("7a", "6c")
+        1
+        >>> compare("V3", "V3")
+        0
+    """
     ga, gb = parse(a), parse(b)
     if ga.difficulty_index < gb.difficulty_index:
         return -1
@@ -308,8 +435,31 @@ def compare(a, b):
     return 0
 
 
-def from_index(index, system):
-    """Return the nearest grade for a given IRCRA difficulty index."""
+def from_index(index: int, system: str | GradeSystem) -> str:
+    """Return the nearest grade for a given IRCRA difficulty index.
+
+    Finds the grade whose IRCRA index is closest to *index*.  When
+    two grades are equidistant, the harder grade is returned.
+
+    Args:
+        index: IRCRA difficulty index.
+        system: Target grading system.
+
+    Returns:
+        Grade string in *system* closest to *index*.
+
+    Raises:
+        UnknownSystemError: If *system* is not recognised.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA scale definition.
+
+    Examples:
+        >>> from_index(18, "French")
+        '7a'
+        >>> from_index(25, "V-Scale")
+        'V8'
+    """
     sys = system if isinstance(system, (RouteSystem, BoulderSystem)) else _resolve_system(system)
     if _is_route(sys):
         col, table = _ROUTE_COL[sys], _ROUTE_TABLE
@@ -319,8 +469,30 @@ def from_index(index, system):
     return best_row[col]
 
 
-def all_grades(system):
-    """Return all grades in a system, sorted by difficulty (ascending)."""
+def all_grades(system: str | GradeSystem) -> list[Grade]:
+    """Return all grades in a system, sorted by difficulty (ascending).
+
+    Useful for building grade selectors, dropdowns, or conversion tables.
+
+    Args:
+        system: Grading system name or enum.
+
+    Returns:
+        List of :class:`Grade` objects ordered by ascending difficulty.
+
+    Raises:
+        UnknownSystemError: If *system* is not recognised.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA grade tables.
+
+    Examples:
+        >>> grades = all_grades("French")
+        >>> grades[0].value
+        '1'
+        >>> grades[-1].value
+        '9c'
+    """
     sys = system if isinstance(system, (RouteSystem, BoulderSystem)) else _resolve_system(system)
     if _is_route(sys):
         col = _ROUTE_COL[sys]

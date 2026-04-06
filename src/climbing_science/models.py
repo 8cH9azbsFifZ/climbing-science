@@ -54,7 +54,17 @@ class ClimberLevel(str, Enum):
 
 
 class Discipline(str, Enum):
-    """Climbing discipline."""
+    """Climbing discipline.
+
+    Members:
+        BOULDERING: Indoor/outdoor bouldering.
+        SPORT: Sport (bolt-protected) route climbing.
+        TRAD: Traditional (self-placed protection) climbing.
+        SPEED: Speed climbing.
+
+    References:
+        Draper et al. (2015) :cite:`draper2015` — IRCRA discipline categories.
+    """
 
     BOULDERING = "bouldering"
     SPORT = "sport"
@@ -63,7 +73,17 @@ class Discipline(str, Enum):
 
 
 class GripType(str, Enum):
-    """Grip positions for hangboard testing and training."""
+    """Grip positions for hangboard testing and training.
+
+    Members:
+        HALF_CRIMP: Fingers at ~90° DIP, thumb not engaged.
+        FULL_CRIMP: Fingers crimped with thumb lock.
+        OPEN_HAND: Open-hand / slope grip.
+        THREE_FINGER_DRAG: Index–middle–ring, open drag.
+
+    References:
+        Schweizer (2001) :cite:`schweizer2001` — crimp biomechanics.
+    """
 
     HALF_CRIMP = "half_crimp"
     FULL_CRIMP = "full_crimp"
@@ -188,7 +208,17 @@ class CriticalForceTest(BaseModel):
 
 
 class PullUpTest(BaseModel):
-    """Max pull-up test result."""
+    """Max pull-up test result.
+
+    Attributes:
+        max_reps: Maximum repetitions completed.
+        added_weight_kg: External weight added (negative for assist).
+        body_weight_kg: Body weight at time of test.
+
+    References:
+        Baláš et al. (2012) :cite:`balas2012` — pull-up as
+        performance predictor.
+    """
 
     max_reps: int = Field(ge=0)
     added_weight_kg: float = 0.0

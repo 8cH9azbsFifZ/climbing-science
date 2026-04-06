@@ -552,6 +552,10 @@ def format_notation(protocol: ProtocolDefinition, added_weight_kg: float = 0.0) 
     Returns:
         Formatted notation string.
 
+    References:
+        Notation follows conventions from López 2014 (:cite:`lopez2014`)
+        and Hörst 2016 (:cite:`horst2016`).
+
     Examples:
         >>> p = get_protocol("lopez-maxhang-maw")
         >>> format_notation(p, 15.0)

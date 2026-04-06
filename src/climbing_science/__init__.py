@@ -27,11 +27,19 @@ from climbing_science.endurance import (
     w_prime_balance,
 )
 from climbing_science.grades import (
+    BoulderSystem,
     Grade,
+    GradeDomainError,
+    GradeError,
     GradeSystem,
+    RouteSystem,
+    UnknownGradeError,
+    UnknownSystemError,
+    all_grades,
     compare,
     convert,
     difficulty_index,
+    from_index,
     parse,
 )
 from climbing_science.io import (

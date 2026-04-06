@@ -163,6 +163,11 @@ def from_bodyweight_hang(
 
     References:
         Rohmert (1960) :cite:`rohmert1960`.
+
+    Examples:
+        >>> mvc = from_bodyweight_hang(70.0, 30.0)
+        >>> mvc.edge_size_mm
+        20
     """
     return from_mvc7_test(
         body_weight_kg=body_weight_kg,
@@ -189,6 +194,15 @@ def quick_profile(
 
     Returns:
         :class:`~climbing_science.models.ClimberProfile`.
+
+    References:
+        Profile schema follows Draper et al. (2015) :cite:`draper2015`
+        — IRCRA athlete descriptors.
+
+    Examples:
+        >>> p = quick_profile("Test", 70.0, 3.0)
+        >>> p.name
+        'Test'
     """
     return ClimberProfile(
         name=name,

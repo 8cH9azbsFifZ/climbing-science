@@ -353,6 +353,10 @@ def session_to_dataframe(
 
     Raises:
         ImportError: If pandas is not installed.
+
+    References:
+        Levernier & Laffaye (2019) :cite:`levernier2019`
+        — force-time data format conventions.
     """
     pd = _require_pandas()
 

@@ -48,6 +48,10 @@ def read_force_csv(
     Raises:
         ValueError: If required columns are missing.
 
+    References:
+        Input format follows Tindeq Progressor CSV conventions
+        (80 Hz sampling, :cite:`levernier2019`).
+
     Examples:
         >>> data = "time_s,force_kg\\n0.0,0.0\\n0.1,5.2\\n0.2,10.1"
         >>> read_force_csv(data)
@@ -84,6 +88,10 @@ def export_session_json(session: SessionLog) -> str:
     Returns:
         JSON string representation.
 
+    References:
+        Schema follows :class:`~climbing_science.models.SessionLog`
+        (López 2014 :cite:`lopez2014` methodology).
+
     Examples:
         >>> from datetime import date
         >>> s = SessionLog(date=date(2026, 4, 3), climber_name="test")
@@ -105,6 +113,10 @@ def import_session_json(json_str: str) -> SessionLog:
 
     Raises:
         ValidationError: If JSON doesn't match SessionLog schema.
+
+    References:
+        Schema follows :class:`~climbing_science.models.SessionLog`
+        (López 2014 :cite:`lopez2014` methodology).
 
     Examples:
         >>> from datetime import date
@@ -136,6 +148,10 @@ def export_assessment_markdown(
 
     Returns:
         Markdown-formatted report string.
+
+    References:
+        Assessment structure follows Lattice Research recommendations
+        and Giles et al. (2006) :cite:`giles2006` MVC-7 protocol.
 
     Examples:
         >>> p = ClimberProfile(name="Test", body_weight_kg=70.0, experience_years=3)
@@ -231,6 +247,10 @@ def export_assessment_json(
 
     Returns:
         JSON string.
+
+    References:
+        Assessment structure follows Lattice Research recommendations
+        and Giles et al. (2006) :cite:`giles2006` MVC-7 protocol.
 
     Examples:
         >>> p = ClimberProfile(name="Test", body_weight_kg=70.0, experience_years=3)

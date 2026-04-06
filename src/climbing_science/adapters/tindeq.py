@@ -119,6 +119,9 @@ def load_all(directory: str | Path) -> list[TindeqSession]:
 
     Returns:
         List of successfully parsed sessions, sorted by filename.
+
+    References:
+        Tindeq Progressor specification (80 Hz, 0.1 kg resolution).
     """
     d = Path(directory)
     if not d.is_dir():
@@ -175,6 +178,10 @@ def extract_peaks(
 
     Returns:
         List of detected peaks.
+
+    References:
+        Levernier & Laffaye (2019) :cite:`levernier2019`
+        — force peak detection methodology.
     """
     values = session.values
     if smooth_ms > 0:

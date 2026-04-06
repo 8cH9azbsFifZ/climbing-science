@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] — 2026-04-06
+
+### Fixed
+
+- **grades** — Full Google-style docstrings with Args, Returns, Raises, References, Examples for all 6 public functions (`convert`, `parse`, `compare`, `difficulty_index`, `from_index`, `all_grades`) and expanded class docs (`Grade`, `RouteSystem`, `BoulderSystem`). Added type annotations.
+- **__init__** — Added 8 missing re-exports (`BoulderSystem`, `RouteSystem`, `GradeError`, `UnknownGradeError`, `UnknownSystemError`, `GradeDomainError`, `all_grades`, `from_index`).
+- **io** — Added References sections to all 5 public functions.
+- **models** — Expanded docstrings for `Discipline`, `GripType`, `PullUpTest` with Members/Attributes/References.
+- **signal** — Expanded `Peak` dataclass docstring with Attributes/References.
+- **protocols** — Added References to `format_notation()`.
+- **adapters/tindeq** — Added References to `extract_peaks()` and `load_all()`.
+- **adapters/manual** — Added References to `quick_profile()`, Examples to `from_bodyweight_hang()`.
+- **frontends/notebook** — Added References to `session_to_dataframe()`.
+
 ## [0.3.0] — 2026-04-05
 
 ### Added

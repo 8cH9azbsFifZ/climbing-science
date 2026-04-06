@@ -1,6 +1,6 @@
 """Climbing Science - Open-source Python library for evidence-based climbing training analysis."""
 
-__version__ = "0.3.4"
+__version__ = "0.4.0"
 
 from climbing_science.diagnostics import (
     classify_level,

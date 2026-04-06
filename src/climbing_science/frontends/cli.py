@@ -22,35 +22,50 @@ import textwrap
 def _cmd_grade(args: argparse.Namespace) -> None:
     """Convert a climbing grade between systems."""
     from climbing_science import convert, parse
+    from climbing_science.grades import BoulderSystem
 
+    # Map short names to system identifiers accepted by convert()
+    sys_map = {
+        "french": "french",
+        "uiaa": "uiaa",
+        "yds": "yds",
+        "font": "font",
+        "v": "v-scale",
+        "v-scale": "v-scale",
+    }
     systems_route = ["french", "uiaa", "yds"]
-    systems_boulder = ["font", "v"]
+    systems_boulder = ["font", "v-scale"]
     grade_str = args.grade
     target = args.to.lower()
 
     # Detect source system
     parsed = parse(grade_str)
-    from_sys = str(parsed.system.value).lower()
-    is_boulder = from_sys in ("font", "v")
-    all_systems = systems_boulder if is_boulder else systems_route
+    from_sys = sys_map.get(str(parsed.system.value).lower().replace(" ", "-"), str(parsed.system.value))
+    is_boulder = isinstance(parsed.system, BoulderSystem)
+    all_targets = systems_boulder if is_boulder else systems_route
+
+    # Short display names
+    display_names = {"french": "FRENCH", "uiaa": "UIAA", "yds": "YDS", "font": "FONT", "v-scale": "V-SCALE"}
 
     if target == "all":
         results = []
-        for sys_name in all_systems:
+        for sys_name in all_targets:
             try:
                 converted = convert(grade_str, from_sys, sys_name)
-                results.append(f"  {sys_name.upper():>6s}: {converted}")
+                display = display_names.get(sys_name, sys_name.upper())
+                results.append(f"  {display:>8s}: {converted}")
             except Exception:
                 pass
         if results:
-            print(f"Grade {grade_str} ({from_sys.upper()}):")
+            print(f"Grade {grade_str} ({display_names.get(from_sys, from_sys.upper())}):")
             print("\n".join(results))
         else:
             print(f"Error: could not convert '{grade_str}'", file=sys.stderr)
             sys.exit(1)
     else:
+        target_sys = sys_map.get(target, target)
         try:
-            result = convert(grade_str, from_sys, target)
+            result = convert(grade_str, from_sys, target_sys)
             print(result)
         except Exception as exc:
             print(f"Error: {exc}", file=sys.stderr)
@@ -76,7 +91,7 @@ def _cmd_analyze(args: argparse.Namespace) -> None:
         print(f"Edge correction: {mvc7:.1f} kg @ {edge}mm → {mvc7_corrected:.1f} kg @ 20mm")
         mvc7 = mvc7_corrected
 
-    ratio = power_to_weight(mvc7, bw)
+    ratio, _level = power_to_weight(mvc7, bw)
     predicted_route = mvc7_to_grade(ratio, model="COMPOSITE")
     predicted_boulder = mvc7_to_grade(ratio, model="MAXTOGRADE")
 
@@ -85,7 +100,7 @@ def _cmd_analyze(args: argparse.Namespace) -> None:
     print(f"{'═' * 45}")
     print(f"  Body weight:        {bw:.1f} kg")
     print(f"  MVC-7 (20mm):       {mvc7:.1f} kg")
-    print(f"  Power-to-weight:    {ratio:.1%}")
+    print(f"  Power-to-weight:    {ratio:.1f}% BW")
     print(f"  Predicted route:    {predicted_route}")
     print(f"  Predicted boulder:  {predicted_boulder}")
     if args.grade:
@@ -96,14 +111,20 @@ def _cmd_analyze(args: argparse.Namespace) -> None:
 
 def _cmd_protocols(args: argparse.Namespace) -> None:
     """List and filter hangboard protocols."""
-    from climbing_science.protocols import format_notation, list_protocols, select_protocols
+    from climbing_science.protocols import format_notation, list_protocols
 
+    energy_filter = None
+    level_filter = None
+    if args.energy:
+        from climbing_science.models import EnergySystem
+
+        energy_filter = EnergySystem(args.energy)
     if args.level:
-        protos = select_protocols(level=args.level)
-    elif args.energy:
-        protos = select_protocols(energy_system=args.energy)
-    else:
-        protos = list_protocols()
+        from climbing_science.models import ClimberLevel
+
+        level_filter = ClimberLevel(args.level)
+
+    protos = list_protocols(energy_system=energy_filter, min_level=level_filter)
 
     if not protos:
         print("No protocols found matching your criteria.")
@@ -112,8 +133,8 @@ def _cmd_protocols(args: argparse.Namespace) -> None:
     print(f"{'ID':<25s} {'Name':<40s} {'Energy':<10s} {'Notation'}")
     print(f"{'─' * 25} {'─' * 40} {'─' * 10} {'─' * 30}")
     for p in protos:
-        notation = format_notation(p.id)
-        energy = p.energy_system if hasattr(p, "energy_system") else "—"
+        notation = format_notation(p)
+        energy = p.energy_system.value if p.energy_system else "—"
         print(f"{p.id:<25s} {p.name:<40s} {energy:<10s} {notation}")
 
 
@@ -133,21 +154,22 @@ def _cmd_endurance(args: argparse.Namespace) -> None:
         print("Error: --intensities and --durations must have the same length", file=sys.stderr)
         sys.exit(1)
 
-    result = critical_force(intensities, durations)
+    cf_pct, w_prime, r_squared = critical_force(intensities, durations)
     print(f"\n{'═' * 45}")
     print("  🫁 Critical Force Analysis")
     print(f"{'═' * 45}")
-    print(f"  CF:       {result['cf_percent_mvc']:.1f}% MVC")
-    print(f"  W':       {result['w_prime_pct_s']:.1f}% MVC·s")
-    print(f"  R²:       {result['r_squared']:.4f}")
+    print(f"  CF:       {cf_pct:.1f}% MVC")
+    print(f"  W':       {w_prime:.1f}% MVC·s")
+    print(f"  R²:       {r_squared:.4f}")
 
     if args.mvc7 and args.bw:
-        ratio = power_to_weight(args.mvc7, args.bw)
-        cf_ratio = cf_mvc_ratio(result["cf_percent_mvc"], ratio * 100)
+        ratio, _ = power_to_weight(args.mvc7, args.bw)
+        cf_ratio = cf_mvc_ratio(cf_pct, ratio)
         interp = interpret_cf_ratio(cf_ratio)
         print(f"  CF/BW:    {cf_ratio:.2f}")
-        print(f"  Level:    {interp['level']}")
-        print(f"  Note:     {interp['description']}")
+        print(f"  Category: {interp['category']}")
+        print(f"  Note:     {interp['interpretation']}")
+        print(f"  Priority: {interp['priority']}")
     print(f"{'═' * 45}")
 
 

@@ -13,12 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **endurance** — `validate_ttf()` function: compares model-predicted TtF (from `time_to_failure()`) with actual measured TtF. Returns absolute/relative error and model quality rating (excellent/good/fair/poor). Reference: Jones et al. 2010.
 - **models** — `TtFResult` Pydantic model for structured TtF extraction results.
 - **protocols** — `ttf-endurance-3pt` protocol: standard 3-point Time-to-Failure test at 80%, 60%, 45% MVC with 5–10 min rest between bouts. Reference: Jones et al. 2010, Fryer et al. 2018.
+- **PLAN** — Updated PLAN.md to reflect actual implementation state (flat module structure, correct coverage numbers, extra modules).
+
+## [0.3.2] — 2026-04-06
+
+### Added
+
 - **strength** — `StrengthModel` enum with `COMPOSITE` (default, route-grade) and `MAXTOGRADE` (crowd-sourced bouldering survey, n ≈ 2 000+, V1–V17) prediction models. New `model` keyword parameter on `mvc7_to_grade()` and `grade_to_mvc7()`.
 - **references** — Added `maxtograde2020` and `banaszczyk2020` BibTeX entries.
 
 ### Fixed
 
-- **PLAN** — Moved `fmax_right_kg`, `fmax_left_kg`, and `training_mode` from `AthleteProfile` to `TestResult`. Athlete profile now contains only immutable properties; measurement data belongs in test results.
+- **models** — Moved `fmax_right_kg`, `fmax_left_kg`, and `training_mode` from `AthleteProfile` to `TestResult`. Athlete profile now contains only immutable properties; measurement data belongs in test results.
+- Resolved all ruff lint errors (unused imports/variables, import sorting).
+- Applied ruff formatting to 8 files.
+- Removed deprecated license classifier (PEP 639).
 
 ## [0.3.1] — 2026-04-06
 

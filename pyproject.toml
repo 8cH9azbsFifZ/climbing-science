@@ -37,7 +37,6 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Typing :: Typed",
 ]
 dependencies = [

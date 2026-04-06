@@ -22,10 +22,6 @@ References:
 
 from __future__ import annotations
 
-import math
-
-from climbing_science.strength import rohmert_conversion
-
 __all__ = [
     "plot_force_session",
     "plot_rohmert_curve",
@@ -226,9 +222,9 @@ def plot_strength_benchmark(
     plt = _require_matplotlib()
 
     fig, ax = plt.subplots(figsize=figsize)
-    labels = [b[1] for b in _BENCHMARKS]
+    [b[1] for b in _BENCHMARKS]
     thresholds = [b[0] for b in _BENCHMARKS]
-    colors = [b[2] for b in _BENCHMARKS]
+    [b[2] for b in _BENCHMARKS]
 
     # Horizontal bar chart of thresholds
     for i, (thresh, label, color) in enumerate(_BENCHMARKS):

@@ -1,7 +1,6 @@
 """Tests for climbing_science.adapters.tindeq — Tindeq Progressor adapter."""
 
 import json
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -14,7 +13,6 @@ from climbing_science.adapters.tindeq import (
     load,
     load_all,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers — synthetic Tindeq JSON

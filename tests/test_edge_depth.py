@@ -1,6 +1,5 @@
 """Tests for climbing_science.edge_depth — edge depth correction."""
 
-import math
 
 import pytest
 
@@ -14,7 +13,6 @@ from climbing_science.edge_depth import (
     estimate_force_at_depth,
     normalize_to_reference,
 )
-
 
 # ---------------------------------------------------------------------------
 # correction_factor

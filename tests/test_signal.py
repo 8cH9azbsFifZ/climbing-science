@@ -1,13 +1,9 @@
 """Tests for climbing_science.signal — force-curve signal processing."""
 
-import math
 
 import pytest
 
 from climbing_science.signal import (
-    Peak,
-    RFDResult,
-    SegmentedRep,
     best_n_second_average,
     compute_impulse,
     compute_rfd,

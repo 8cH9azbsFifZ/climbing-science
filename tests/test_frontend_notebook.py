@@ -102,7 +102,7 @@ class TestPlotProtocolComparison:
 
 class TestSessionToDataframe:
     def test_basic(self):
-        pd = pytest.importorskip("pandas")
+        pytest.importorskip("pandas")
         values = [10.0, 20.0, 30.0, 40.0]
         df = session_to_dataframe(values, sample_rate_hz=100.0)
         assert len(df) == 4
@@ -112,7 +112,7 @@ class TestSessionToDataframe:
         assert df["time_s"].iloc[1] == pytest.approx(0.01)
 
     def test_custom_columns(self):
-        pd = pytest.importorskip("pandas")
+        pytest.importorskip("pandas")
         df = session_to_dataframe([1.0, 2.0], columns={"time": "t", "force": "f"})
         assert "t" in df.columns
         assert "f" in df.columns

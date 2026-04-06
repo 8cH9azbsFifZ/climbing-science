@@ -125,7 +125,7 @@ def from_repeater_test(
 
     intensities = [0.80, 0.60, low_pct]
     times = [t80_s, t60_s, t_low_s]
-    forces = [pct * mvc7_kg for pct in intensities]
+    [pct * mvc7_kg for pct in intensities]
 
     # critical_force() expects %MVC intensities, returns (cf_%mvc, w'_%mvc·s, r²)
     intensities_pct = [pct * 100.0 for pct in intensities]

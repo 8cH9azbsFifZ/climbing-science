@@ -7,6 +7,7 @@ from climbing_science.signal import (
     compute_impulse,
     compute_rfd,
     detect_peaks,
+    extract_ttf,
     segment_repeaters,
     smooth,
 )
@@ -311,3 +312,96 @@ class TestSegmentRepeaters:
         assert len(reps) == 3
         assert reps[0].peak_force_kg == pytest.approx(50.0)
         assert reps[2].peak_force_kg == pytest.approx(40.0)
+
+
+# ---------------------------------------------------------------------------
+# extract_ttf()
+# ---------------------------------------------------------------------------
+
+
+class TestExtractTtf:
+    """Verify Time-to-Failure extraction from force curves.
+
+    Reference: Rohmert 1960, Jones et al. 2010 — isometric TtF tests.
+    """
+
+    def test_clean_hold_and_failure(self):
+        """50kg hold for 5s then drop → TtF = 5.0s."""
+        sig = [0.0] * 100 + [50.0] * 500 + [10.0] * 300
+        result = extract_ttf(sig, RATE, 50.0)
+        assert result["ttf_seconds"] == pytest.approx(5.0, abs=0.1)
+        assert result["mean_force_kg"] == pytest.approx(50.0, abs=0.5)
+        assert result["target_force_kg"] == 50.0
+
+    def test_gradual_fatigue(self):
+        """Force ramps down from 50 to 30 over 10s — TtF < 10s."""
+        ramp = _ramp(50.0, 30.0, 10.0)
+        sig = [0.0] * 100 + ramp + [10.0] * 200
+        result = extract_ttf(sig, RATE, 50.0, drop_threshold_pct=0.10)
+        # Should fail before full 10s since force drops below 45kg threshold
+        assert 0 < result["ttf_seconds"] < 10.0
+
+    def test_force_never_reaches_target_raises(self):
+        """If force never reaches target, should raise ValueError."""
+        sig = _constant(20.0, 5.0)
+        with pytest.raises(ValueError, match="never reached"):
+            extract_ttf(sig, RATE, 50.0)
+
+    def test_brief_dip_tolerated(self):
+        """Brief dip below threshold (< min_hold_s) should not trigger failure."""
+        hold = [50.0] * 300
+        dip = [40.0] * 50  # 0.5s dip (< 2.0s min_hold_s)
+        tail = [50.0] * 300
+        drop = [10.0] * 300
+        sig = hold + dip + tail + drop
+        result = extract_ttf(sig, RATE, 50.0, min_hold_s=2.0)
+        # Should survive the brief dip, TtF ≈ 6.5s (3+0.5+3)
+        assert result["ttf_seconds"] > 5.0
+
+    def test_immediate_sustained_drop_is_failure(self):
+        """Sustained drop (>= min_hold_s) below threshold triggers failure."""
+        hold = [50.0] * 300  # 3s hold
+        drop = [40.0] * 300  # 3s drop (> 2.0s min_hold_s)
+        sig = hold + drop
+        result = extract_ttf(sig, RATE, 50.0, min_hold_s=2.0)
+        assert result["ttf_seconds"] == pytest.approx(3.0, abs=0.1)
+
+    def test_force_cv_zero_for_constant(self):
+        """Constant force should have CV ≈ 0."""
+        sig = [0.0] * 100 + [50.0] * 500 + [10.0] * 300
+        result = extract_ttf(sig, RATE, 50.0)
+        assert result["force_cv_pct"] == pytest.approx(0.0, abs=0.1)
+
+    def test_force_cv_nonzero_for_variable(self):
+        """Variable force during hold should have CV > 0."""
+        import random
+
+        random.seed(42)
+        noisy = [50.0 + random.gauss(0, 3) for _ in range(500)]
+        # Ensure all values stay above threshold
+        noisy = [max(46.0, v) for v in noisy]
+        sig = [0.0] * 100 + noisy + [10.0] * 300
+        result = extract_ttf(sig, RATE, 50.0)
+        assert result["force_cv_pct"] > 0
+
+    def test_empty_raises(self):
+        with pytest.raises(ValueError, match="must not be empty"):
+            extract_ttf([], RATE, 50.0)
+
+    def test_zero_target_raises(self):
+        with pytest.raises(ValueError, match="target_force_kg must be > 0"):
+            extract_ttf([50.0], RATE, 0.0)
+
+    def test_zero_sample_rate_raises(self):
+        with pytest.raises(ValueError, match="sample_rate_hz must be > 0"):
+            extract_ttf([50.0], 0.0, 50.0)
+
+    def test_invalid_threshold_raises(self):
+        with pytest.raises(ValueError, match="drop_threshold_pct"):
+            extract_ttf([50.0], RATE, 50.0, drop_threshold_pct=1.5)
+
+    def test_hold_to_end_of_signal(self):
+        """If force never drops, TtF = entire hold duration."""
+        sig = [0.0] * 100 + [50.0] * 500
+        result = extract_ttf(sig, RATE, 50.0)
+        assert result["ttf_seconds"] == pytest.approx(5.0, abs=0.1)

@@ -24,6 +24,7 @@ from climbing_science.endurance import (
     critical_force,
     interpret_cf_ratio,
     time_to_failure,
+    validate_ttf,
     w_prime_balance,
 )
 from climbing_science.grades import (
@@ -69,6 +70,7 @@ from climbing_science.models import (
     GripType,
     MVC7Test,
     SessionLog,
+    TtFResult,
 )
 from climbing_science.periodization import (
     MacroCycle,
@@ -93,6 +95,7 @@ from climbing_science.signal import (
     compute_impulse,
     compute_rfd,
     detect_peaks,
+    extract_ttf,
     segment_repeaters,
     smooth,
 )
@@ -133,6 +136,7 @@ __all__ = [
     "GripType",
     "MVC7Test",
     "SessionLog",
+    "TtFResult",
     # signal
     "Peak",
     "RFDResult",
@@ -141,6 +145,7 @@ __all__ = [
     "compute_impulse",
     "compute_rfd",
     "detect_peaks",
+    "extract_ttf",
     "segment_repeaters",
     "smooth",
     # strength
@@ -165,6 +170,7 @@ __all__ = [
     "critical_force",
     "interpret_cf_ratio",
     "time_to_failure",
+    "validate_ttf",
     "w_prime_balance",
     # load
     "acwr",

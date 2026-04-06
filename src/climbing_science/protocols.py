@@ -432,6 +432,24 @@ REGISTRY: dict[str, ProtocolDefinition] = {
         ),
         reference_key="lopez2014",
     ),
+    "ttf-endurance-3pt": ProtocolDefinition(
+        id="ttf-endurance-3pt",
+        name="3-Point Time-to-Failure Test",
+        author="Jones / Fryer",
+        energy_system=EnergySystem.AEROBIC,
+        min_level=ClimberLevel.INTERMEDIATE,
+        params=ProtocolParams(
+            edge_size_mm=20,
+            grip_type=GripType.HALF_CRIMP,
+            hang_duration_sec=999.0,
+            rest_between_reps_sec=300.0,
+            reps_per_set=1,
+            rest_between_sets_sec=600.0,
+            sets=3,
+            intensity_percent_mvc=(45.0, 80.0),
+        ),
+        reference_key="jones2010",
+    ),
 }
 
 

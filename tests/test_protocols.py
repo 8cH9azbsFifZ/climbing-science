@@ -24,7 +24,7 @@ class TestRegistry:
 
     def test_minimum_20_protocols(self):
         """FR-06.1: at least 20 protocols required."""
-        assert len(REGISTRY) >= 20
+        assert len(REGISTRY) >= 21
 
     def test_all_have_required_fields(self):
         for pid, proto in REGISTRY.items():
@@ -36,6 +36,14 @@ class TestRegistry:
 
     def test_lopez_maxhang_exists(self):
         assert "lopez-maxhang-maw" in REGISTRY
+
+    def test_ttf_endurance_3pt_exists(self):
+        p = get_protocol("ttf-endurance-3pt")
+        assert p.name == "3-Point Time-to-Failure Test"
+        assert p.author == "Jones / Fryer"
+        assert p.energy_system == EnergySystem.AEROBIC
+        assert p.params.sets == 3
+        assert p.reference_key == "jones2010"
 
     def test_energy_system_coverage(self):
         """All three energy systems should be represented."""

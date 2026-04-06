@@ -24,6 +24,7 @@ __all__ = [
     "MVC7Test",
     "CriticalForceTest",
     "PullUpTest",
+    "TtFResult",
     "SessionLog",
     "ExerciseLog",
     "ProtocolParams",
@@ -223,6 +224,33 @@ class PullUpTest(BaseModel):
     max_reps: int = Field(ge=0)
     added_weight_kg: float = 0.0
     body_weight_kg: float = Field(gt=0)
+
+
+class TtFResult(BaseModel):
+    """Time-to-Failure extraction result from a force-time curve.
+
+    Captures the actual hang duration at a target force level,
+    derived from raw force-gauge data.
+
+    Attributes:
+        target_force_kg: Requested target force in kg.
+        onset_idx: Sample index where force first reaches the target.
+        failure_idx: Sample index where force permanently drops below threshold.
+        ttf_seconds: Actual time-to-failure in seconds (failure_idx - onset_idx) / rate.
+        mean_force_kg: Mean force during the hold period.
+        force_cv_pct: Coefficient of variation of force during hold (%).
+
+    References:
+        Rohmert 1960 (:cite:`rohmert1960`) — isometric endurance model,
+        Jones et al. 2010 (:cite:`jones2010`) — critical power / TtF relationship.
+    """
+
+    target_force_kg: float = Field(gt=0, description="Target force in kg")
+    onset_idx: int = Field(ge=0, description="Sample index of hold onset")
+    failure_idx: int = Field(ge=0, description="Sample index of failure")
+    ttf_seconds: float = Field(ge=0, description="Time to failure in seconds")
+    mean_force_kg: float = Field(ge=0, description="Mean force during hold")
+    force_cv_pct: float = Field(ge=0, description="Force coefficient of variation (%)")
 
 
 class AssessmentResult(BaseModel):

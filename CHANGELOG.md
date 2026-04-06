@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **signal** — `extract_ttf()` function: extracts actual Time-to-Failure from raw force-time curves. Detects hold onset and failure point with configurable drop threshold and dip tolerance. Returns TtF, mean force, and coefficient of variation. References: Rohmert 1960, Jones et al. 2010.
+- **endurance** — `validate_ttf()` function: compares model-predicted TtF (from `time_to_failure()`) with actual measured TtF. Returns absolute/relative error and model quality rating (excellent/good/fair/poor). Reference: Jones et al. 2010.
+- **models** — `TtFResult` Pydantic model for structured TtF extraction results.
+- **protocols** — `ttf-endurance-3pt` protocol: standard 3-point Time-to-Failure test at 80%, 60%, 45% MVC with 5–10 min rest between bouts. Reference: Jones et al. 2010, Fryer et al. 2018.
 - **strength** — `StrengthModel` enum with `COMPOSITE` (default, route-grade) and `MAXTOGRADE` (crowd-sourced bouldering survey, n ≈ 2 000+, V1–V17) prediction models. New `model` keyword parameter on `mvc7_to_grade()` and `grade_to_mvc7()`.
 - **references** — Added `maxtograde2020` and `banaszczyk2020` BibTeX entries.
 

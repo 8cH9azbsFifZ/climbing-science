@@ -12,6 +12,7 @@ from climbing_science.endurance import (
     critical_force,
     interpret_cf_ratio,
     time_to_failure,
+    validate_ttf,
     w_prime_balance,
 )
 
@@ -248,3 +249,61 @@ class TestInterpretCfRatio:
         result = interpret_cf_ratio(0.55)
         assert result["category"] == "strength-limited"
         assert "maxhang" in result["priority"].lower() or "bouldering" in result["priority"].lower()
+
+
+# ---------------------------------------------------------------------------
+# validate_ttf — model vs actual comparison
+# ---------------------------------------------------------------------------
+
+
+class TestValidateTtf:
+    """Verify TtF model validation.
+
+    Reference: Jones et al. 2010 — predicted t_lim = W' / (F - CF).
+    """
+
+    def test_excellent_match(self):
+        """< 10% error → excellent."""
+        result = validate_ttf(44.4, 42.0)
+        assert result["model_quality"] == "excellent"
+        assert result["absolute_error_s"] == pytest.approx(2.4, abs=0.1)
+
+    def test_good_match(self):
+        """10–20% error → good."""
+        result = validate_ttf(48.0, 40.0)
+        assert result["model_quality"] == "good"
+
+    def test_fair_match(self):
+        """20–35% error → fair."""
+        result = validate_ttf(54.0, 40.0)
+        assert result["model_quality"] == "fair"
+
+    def test_poor_match(self):
+        """> 35% error → poor."""
+        result = validate_ttf(80.0, 40.0)
+        assert result["model_quality"] == "poor"
+
+    def test_perfect_match(self):
+        """Identical values → 0 error, excellent."""
+        result = validate_ttf(44.4, 44.4)
+        assert result["absolute_error_s"] == 0.0
+        assert result["relative_error_pct"] == 0.0
+        assert result["model_quality"] == "excellent"
+
+    def test_negative_predicted_raises(self):
+        with pytest.raises(ValueError, match="non-negative"):
+            validate_ttf(-1.0, 40.0)
+
+    def test_negative_actual_raises(self):
+        with pytest.raises(ValueError, match="non-negative"):
+            validate_ttf(44.0, -5.0)
+
+    def test_zero_actual(self):
+        """Zero actual with positive predicted → poor."""
+        result = validate_ttf(10.0, 0.0)
+        assert result["model_quality"] == "poor"
+
+    def test_both_zero(self):
+        """Both zero → excellent (no error)."""
+        result = validate_ttf(0.0, 0.0)
+        assert result["model_quality"] == "excellent"

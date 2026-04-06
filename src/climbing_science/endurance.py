@@ -18,6 +18,7 @@ __all__ = [
     "interpret_cf_ratio",
     "time_to_failure",
     "classify_endurance",
+    "validate_ttf",
     "w_prime_balance",
 ]
 
@@ -306,3 +307,70 @@ def w_prime_balance(
         result.append(round(balance, 1))
 
     return result
+
+
+def validate_ttf(
+    predicted_s: float,
+    actual_s: float,
+) -> dict[str, object]:
+    """Compare model-predicted TtF with actual measured TtF.
+
+    Assesses how well the Critical Force model (Jones et al. 2010)
+    predicts actual time-to-failure from a force-gauge test.
+
+    Args:
+        predicted_s: Model-predicted time to failure in seconds
+            (from :func:`time_to_failure`).
+        actual_s: Actual measured time to failure in seconds
+            (from :func:`~climbing_science.signal.extract_ttf`).
+
+    Returns:
+        Dict with keys:
+            - ``predicted_s``: The predicted value.
+            - ``actual_s``: The actual value.
+            - ``absolute_error_s``: ``|predicted - actual|``.
+            - ``relative_error_pct``: Relative error as percentage of actual.
+            - ``model_quality``: "excellent" (≤10%), "good" (≤20%),
+              "fair" (≤35%), or "poor" (>35%).
+
+    Raises:
+        ValueError: If either value is negative.
+
+    References:
+        Jones et al. 2010 (:cite:`jones2010`) — critical power model
+        predicts t_lim = W' / (F - CF).
+
+    Examples:
+        >>> validate_ttf(44.4, 42.0)["model_quality"]
+        'excellent'
+        >>> validate_ttf(44.4, 42.0)["absolute_error_s"]
+        2.4
+    """
+    if predicted_s < 0:
+        raise ValueError(f"predicted_s must be non-negative, got {predicted_s}")
+    if actual_s < 0:
+        raise ValueError(f"actual_s must be non-negative, got {actual_s}")
+
+    abs_error = abs(predicted_s - actual_s)
+
+    if actual_s > 0:
+        rel_error = (abs_error / actual_s) * 100.0
+    else:
+        rel_error = float("inf") if predicted_s > 0 else 0.0
+
+    if rel_error <= 10.0:
+        quality = "excellent"
+    elif rel_error <= 20.0:
+        quality = "good"
+    elif rel_error <= 35.0:
+        quality = "fair"
+    else:
+        quality = "poor"
+
+    return {
+        "predicted_s": round(predicted_s, 2),
+        "actual_s": round(actual_s, 2),
+        "absolute_error_s": round(abs_error, 2),
+        "relative_error_pct": round(rel_error, 1),
+        "model_quality": quality,
+    }

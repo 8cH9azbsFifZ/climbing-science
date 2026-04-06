@@ -35,6 +35,7 @@ __all__ = [
     "compute_impulse",
     "compute_rfd",
     "detect_peaks",
+    "extract_ttf",
     "segment_repeaters",
     "smooth",
 ]
@@ -514,3 +515,121 @@ def segment_repeaters(
             i += 1
 
     return reps
+
+
+# ---------------------------------------------------------------------------
+# Time-to-Failure Extraction
+# ---------------------------------------------------------------------------
+
+
+def extract_ttf(
+    values: list[float],
+    sample_rate_hz: float,
+    target_force_kg: float,
+    drop_threshold_pct: float = 0.10,
+    min_hold_s: float = 2.0,
+) -> dict:
+    """Extract Time-to-Failure from a raw force-time curve.
+
+    Analyses a recorded force curve from an isometric TtF test where the
+    climber attempts to sustain a target force until failure.  Detects
+    the onset (force first reaches target) and failure (force permanently
+    drops below threshold) to compute the actual hold duration.
+
+    The failure threshold is ``target_force_kg × (1 - drop_threshold_pct)``.
+    A brief dip shorter than ``min_hold_s`` below threshold is tolerated
+    (e.g. grip readjustment) — failure is only declared when force stays
+    below threshold for at least ``min_hold_s`` consecutive seconds.
+
+    Args:
+        values: Force measurements in kg.
+        sample_rate_hz: Sampling rate in Hz.
+        target_force_kg: Target force the climber attempted to hold (kg).
+        drop_threshold_pct: Fractional drop below target that counts as
+            failure (default 0.10 = 10% below target).
+        min_hold_s: Minimum consecutive seconds below threshold before
+            declaring failure (default 2.0s).
+
+    Returns:
+        Dict with keys:
+            - ``target_force_kg``: The target force.
+            - ``onset_idx``: Sample index where hold begins.
+            - ``failure_idx``: Sample index of failure.
+            - ``ttf_seconds``: Time-to-failure in seconds.
+            - ``mean_force_kg``: Mean force during hold.
+            - ``force_cv_pct``: Coefficient of variation during hold (%).
+
+    Raises:
+        ValueError: If inputs are invalid or force never reaches target.
+
+    References:
+        Rohmert 1960 (:cite:`rohmert1960`) — isometric endurance curve,
+        Jones et al. 2010 (:cite:`jones2010`) — t_lim = W' / (F - CF).
+
+    Examples:
+        >>> sig = [0.0]*100 + [40.0]*500 + [10.0]*100
+        >>> result = extract_ttf(sig, 100.0, 40.0)
+        >>> round(result["ttf_seconds"], 1)
+        5.0
+    """
+    if sample_rate_hz <= 0:
+        raise ValueError(f"sample_rate_hz must be > 0, got {sample_rate_hz}")
+    if target_force_kg <= 0:
+        raise ValueError(f"target_force_kg must be > 0, got {target_force_kg}")
+    if not values:
+        raise ValueError("values must not be empty")
+    if not 0 <= drop_threshold_pct < 1:
+        raise ValueError(f"drop_threshold_pct must be in [0, 1), got {drop_threshold_pct}")
+
+    threshold = target_force_kg * (1.0 - drop_threshold_pct)
+    min_drop_samples = max(1, int(min_hold_s * sample_rate_hz))
+
+    # Find onset: first sample at or above threshold
+    onset_idx = None
+    for i, v in enumerate(values):
+        if v >= threshold:
+            onset_idx = i
+            break
+
+    if onset_idx is None:
+        raise ValueError(
+            f"Force never reached threshold ({threshold:.1f} kg). "
+            f"Max force in signal: {max(values):.1f} kg."
+        )
+
+    # Find failure: first time force stays below threshold for min_hold_s
+    failure_idx = len(values) - 1
+    below_count = 0
+    for i in range(onset_idx, len(values)):
+        if values[i] < threshold:
+            below_count += 1
+            if below_count >= min_drop_samples:
+                failure_idx = i - min_drop_samples + 1
+                break
+        else:
+            below_count = 0
+
+    # Compute metrics over the hold region
+    hold_region = values[onset_idx:failure_idx]
+    if not hold_region:
+        raise ValueError("Hold region is empty — onset and failure overlap")
+
+    mean_force = sum(hold_region) / len(hold_region)
+    ttf_seconds = (failure_idx - onset_idx) / sample_rate_hz
+
+    # Coefficient of variation
+    if mean_force > 0 and len(hold_region) > 1:
+        variance = sum((v - mean_force) ** 2 for v in hold_region) / len(hold_region)
+        std_dev = math.sqrt(variance)
+        cv_pct = (std_dev / mean_force) * 100.0
+    else:
+        cv_pct = 0.0
+
+    return {
+        "target_force_kg": target_force_kg,
+        "onset_idx": onset_idx,
+        "failure_idx": failure_idx,
+        "ttf_seconds": round(ttf_seconds, 2),
+        "mean_force_kg": round(mean_force, 2),
+        "force_cv_pct": round(cv_pct, 2),
+    }

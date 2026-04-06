@@ -632,3 +632,6 @@ def extract_ttf(
         "mean_force_kg": round(mean_force, 2),
         "force_cv_pct": round(cv_pct, 2),
     }
+
+
+x = 1

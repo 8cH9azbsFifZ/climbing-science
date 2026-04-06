@@ -15,28 +15,38 @@ and raw data from Tindeq/Climbro force measurements.
 
 ---
 
-## Gap Analysis
+## Implementation Status (v0.3.1)
 
-### What Exists Where
+| Capability                       | Status | Module             | Coverage |
+| -------------------------------- | ------ | ------------------ | -------- |
+| Rohmert curve (fatigue model)    | ✅     | `strength.py`      | 90%      |
+| Edge depth correction (Amca)     | ✅     | `edge_depth.py`    | good     |
+| MVC-7 → grade prediction         | ✅     | `strength.py`      | 90%      |
+| Critical Force (CF/W')           | ✅     | `endurance.py`     | good     |
+| Training Load (TUT/RPE/ACWR)    | ✅     | `load.py`          | 90%      |
+| Protocol Registry & Selection    | ✅     | `protocols.py`     | 97%      |
+| Grade conversion (5 systems)     | ✅     | `grades.py`        | ~95%     |
+| RFD analysis                     | ✅     | `signal.py`        | 96%      |
+| Force curve signal processing    | ✅     | `signal.py`        | 96%      |
+| Tindeq JSON adapter              | ✅     | `adapters/tindeq`  | good     |
+| Manual input adapter             | ✅     | `adapters/manual`  | good     |
+| Athlete diagnostics              | ✅     | `diagnostics.py`   | good     |
+| Periodization (macro/meso/micro) | ✅     | `periodization.py` | 96%      |
+| Data I/O (CSV/JSON/Markdown)     | ✅     | `io.py`            | 89%      |
+| Jupyter plot helpers             | ✅     | `frontends/notebook`| good    |
+| Generic CSV adapter              | ❌     | —                  | —        |
+| Assessment report (report.py)    | ❌     | —                  | —        |
+| CLI runner (cli.py)              | ❌     | —                  | —        |
+| Notebooks (6 of 7)               | ❌     | —                  | —        |
 
-| Capability                       | Python |
-| -------------------------------- | ------ |
-| Rohmert curve (fatigue model)    | ❌     |
-| Edge depth correction (Amca)     | ❌     |
-| MVC-7 → grade prediction         | ❌     |
-| Critical Force (CF/W')           | ❌     |
-| Hangboard Load Calculator        | ❌     |
-| Sport Climbing Level Calculator  | ❌     |
-| RFD analysis                     | ❌     |
-| Tindeq JSON → Assessment         | ❌     |
-| Force curve signal processing    | ❌     |
+**Overall:** 498 tests, all passing, 95% total coverage.
 
-### Core Gap
+### Remaining Gap
 
-There is **no open, validated Python library** for climbing science calculations.
-StrengthClimbing has everything as proprietary JavaScript behind a paywall.
-The Copilot skills *describe* the formulas. The iOS app *measures*.
-But **nobody calculates openly and reproducibly**.
+The **core calculation modules** are complete and well-tested (78–100% coverage).
+What's missing is the **presentation layer**: a CLI, a proper report generator,
+and the example notebooks that make the library accessible to non-programmers.
+One pre-existing test (`test_version`) fails due to a version string mismatch.
 
 ---
 
@@ -60,51 +70,47 @@ all sources and all calculations.
 │                    Layer 4: FRONTENDS                        │
 │         Concrete applications — interchangeable             │
 │                                                             │
-│  cli.py            CLI runner ($ climbing-science analyze)  │
-│  notebook.py       Jupyter helpers (Plot, DataFrame export) │
-│  report.py         Assessment report (Markdown/HTML/dict)   │
+│  frontends/notebook.py  ✅ Jupyter helpers (plots, DF)     │
+│  frontends/cli.py       ❌ CLI runner (planned)            │
+│  frontends/report.py    ❌ Assessment report (planned)     │
 └──────────────────────────┬──────────────────────────────────┘
                            │ uses
 ┌──────────────────────────▼──────────────────────────────────┐
 │                    Layer 3: I/O ADAPTERS                     │
 │         Reads/writes external formats → canonical model     │
 │                                                             │
-│  adapters/                                                  │
-│    tindeq.py       FingerForceTraining JSON & Tindeq App    │
-│    climbro.py      Climbro CSV/JSON                         │
-│    griptonite.py   Griptonite data (format TBD)             │
-│    manual.py       Manual input (BW, MVC-7, hang time)      │
-│    csv_generic.py  Generic CSV import (time, force)         │
+│  adapters/tindeq.py   ✅ Tindeq Progressor JSON            │
+│  adapters/manual.py   ✅ Manual input (BW, MVC-7, time)    │
+│  io.py                ✅ CSV/JSON/Markdown I/O              │
+│  adapters/csv_generic ❌ Generic CSV adapter (planned)     │
 └──────────────────────────┬──────────────────────────────────┘
                            │ produces/consumes
 ┌──────────────────────────▼──────────────────────────────────┐
-│              CANONICAL DATA MODEL (datamodel.py)            │
+│              CANONICAL DATA MODEL (models.py)               │
 │         Device-agnostic — the "currency" of the library     │
 │                                                             │
-│  ForceSample(time_s, force_kg)                              │
-│  ForceSession(samples, metadata, segments?)                 │
-│  AthleteProfile(weight_kg, height_cm?, arm_span?, sex?)     │
-│  TestResult(mvc7_r, mvc7_l, cf_kg?, rfd?, grade_pred?, ..)  │
+│  ClimberProfile, MVC7Test, CriticalForceTest, SessionLog   │
+│  AssessmentResult, ProtocolParams, ProtocolDefinition       │
+│  ExerciseLog, ProgressionRule, InjuryRecord, WeeklyVolume  │
 └──────────┬───────────────────────────────┬──────────────────┘
            │ uses                          │ uses
 ┌──────────▼──────────┐  ┌────────────────▼───────────────────┐
-│  Layer 2: EXERCISES  │  │                                    │
-│  Protocols & Plan    │  │                                    │
-│                      │  │                                    │
-│  protocols.py        │  │                                    │
-│  hangboard_calc.py   │  │                                    │
+│  Layer 2: EXERCISES  │  │  EXTRAS (not in original plan)     │
+│  Protocols & Load    │  │                                    │
+│                      │  │  diagnostics.py  ✅ Weakness ID    │
+│  protocols.py     ✅ │  │  periodization.py ✅ Macro/Meso   │
+│  load.py          ✅ │  │                                    │
 └──────────┬───────────┘  │                                    │
            │ uses         │                                    │
 ┌──────────▼──────────────▼───────────────────────────────────┐
 │                    Layer 1: MODELS                            │
 │         Pure mathematics — no I/O, no state                  │
 │                                                              │
-│  rohmert.py          Isometric fatigue curve                  │
-│  edge_depth.py       Edge depth correction                    │
-│  critical_force.py   CF/W' from 3-point test                  │
-│  strength_analyzer   MVC → grade prediction                   │
-│  grades.py           Grade conversion                         │
-│  signal.py           Force curve signal processing            │
+│  strength.py     ✅ Rohmert + MVC↔Grade + RFD               │
+│  edge_depth.py   ✅ Edge depth correction                    │
+│  endurance.py    ✅ CF/W' from 3-point test                  │
+│  grades.py       ✅ Grade conversion (5 systems)             │
+│  signal.py       ✅ Force curve signal processing            │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -128,8 +134,14 @@ all sources and all calculations.
 
 ### Canonical Data Model — The Bridge
 
+> **Implementation note:** The original plan called for `datamodel.py` with `ForceSample`,
+> `ForceSession`, `AthleteProfile`, `TestResult`. The actual implementation uses `models.py`
+> with a richer set of 17+ dataclasses/enums (see `models.py` section above).
+> The data model design below shows the **original intent**; the actual types are documented
+> in the `models.py` module docstrings.
+
 ```python
-# datamodel.py — Device-agnostic, app-agnostic
+# models.py — Device-agnostic, app-agnostic (was: datamodel.py)
 
 from dataclasses import dataclass, field
 
@@ -254,71 +266,79 @@ notebook.plot_protocol_comparison(mvc7=105, bw=65) # Protocol comparison
 
 ```
 src/climbing_science/
-├── __init__.py
-├── datamodel.py               # Canonical data model (ForceSample, ForceSession, ...)
+├── __init__.py               # Public API re-exports (201 LOC)
+├── models.py                 # ✅ Domain types: 17 dataclasses/enums (403 LOC)
+├── grades.py                 # ✅ Grade conversion UIAA/French/YDS/Font/V (502 LOC)
+├── edge_depth.py             # ✅ Edge depth correction, Amca 2.5%/mm (185 LOC)
+├── endurance.py              # ✅ Critical Force, W', TLim, W'bal (308 LOC)
+├── strength.py               # ✅ MVC↔Grade, Rohmert, RFD, P:W (494 LOC, 90% cov)
+├── signal.py                 # ✅ Peak detection, RFD, MVC-7, impulse (516 LOC)
+├── protocols.py              # ✅ Protocol registry & selection (581 LOC)
+├── load.py                   # ✅ TUT, RPE, ACWR, injury risk (410 LOC)
+├── diagnostics.py            # ✅ Level classification, weakness ID (226 LOC)
+├── periodization.py          # ✅ Macro/meso/microcycle generation (328 LOC)
+├── io.py                     # ✅ CSV/JSON/Markdown import/export (280 LOC)
+├── py.typed                  # PEP 561 marker
 │
-├── models/                    # Layer 1: Pure Math
+├── adapters/                 # Layer 3: I/O Adapters
 │   ├── __init__.py
-│   ├── rohmert.py             # Isometric fatigue curve
-│   ├── edge_depth.py          # Edge depth correction (Amca)
-│   ├── critical_force.py      # CF/W' Regression
-│   ├── strength_analyzer.py   # MVC → Grade prediction
-│   ├── grades.py              # Grade conversion (UIAA/French/V/Font/YDS)
-│   └── signal.py              # Signal processing (Smoothing, Peak Detection, RFD)
+│   ├── tindeq.py             # ✅ Tindeq Progressor JSON (309 LOC)
+│   └── manual.py             # ✅ Manual input, no device needed (212 LOC)
 │
-├── exercises/                 # Layer 2: Protocols & Planning
-│   ├── __init__.py
-│   ├── protocols.py           # Protocol definitions (data classes)
-│   └── hangboard_calc.py      # Training loads from MVC + Protocol
-│
-├── adapters/                  # Layer 3: I/O Adapters (Format → Data model)
-│   ├── __init__.py
-│   ├── tindeq.py              # FingerForceTraining JSON & Tindeq App
-│   ├── climbro.py             # Climbro CSV/JSON
-│   ├── manual.py              # Manual input (no device needed)
-│   └── csv_generic.py         # Generic CSV import
-│
-└── frontends/                 # Layer 4: Applications
+└── frontends/                # Layer 4: Applications
     ├── __init__.py
-    ├── cli.py                 # CLI runner
-    ├── notebook.py            # Jupyter helpers (Plots, DataFrame export)
-    └── report.py              # Assessment report (Markdown/HTML/dict)
+    └── notebook.py           # ✅ Jupyter plot helpers (369 LOC)
 
-notebooks/                         # Deliverable Jupyter analyses
-├── 01_my_climbing_assessment.ipynb    # Personal overall assessment
-├── 02_rohmert_curve_explained.ipynb   # Theory: Isometric fatigue
-├── 03_critical_force_analysis.ipynb   # Evaluate + understand CF test
-├── 04_protocol_comparison.ipynb       # Which protocol suits me?
-├── 05_session_deep_dive.ipynb         # Analyze Tindeq session
-├── 06_progress_tracker.ipynb          # Progress over weeks/months
-└── 07_edge_depth_science.ipynb        # Why 20mm? Edge depth correction
+notebooks/
+└── grade_conversion.ipynb    # ✅ Only notebook so far
 
-tests/
-├── test_datamodel.py
-├── models/
-│   ├── test_rohmert.py
-│   ├── test_edge_depth.py
-│   ├── test_critical_force.py
-│   ├── test_strength_analyzer.py
-│   ├── test_grades.py
-│   └── test_signal.py
-├── exercises/
-│   ├── test_protocols.py
-│   └── test_hangboard_calc.py
+tests/                        # 498 tests, flat structure
+├── conftest.py
+├── test_basic.py
+├── test_citations.py
+├── test_diagnostics.py
+├── test_edge_depth.py
+├── test_endurance.py
+├── test_grades.py
+├── test_io.py
+├── test_load.py
+├── test_models.py
+├── test_periodization.py
+├── test_protocols.py
+├── test_signal.py
+├── test_strength.py
+├── test_adapter_manual.py
+├── test_adapter_tindeq.py
+└── test_frontend_notebook.py
+```
+
+### Not Yet Implemented
+
+```
+src/climbing_science/
+│   (missing)
 ├── adapters/
-│   ├── test_tindeq.py
-│   ├── test_climbro.py
-│   └── test_manual.py
+│   └── csv_generic.py        # ❌ Generic CSV import (partially in io.py)
+│
 └── frontends/
-    ├── test_report.py
-    └── test_notebook.py
+    ├── report.py             # ❌ Assessment report generator (partially in io.py)
+    └── cli.py                # ❌ CLI runner
+
+notebooks/                    # ❌ 6 of 7 notebooks missing
+├── 01_my_climbing_assessment.ipynb
+├── 02_rohmert_curve_explained.ipynb
+├── 03_critical_force_analysis.ipynb
+├── 04_protocol_comparison.ipynb
+├── 05_session_deep_dive.ipynb
+├── 06_progress_tracker.ipynb
+└── 07_edge_depth_science.ipynb
 ```
 
 ---
 
 ## Modules — Layer 1: Models
 
-### Module 1: `rohmert.py` — Isometric Fatigue Curve
+### Module 1: `strength.py` (was: `rohmert.py`) — Rohmert + Strength Analysis ✅
 
 **Priority:** 🔴 Foundation for everything else
 
@@ -382,7 +402,7 @@ def mvc7_from_test(total_load_kg: float, hang_time_s: float,
 
 ---
 
-### Module 2: `edge_depth.py` — Edge Depth Correction
+### Module 2: `edge_depth.py` — Edge Depth Correction ✅
 
 **Priority:** 🟡 Required for correct comparisons
 
@@ -427,7 +447,7 @@ def convert_force(force_kg: float, from_edge_mm: float,
 
 ---
 
-### Module: `grades.py` — Grade Conversion & Numerical Difficulty Index
+### Module: `grades.py` — Grade Conversion & Numerical Difficulty Index ✅
 
 **Priority:** 🟢 Quick win, no math, foundation for strength_analyzer
 
@@ -1165,7 +1185,7 @@ for french, expected_yds in PYCLIMB_FRENCH_TO_YDS.items():
 
 ---
 
-### Module 3: `signal.py` — Force-Curve Signal Processing
+### Module 3: `signal.py` — Force-Curve Signal Processing ✅
 
 **Priority:** 🟡 Foundation for Tindeq analysis
 
@@ -1217,7 +1237,7 @@ def compute_impulse(values: list[float], timestamps_us: list[int]) -> float:
 
 ---
 
-### Module 4: `strength_analyzer.py` — Grade Prediction from Finger Strength
+### Module 4: `strength.py` (was: `strength_analyzer.py`) — Grade Prediction from Finger Strength ✅
 
 **Priority:** 🔴 Core feature
 
@@ -1304,7 +1324,7 @@ class GradeResult:
 
 ---
 
-### Module 4: `critical_force.py` — Critical Force & W'
+### Module 4: `endurance.py` (was: `critical_force.py`) — Critical Force & W' ✅
 
 **Priority:** 🔴 Only open CF model
 
@@ -1382,7 +1402,7 @@ class CFResult:
 
 ## Modules — Layer 2: Exercises
 
-### Module 5: `protocols.py` — Protocol Definitions
+### Module 5: `protocols.py` — Protocol Definitions ✅
 
 **Priority:** 🟡 Pure data, no logic
 
@@ -1422,7 +1442,7 @@ about Rohmert or Edge-Depth. They only describe structure and intensity ranges.
 
 ---
 
-### Module 6: `hangboard_calc.py` — Training Load Calculator
+### Module 6: `load.py` (was: `hangboard_calc.py`) — Training Load Calculator ✅
 
 **Priority:** 🟡 Highest everyday utility
 
@@ -1459,7 +1479,7 @@ def compare_protocols(mvc7_kg: float, bodyweight_kg: float,
 
 ## Modules — Layer 3: I/O Adapters
 
-### Module 7: `adapters/tindeq.py` — Tindeq Progressor Adapter
+### Module 7: `adapters/tindeq.py` — Tindeq Progressor Adapter ✅
 
 **Priority:** 🟡 Primary adapter (for FingerForceTraining iOS app)
 
@@ -1481,7 +1501,7 @@ def load_all(directory: str) -> list[ForceSession]:
     """Loads all sessions from a directory (iCloud export)."""
 ```
 
-### Module 8: `adapters/manual.py` — Manual Input
+### Module 8: `adapters/manual.py` — Manual Input ✅
 
 **Priority:** 🟡 For users without a force gauge
 
@@ -1498,7 +1518,10 @@ def from_repeater_test(bodyweight_kg: float,
     """Creates TestResult from manual CF test (3-point)."""
 ```
 
-### Module 9: `adapters/csv_generic.py` — Generic CSV Import
+### Module 9: `adapters/csv_generic.py` — Generic CSV Import ❌ NOT YET IMPLEMENTED
+
+> **Note:** `io.read_force_csv()` provides partial coverage. A dedicated adapter
+> producing canonical `ForceSession` objects is still missing.
 
 ```python
 def load(path: str, time_col: str = "time_s",
@@ -1511,7 +1534,10 @@ def load(path: str, time_col: str = "time_s",
 
 ## Modules — Layer 4: Frontends
 
-### Module 10: `frontends/report.py` — Assessment Report
+### Module 10: `frontends/report.py` — Assessment Report ❌ NOT YET IMPLEMENTED
+
+> **Note:** `io.export_assessment_markdown()` and `io.export_assessment_json()` provide
+> partial coverage. A dedicated report generator with full pipeline is still missing.
 
 **Priority:** 🟢 End-to-end result
 
@@ -1536,7 +1562,7 @@ def to_dict(report: AssessmentReport) -> dict:
     """Report as dict (for JSON export, web API)."""
 ```
 
-### Module 11: `frontends/notebook.py` — Jupyter Helpers
+### Module 11: `frontends/notebook.py` — Jupyter Helpers ✅
 
 **Priority:** 🟢 Nice-to-have, high wow factor
 
@@ -1556,7 +1582,7 @@ def session_to_dataframe(session: ForceSession):
     """Converts ForceSession → pandas DataFrame (for custom analysis)."""
 ```
 
-### Module 12: `frontends/cli.py` — CLI Runner
+### Module 12: `frontends/cli.py` — CLI Runner ❌ NOT YET IMPLEMENTED
 
 **Priority:** 🟢 Optional
 
@@ -1570,47 +1596,90 @@ $ climbing-science grade "7a+" --to uiaa
 
 ---
 
+## Additional Modules (not in original plan) ✅
+
+These modules emerged during implementation and extend the library beyond
+the original scope. They are fully functional and tested.
+
+### `diagnostics.py` — Athlete Profiling & Weakness Identification (226 LOC)
+
+**Functions:**
+- `classify_level()` — Classify climber level from grade (beginner/intermediate/advanced/elite)
+- `identify_weakness()` — Identify primary limiter (strength/endurance/power/technique)
+- `training_priority()` — Rank training priorities based on assessment gaps
+- `progress_delta()` — Quantify progress between two assessments
+
+### `periodization.py` — Training Cycle Generation (328 LOC)
+
+**Classes:** `Phase`, `MesoCycle`, `MicroCycle`, `MacroCycle`
+
+**Functions:**
+- `generate_macrocycle()` — Generate annual plan template
+- `generate_mesocycle()` — Generate 4–8 week training block
+- `generate_microcycle()` — Generate weekly session plan
+- `validate_constraints()` — Validate periodization constraints
+
+**Coverage:** 96% — well tested.
+
+### `io.py` — Data Import/Export (280 LOC)
+
+**Functions:**
+- `read_force_csv()` — Parse force-gauge CSV (Tindeq, Climbro format)
+- `export_session_json()` / `import_session_json()` — SessionLog serialization
+- `export_assessment_markdown()` — Generate Markdown report from assessment
+- `export_assessment_json()` — Export assessment as JSON
+
+**Coverage:** 89% — well tested.
+
+> **Note:** `io.py` partially covers the planned `adapters/csv_generic.py` and
+> `frontends/report.py`. Consider whether dedicated modules are still needed
+> given the good coverage (89%) of `io.py`.
+
+---
+
 ## Dependency Graph
 
 ```
 Layer 1 — MODELS (pure functions, no I/O)
 ┌──────────┐  ┌───────────┐
-│ grades   │  │ rohmert   │ ← Foundation
+│ grades ✅│  │strength ✅│ ← Rohmert + MVC↔Grade + RFD
 └──────────┘  └─────┬─────┘
                     │
               ┌─────┴─────┐
               ▼           ▼
          ┌──────────┐ ┌───────────────────┐
-         │edge_depth│ │strength_analyzer  │
-         └──────────┘ │(rohmert + grades) │
-              │       └───────────────────┘
-              │
-         ┌────┘   ┌──────────────────┐
-         │        │ critical_force   │ (standalone)
-         │        └──────────────────┘
-         │
-         ▼
+         │edge_depth│ │ (strength uses    │
+         │    ✅    │ │  grades internally)│
+         └──────────┘ └───────────────────┘
+
+         ┌──────────────────┐
+         │ endurance ✅     │ (standalone, CF/W')
+         └──────────────────┘
+
     ┌──────────┐
-    │ signal   │ (standalone, pure math)
+    │ signal ✅│ (standalone, pure math)
     └──────────┘
 
-DATA MODEL (datamodel.py — the bridge)
-    ForceSample, ForceSession, AthleteProfile, TestResult
+DATA MODEL (models.py — the bridge)
+    ClimberProfile, MVC7Test, CriticalForceTest, SessionLog, ...
 
-Layer 2 — EXERCISES (protocol data + calculation)
-┌──────────────┐    ┌────────────────────────────┐
-│ protocols    │───▶│ hangboard_calc             │
-│ (pure data)  │    │ (protocols + rohmert + edge)│
-└──────────────┘    └────────────────────────────┘
+Layer 2 — EXERCISES + EXTRAS
+┌──────────────┐    ┌──────────────┐
+│ protocols ✅ │───▶│ load ✅      │
+│ (pure data)  │    │ (TUT/RPE/ACWR)│
+└──────────────┘    └──────────────┘
+┌────────────────┐  ┌──────────────────┐
+│ diagnostics ✅ │  │ periodization ✅ │
+└────────────────┘  └──────────────────┘
 
 Layer 3 — ADAPTERS (format → data model)
 ┌──────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────┐
-│ tindeq   │ │ climbro │ │ manual  │ │ csv_generic │
+│ tindeq ✅│ │ manual✅│ │ io ✅   │ │ csv_generic❌│
 └──────────┘ └─────────┘ └─────────┘ └─────────────┘
 
 Layer 4 — FRONTENDS (applications)
 ┌──────────┐  ┌──────────┐  ┌──────────┐
-│ cli      │  │ report   │  │ notebook │
+│ cli ❌   │  │ report ❌│  │notebook✅│
 └──────────┘  └──────────┘  └──────────┘
 ```
 
@@ -1618,38 +1687,46 @@ Layer 4 — FRONTENDS (applications)
 
 **Layer 0 (Foundation):**
 
-0. **`datamodel.py`** — Canonical data types, everything builds on this
+0. ✅ **`models.py`** (was: `datamodel.py`) — Domain types, 17 dataclasses/enums (403 LOC, 97% cov)
 
 **Layer 1 (bottom-up):**
 
-1. **`models/grades.py`** — Lookup tables, no math, quick win
-2. **`models/rohmert.py`** — Mathematical foundation, easily testable
-3. **`models/edge_depth.py`** — Simple, does not directly require Rohmert
-4. **`models/signal.py`** — Smoothing, Peak Detection, RFD (pure math)
-5. **`models/strength_analyzer.py`** — Uses Rohmert + Edge + Grades, first "wow"
-6. **`models/critical_force.py`** — Standalone model, linear regression
+1. ✅ **`grades.py`** — Grade conversion, 5 systems, 6 functions (502 LOC, ~95% cov)
+2. ✅ **`strength.py`** (was: `rohmert.py` + `strength_analyzer.py`) — Rohmert + MVC↔Grade + RFD (494 LOC, 90% cov)
+3. ✅ **`edge_depth.py`** — Amca 2.5%/mm correction (185 LOC, good cov)
+4. ✅ **`signal.py`** — Peak detection, RFD, MVC-7, impulse, repeater segmentation (516 LOC, 96% cov)
+5. ✅ **`endurance.py`** (was: `critical_force.py`) — CF, W', TLim, W'bal, classify (308 LOC, good cov)
 
 **Layer 2:**
 
-7. **`exercises/protocols.py`** — Pure data classes, immediately testable
-8. **`exercises/hangboard_calc.py`** — Connects protocols with models
+6. ✅ **`protocols.py`** — Protocol registry, selection, formatting (581 LOC, 97% cov)
+7. ✅ **`load.py`** (was: `hangboard_calc.py`) — TUT, RPE, ACWR, overtraining, margin (410 LOC, 90% cov)
 
 **Layer 3:**
 
-9. **`adapters/tindeq.py`** — JSON parsing for FingerForceTraining
-10. **`adapters/manual.py`** — Manual input for users without a device
-11. **`adapters/csv_generic.py`** — Generic import
+8. ✅ **`adapters/tindeq.py`** — FFT JSON, load/load_all, extract_mvc7/peaks (309 LOC)
+9. ✅ **`adapters/manual.py`** — MVC-7 test, repeater test, quick_profile (212 LOC)
+10. ❌ **`adapters/csv_generic.py`** — Generic import (partially covered by `io.read_force_csv`)
 
 **Layer 4 + Notebooks:**
 
-12. **`frontends/report.py`** — End-to-end assessment
-13. **`frontends/notebook.py`** — Jupyter helpers (plots, DataFrame)
-14. **`frontends/cli.py`** — Interactive CLI
-15. **Example Notebooks** — Deliverable analyses (see below)
+11. ❌ **`frontends/report.py`** — Assessment report (partially covered by `io.export_assessment_*`)
+12. ✅ **`frontends/notebook.py`** — 5 plot functions + DataFrame export (369 LOC)
+13. ❌ **`frontends/cli.py`** — Interactive CLI
+14. ⚠️ **Example Notebooks** — 1 of 7 complete (`grade_conversion.ipynb`)
+
+**Extra (emerged during implementation):**
+
+15. ✅ **`diagnostics.py`** — Level classification, weakness ID, progress delta (226 LOC)
+16. ✅ **`periodization.py`** — Macro/meso/microcycle generation (328 LOC, 96% cov)
+17. ✅ **`io.py`** — CSV/JSON/Markdown import/export (280 LOC, 89% cov)
 
 ---
 
 ## Example Notebooks — Interactive Analyses with References
+
+> **Status:** 1 of 7 notebooks implemented (`grade_conversion.ipynb`).
+> The 6 planned notebooks below are **not yet created**.
 
 The notebooks are the **main product** for end users. They combine:
 - Real calculations with the library
@@ -1661,13 +1738,14 @@ The notebooks are the **main product** for end users. They combine:
 
 ```
 notebooks/
-├── 01_my_climbing_assessment.ipynb    # Personal overall assessment
-├── 02_rohmert_curve_explained.ipynb   # Theory: Isometric fatigue
-├── 03_critical_force_analysis.ipynb   # Analyze + understand CF test
-├── 04_protocol_comparison.ipynb       # Which protocol fits me?
-├── 05_session_deep_dive.ipynb         # Analyze Tindeq session
-├── 06_progress_tracker.ipynb          # Progress over weeks/months
-└── 07_edge_depth_science.ipynb        # Why 20mm? Edge depth correction
+├── grade_conversion.ipynb                # ✅ Implemented
+├── 01_my_climbing_assessment.ipynb       # ❌ Planned
+├── 02_rohmert_curve_explained.ipynb      # ❌ Planned
+├── 03_critical_force_analysis.ipynb      # ❌ Planned
+├── 04_protocol_comparison.ipynb          # ❌ Planned
+├── 05_session_deep_dive.ipynb            # ❌ Planned
+├── 06_progress_tracker.ipynb             # ❌ Planned
+└── 07_edge_depth_science.ipynb           # ❌ Planned
 ```
 
 ### Notebook 1: `01_my_climbing_assessment.ipynb`

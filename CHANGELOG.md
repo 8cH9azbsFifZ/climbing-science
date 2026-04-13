@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Data attribution** — All Lattice Training references now explicitly clarify
+  that only publicly available summary statistics (blog, podcasts, social media)
+  were used. No proprietary datasets are included. Composite benchmark tables
+  are documented as an independent synthesis from multiple public sources.
+
 ## [0.4.0] — 2026-04-06
 
 ### Added

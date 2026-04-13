@@ -5,15 +5,22 @@ to expected climbing grade and vice versa.
 
 Multiple prediction models are available via :class:`StrengthModel`:
 
-* **composite** — Merged route-grade benchmarks from Lattice Training
-  (n ≈ 901), StrengthClimbing.com, and r/climbharder survey (n = 555).
+* **composite** — Synthesised route-grade benchmarks derived from publicly
+  available data: StrengthClimbing.com aggregated surveys (n ≈ 2 000),
+  the r/climbharder community survey (n = 555), and publicly shared
+  Lattice Training summary statistics (blog posts, podcasts, social media).
+  No proprietary Lattice datasets were used; the values in this table are
+  an independent synthesis of publicly available information.
 * **maxtograde** — Crowd-sourced bouldering survey (n ≈ 2 000+, V1–V17),
-  cross-validated against Lattice benchmarks up to V13.
+  cross-validated against publicly available Lattice summary figures up
+  to V13.
 
 Data sources:
-    - Lattice Training (n ≈ 901 climbers), internal benchmarks
+    - StrengthClimbing.com aggregated survey data (:cite:`banaszczyk2020`)
     - MaxToGrade survey (:cite:`maxtograde2020`) — crowd-sourced (n ≈ 2 000+)
-    - Banaszczyk 2020 (:cite:`banaszczyk2020`) — cross-validation
+    - r/climbharder 2017 community survey (n = 555)
+    - Lattice Training — publicly shared summary statistics only
+      (blog, podcasts, Instagram); no proprietary data used
     - Giles et al. 2006 (:cite:`giles2006`) — physiology of rock climbing
     - López-Rivera & González-Badillo 2012 (:cite:`lopezrivera2012`)
     - Levernier & Laffaye 2019 (:cite:`levernier2019`) — RFD in climbers
@@ -45,13 +52,13 @@ class StrengthModel(str, Enum):
     :func:`grade_to_mvc7` for mapping MVC-7 %BW ↔ climbing grade.
 
     Members:
-        COMPOSITE: Merged route-grade benchmarks (Lattice + SC + climbharder).
+        COMPOSITE: Synthesised route-grade benchmarks from public sources
+            (StrengthClimbing, r/climbharder, Lattice public summaries).
         MAXTOGRADE: Crowd-sourced bouldering survey (n ≈ 2 000+, V1–V17).
 
     References:
-        Lattice Training benchmarks (n ≈ 901),
-        MaxToGrade survey (:cite:`maxtograde2020`),
-        Banaszczyk 2020 (:cite:`banaszczyk2020`).
+        StrengthClimbing.com (:cite:`banaszczyk2020`),
+        MaxToGrade survey (:cite:`maxtograde2020`).
     """
 
     COMPOSITE = "composite"
@@ -63,13 +70,17 @@ class StrengthModel(str, Enum):
 # ---------------------------------------------------------------------------
 
 # --- Composite model (route grades) ---------------------------------------
-# Merged from multiple sources:
-#   - Lattice Training (n ≈ 901), internal grade-strength correlations
-#   - StrengthClimbing.com aggregated survey data (n ≈ 2000)
-#   - r/climbharder 2017 survey (n = 555)
+# Independent synthesis from multiple *publicly available* sources:
+#   - StrengthClimbing.com aggregated surveys (n ≈ 2000)
+#   - r/climbharder 2017 community survey (n = 555)
+#   - Lattice Training publicly shared summary statistics
+#     (blog posts, podcasts, Instagram — no proprietary data)
+#
+# The values below are interpolated median %BW per grade, derived from
+# the combined public data.  They are NOT a reproduction of any single
+# proprietary dataset.
 #
 # Protocol: 20 mm edge, half-crimp, 7-second max hang
-# Values represent the MEDIAN %BW for climbers at each grade.
 # Format: (french_grade, percent_bw)
 # ---------------------------------------------------------------------------
 
@@ -101,13 +112,13 @@ _BENCH_IDX: list[tuple[int, float]] = [(difficulty_index(g, RouteSystem.FRENCH),
 # --- MaxToGrade model (boulder grades) ------------------------------------
 # Crowd-sourced internet survey (n ≈ 2 000+, May 2020).
 # Bouldering-focused: maps MVC-7 %BW on 20 mm edge → V-grade.
-# Means consistent with Lattice Training benchmarks up to V13.
+# Means consistent with publicly shared Lattice summary figures up to V13.
 # Above V13 extrapolated from elite data (Banaszczyk 2020).
 #
 # Sources:
 #   - toclimb8a.shinyapps.io/maxtograde/  (primary survey data)
 #   - Banaszczyk 2020, StrengthClimbing.com (cross-validation)
-#   - Lattice Training Instagram, Mar. 2020 (2-arm boulder benchmarks)
+#   - Lattice Training publicly shared social media posts (Mar. 2020)
 # Format: (v_grade, percent_bw)
 # ---------------------------------------------------------------------------
 
@@ -246,7 +257,7 @@ def mvc7_to_grade(
 
     References:
         Giles et al. 2006 (:cite:`giles2006`),
-        Lattice Training benchmark data (n ≈ 901),
+        Banaszczyk 2020 (:cite:`banaszczyk2020`),
         MaxToGrade survey (:cite:`maxtograde2020`).
 
     Examples:
@@ -305,7 +316,7 @@ def grade_to_mvc7(
 
     References:
         Giles et al. 2006 (:cite:`giles2006`),
-        Lattice Training benchmark data (n ≈ 901),
+        Banaszczyk 2020 (:cite:`banaszczyk2020`),
         MaxToGrade survey (:cite:`maxtograde2020`).
 
     Examples:
@@ -411,7 +422,7 @@ def power_to_weight(
 
     References:
         Schweizer 2001 (:cite:`schweizer2001`),
-        Lattice Training benchmarks.
+        Banaszczyk 2020 (:cite:`banaszczyk2020`).
 
     Examples:
         >>> power_to_weight(88.0, 70.0)

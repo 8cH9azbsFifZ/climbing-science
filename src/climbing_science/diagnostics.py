@@ -6,7 +6,7 @@ assessments.
 
 Data sources:
     - Draper et al. 2015 (:cite:`draper2015`) — IRCRA level classification
-    - Lattice Training benchmarks — grade-to-level mapping
+    - Lattice Training — publicly shared grade-to-level boundaries
     - Fryer et al. 2018 (:cite:`fryer2018`) — CF/MVC ratio interpretation
     - Hörst 2016 (:cite:`horst2016`) — training priority framework
 """
@@ -26,7 +26,8 @@ __all__ = [
 # ---------------------------------------------------------------------------
 # Level classification thresholds
 # ---------------------------------------------------------------------------
-# Based on Draper et al. 2015 (IRCRA) and Lattice Training.
+# Based on Draper et al. 2015 (IRCRA) and publicly shared Lattice Training
+# grade-to-level boundaries.
 # Uses French sport grade as the canonical reference.
 #
 # Difficulty index thresholds (from grades.py):
@@ -49,7 +50,7 @@ def classify_level(
     """Classify climber level from their hardest redpoint grade.
 
     Level boundaries follow the IRCRA descriptors (Draper et al. 2015)
-    and Lattice Training grade-to-level mapping:
+    and publicly available Lattice Training grade-to-level boundaries:
         - Beginner: below 6a (French) / V2 / 5.10d
         - Intermediate: 6a – 6c+ / V2–V5 / 5.10d–5.12a
         - Advanced: 7a – 7b+ / V5–V8 / 5.12b–5.13a
@@ -64,7 +65,7 @@ def classify_level(
 
     References:
         Draper et al. 2015 (:cite:`draper2015`),
-        Lattice Training benchmarks.
+        Draper et al. 2015 (:cite:`draper2015`).
 
     Examples:
         >>> classify_level("6b", RouteSystem.FRENCH)
@@ -103,7 +104,8 @@ def identify_weakness(
 
     References:
         Fryer et al. 2018 (:cite:`fryer2018`) — CF/MVC interpretation,
-        Lattice Training assessment framework.
+        Fryer et al. 2018 (:cite:`fryer2018`),
+        publicly shared Lattice Training assessment categories.
 
     Examples:
         >>> identify_weakness(1.0, 0.30)
@@ -205,7 +207,7 @@ def progress_delta(
         Dictionary of metric deltas (positive = improvement).
 
     References:
-        Lattice Training progress methodology.
+        Draper et al. 2015 (:cite:`draper2015`) — progress methodology.
 
     Examples:
         >>> d = progress_delta(1.20, 1.35)

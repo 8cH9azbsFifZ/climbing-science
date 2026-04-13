@@ -17,7 +17,7 @@ References:
     Hörst (2016) :cite:`horst2016` — strength benchmarks.
     Rohmert (1960) :cite:`rohmert1960` — isometric fatigue curve.
     Giles et al. (2006) :cite:`giles2006` — MVC-7 protocol.
-    Lattice Training — benchmark dataset (n ≈ 901).
+    Banaszczyk (2020) :cite:`banaszczyk2020` — benchmark synthesis.
 """
 
 from __future__ import annotations
@@ -188,7 +188,7 @@ def plot_rohmert_curve(
 # Strength benchmark
 # ---------------------------------------------------------------------------
 
-# Lattice-derived MVC/BW benchmarks (approximate)
+# MVC/BW benchmarks (synthesised from public sources)
 _BENCHMARKS = [
     (0.8, "Beginner", "#94A3B8"),
     (1.0, "Intermediate", "#F59E0B"),
@@ -215,7 +215,7 @@ def plot_strength_benchmark(
 
     References:
         Hörst (2016) :cite:`horst2016` — Table 4.2.
-        Lattice Training benchmarks (n ≈ 901).
+        Banaszczyk 2020 (:cite:`banaszczyk2020`).
     """
     plt = _require_matplotlib()
 

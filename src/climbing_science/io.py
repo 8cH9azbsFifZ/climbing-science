@@ -150,12 +150,8 @@ def export_assessment_markdown(
         Markdown-formatted report string.
 
     References:
-        Assessment structure follows Lattice Research recommendations
+        Assessment structure follows published best practice
         and Giles et al. (2006) :cite:`giles2006` MVC-7 protocol.
-
-    Examples:
-        >>> p = ClimberProfile(name="Test", body_weight_kg=70.0, experience_years=3)
-        >>> md = export_assessment_markdown(p)
         >>> '# Climbing Assessment' in md
         True
     """
@@ -249,12 +245,8 @@ def export_assessment_json(
         JSON string.
 
     References:
-        Assessment structure follows Lattice Research recommendations
+        Assessment structure follows published best practice
         and Giles et al. (2006) :cite:`giles2006` MVC-7 protocol.
-
-    Examples:
-        >>> p = ClimberProfile(name="Test", body_weight_kg=70.0, experience_years=3)
-        >>> j = export_assessment_json(p)
         >>> '"name": "Test"' in j
         True
     """

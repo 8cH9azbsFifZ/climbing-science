@@ -45,7 +45,6 @@ class ClimberLevel(str, Enum):
 
     References:
         Draper et al. 2015 (:cite:`draper2015`) — IRCRA descriptors.
-        Lattice Training grade-to-level mapping.
     """
 
     BEGINNER = "beginner"
@@ -265,8 +264,8 @@ class AssessmentResult(BaseModel):
         notes: Free-text notes.
 
     References:
-        Testing protocol follows Lattice Research recommendations
-        and López methodology.
+        Testing protocol follows published recommendations
+        (Giles et al. 2006 :cite:`giles2006`) and López methodology.
     """
 
     date: date

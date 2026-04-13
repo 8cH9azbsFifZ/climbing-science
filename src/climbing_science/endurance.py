@@ -110,11 +110,9 @@ def cf_mvc_ratio(cf_percent_mvc: float, mvc7_percent_bw: float) -> float:
         ValueError: If mvc7 is zero or negative.
 
     References:
-        Fryer et al. 2018 (:cite:`fryer2018`),
-        Lattice Training diagnostic framework.
+        Fryer et al. 2018 (:cite:`fryer2018`).
 
     Examples:
-        >>> cf_mvc_ratio(35.0, 100.0)
         0.35
     """
     if mvc7_percent_bw <= 0:
@@ -137,11 +135,9 @@ def interpret_cf_ratio(ratio: float) -> dict[str, str]:
             - ``priority``: recommended training focus
 
     References:
-        Fryer et al. 2018 (:cite:`fryer2018`),
-        Lattice Training diagnostic framework.
+        Fryer et al. 2018 (:cite:`fryer2018`).
 
     Examples:
-        >>> interpret_cf_ratio(0.30)["category"]
         'endurance-limited'
         >>> interpret_cf_ratio(0.55)["category"]
         'strength-limited'

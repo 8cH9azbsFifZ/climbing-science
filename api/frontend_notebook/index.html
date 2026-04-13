@@ -1,0 +1,2834 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Open-source Python library for evidence-based climbing training analysis">
+      
+      
+      
+        <link rel="canonical" href="https://8cH9azbsFifZ.github.io/climbing-science/api/frontend_notebook/">
+      
+      
+        <link rel="prev" href="../adapter_tindeq/">
+      
+      
+        <link rel="next" href="../../changelog/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Notebook Helpers - climbing-science</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#notebook-helpers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="climbing-science" class="md-header__button md-logo" aria-label="climbing-science" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            climbing-science
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Notebook Helpers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/8cH9azbsFifZ/climbing-science" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    8cH9azbsFifZ/climbing-science
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="climbing-science" class="md-nav__button md-logo" aria-label="climbing-science" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    climbing-science
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/8cH9azbsFifZ/climbing-science" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    8cH9azbsFifZ/climbing-science
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/hangboard-training/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hangboard Training
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/grade-prediction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grade Prediction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../science/rohmert-curve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rohmert Curve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../science/critical-force/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critical Force
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../science/grade-conversion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grade Conversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../science/edge-depth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edge Depth Correction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../science/signal-processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signal Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grades/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grades
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../strength/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Strength
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../endurance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Endurance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../protocols/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protocols
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../periodization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Periodization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagnostics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../edge_depth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edge Depth
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../signal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_12" id="__nav_6_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adapters
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Adapters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adapter_manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adapter_tindeq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tindeq Progressor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_13" id="__nav_6_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontends
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontends
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notebook Helpers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notebook Helpers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        notebook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="notebook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_force_session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_force_session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_protocol_comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_protocol_comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_rohmert_curve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_rohmert_curve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_strength_benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_strength_benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.session_to_dataframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        session_to_dataframe
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        notebook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="notebook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_force_session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_force_session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_protocol_comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_protocol_comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_rohmert_curve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_rohmert_curve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.plot_strength_benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot_strength_benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#climbing_science.frontends.notebook.session_to_dataframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        session_to_dataframe
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="notebook-helpers">Notebook Helpers</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="climbing_science.frontends.notebook" class="doc doc-heading">
+            <code>climbing_science.frontends.notebook</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Jupyter notebook helpers — plots, benchmarks, and DataFrame export.</p>
+<p>Optional dependency on <strong>matplotlib</strong> (for plots) and <strong>pandas</strong>
+(for DataFrame export).  All functions degrade gracefully when these
+packages are not installed by raising an <code>ImportError</code> with a helpful
+message.</p>
+<p>Usage::</p>
+<pre><code>from climbing_science.frontends import notebook
+
+notebook.plot_strength_benchmark(mvc_bw_ratio=1.35)
+notebook.plot_rohmert_curve()
+notebook.plot_force_session(values, sample_rate_hz=80)
+</code></pre>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Hörst (2016) :cite:<code>horst2016</code> — strength benchmarks.
+Rohmert (1960) :cite:<code>rohmert1960</code> — isometric fatigue curve.
+Giles et al. (2006) :cite:<code>giles2006</code> — MVC-7 protocol.
+Banaszczyk (2020) :cite:<code>banaszczyk2020</code> — benchmark synthesis.</p>
+</details>
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="climbing_science.frontends.notebook.plot_force_session" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">plot_force_session</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">sample_rate_hz</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">80.0</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Force–Time Curve&#39;</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Plot a force–time curve with optional peak markers.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>values</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Force values in kg.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sample_rate_hz</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sampling rate in Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>80.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>title</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Plot title.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;Force–Time Curve&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>peaks</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of :class:<code>~climbing_science.signal.Peak</code> objects
+to highlight.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>figsize</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure size (width, height) in inches.</p>
+              </div>
+            </td>
+            <td>
+                  <code>(12, 5)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to call <code>plt.show()</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>matplotlib Figure object.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Levernier &amp; Laffaye (2019) :cite:<code>levernier2019</code>.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/climbing_science/frontends/notebook.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_force_session</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">sample_rate_hz</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">80.0</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Force–Time Curve&quot;</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot a force–time curve with optional peak markers.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        values: Force values in kg.</span>
+<span class="sd">        sample_rate_hz: Sampling rate in Hz.</span>
+<span class="sd">        title: Plot title.</span>
+<span class="sd">        peaks: List of :class:`~climbing_science.signal.Peak` objects</span>
+<span class="sd">            to highlight.</span>
+<span class="sd">        figsize: Figure size (width, height) in inches.</span>
+<span class="sd">        show: Whether to call ``plt.show()``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matplotlib Figure object.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Levernier &amp; Laffaye (2019) :cite:`levernier2019`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span> <span class="o">=</span> <span class="n">_require_matplotlib</span><span class="p">()</span>
+
+    <span class="n">time_s</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="n">sample_rate_hz</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))]</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time_s</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#5B21B6&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Force&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Force (kg)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">peaks</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
+            <span class="n">t_peak</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">peak_idx</span> <span class="o">/</span> <span class="n">sample_rate_hz</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">start_idx</span> <span class="o">/</span> <span class="n">sample_rate_hz</span><span class="p">,</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">end_idx</span> <span class="o">/</span> <span class="n">sample_rate_hz</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_peak</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">peak_value</span><span class="p">,</span> <span class="s2">&quot;rv&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="climbing_science.frontends.notebook.plot_protocol_comparison" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">plot_protocol_comparison</span><span class="p">(</span><span class="n">mvc7_kg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">body_weight_kg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Compare hangboard protocols by training load.</p>
+<p>Shows added weight and TUT for common protocols given your MVC-7.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>mvc7_kg</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>MVC-7 total force in kg.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>body_weight_kg</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Body weight in kg.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>figsize</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure size.</p>
+              </div>
+            </td>
+            <td>
+                  <code>(12, 6)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to call <code>plt.show()</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>matplotlib Figure object.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>López-Rivera (2012) :cite:<code>lopezrivera2012</code>,
+Hörst (2016) :cite:<code>horst2016</code>.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/climbing_science/frontends/notebook.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_protocol_comparison</span><span class="p">(</span>
+    <span class="n">mvc7_kg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">body_weight_kg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare hangboard protocols by training load.</span>
+
+<span class="sd">    Shows added weight and TUT for common protocols given your MVC-7.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mvc7_kg: MVC-7 total force in kg.</span>
+<span class="sd">        body_weight_kg: Body weight in kg.</span>
+<span class="sd">        figsize: Figure size.</span>
+<span class="sd">        show: Whether to call ``plt.show()``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matplotlib Figure object.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        López-Rivera (2012) :cite:`lopezrivera2012`,</span>
+<span class="sd">        Hörst (2016) :cite:`horst2016`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span> <span class="o">=</span> <span class="n">_require_matplotlib</span><span class="p">()</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">climbing_science.load</span><span class="w"> </span><span class="kn">import</span> <span class="n">tut_per_session</span>
+
+    <span class="n">protocols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MaxHang 90%&quot;</span><span class="p">,</span> <span class="s2">&quot;intensity&quot;</span><span class="p">:</span> <span class="mf">0.90</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;reps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hang_s&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;rest_s&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MaxHang 85%&quot;</span><span class="p">,</span> <span class="s2">&quot;intensity&quot;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;reps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hang_s&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;rest_s&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Repeater 60%&quot;</span><span class="p">,</span> <span class="s2">&quot;intensity&quot;</span><span class="p">:</span> <span class="mf">0.60</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;reps&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;hang_s&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;rest_s&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;IntHang 70%&quot;</span><span class="p">,</span> <span class="s2">&quot;intensity&quot;</span><span class="p">:</span> <span class="mf">0.70</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;reps&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;hang_s&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;rest_s&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Density 50%&quot;</span><span class="p">,</span> <span class="s2">&quot;intensity&quot;</span><span class="p">:</span> <span class="mf">0.50</span><span class="p">,</span> <span class="s2">&quot;sets&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;reps&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;hang_s&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;rest_s&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">added_weights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tuts</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">protocols</span><span class="p">:</span>
+        <span class="n">target_force</span> <span class="o">=</span> <span class="n">mvc7_kg</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;intensity&quot;</span><span class="p">]</span>
+        <span class="n">added</span> <span class="o">=</span> <span class="n">target_force</span> <span class="o">-</span> <span class="n">body_weight_kg</span>
+        <span class="n">tut</span> <span class="o">=</span> <span class="n">tut_per_session</span><span class="p">(</span>
+            <span class="n">hang_duration_sec</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;hang_s&quot;</span><span class="p">],</span>
+            <span class="n">reps_per_set</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;reps&quot;</span><span class="p">],</span>
+            <span class="n">num_sets</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;sets&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="n">added_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">added</span><span class="p">)</span>
+        <span class="n">tuts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tut</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#8B5CF6&quot;</span> <span class="k">if</span> <span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;#EF4444&quot;</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">added_weights</span><span class="p">]</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">added_weights</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Added Weight (kg)&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Training Load&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#94A3B8&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">ax2</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">tuts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#10B981&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;TUT (seconds)&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Time Under Tension per Session&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Protocol Comparison (MVC-7: </span><span class="si">{</span><span class="n">mvc7_kg</span><span class="si">}</span><span class="s2"> kg, BW: </span><span class="si">{</span><span class="n">body_weight_kg</span><span class="si">}</span><span class="s2"> kg)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="climbing_science.frontends.notebook.plot_rohmert_curve" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">plot_rohmert_curve</span><span class="p">(</span><span class="n">models</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Plot Rohmert isometric fatigue curves.</p>
+<p>Shows time-to-failure vs. %MVC for different fitness models.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>models</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="str">str</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Model names to plot (default: all three).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>figsize</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure size.</p>
+              </div>
+            </td>
+            <td>
+                  <code>(10, 6)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to call <code>plt.show()</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>matplotlib Figure object.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Rohmert (1960) :cite:<code>rohmert1960</code>,
+Frey-Law &amp; Avin (2010).</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/climbing_science/frontends/notebook.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_rohmert_curve</span><span class="p">(</span>
+    <span class="n">models</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot Rohmert isometric fatigue curves.</span>
+
+<span class="sd">    Shows time-to-failure vs. %MVC for different fitness models.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        models: Model names to plot (default: all three).</span>
+<span class="sd">        figsize: Figure size.</span>
+<span class="sd">        show: Whether to call ``plt.show()``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matplotlib Figure object.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Rohmert (1960) :cite:`rohmert1960`,</span>
+<span class="sd">        Frey-Law &amp; Avin (2010).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span> <span class="o">=</span> <span class="n">_require_matplotlib</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">models</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_ROHMERT_MODELS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;beginner&quot;</span><span class="p">:</span> <span class="s2">&quot;#EF4444&quot;</span><span class="p">,</span> <span class="s2">&quot;intermediate&quot;</span><span class="p">:</span> <span class="s2">&quot;#F59E0B&quot;</span><span class="p">,</span> <span class="s2">&quot;expert&quot;</span><span class="p">:</span> <span class="s2">&quot;#10B981&quot;</span><span class="p">}</span>
+
+    <span class="n">pct_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="o">/</span> <span class="mf">100.0</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">96</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_ROHMERT_MODELS</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">_ROHMERT_MODELS</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pcts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pct</span> <span class="ow">in</span> <span class="n">pct_range</span><span class="p">:</span>
+            <span class="c1"># Rohmert: t_max = a * ln(pct) + b  (simplified)</span>
+            <span class="c1"># Using the library&#39;s rohmert_conversion to derive time</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">pct</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">600</span><span class="p">:</span>
+                <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">pcts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pct</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s2">&quot;#6B7280&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pcts</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">model_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;% MVC&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Time to Failure (s)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Rohmert Isometric Fatigue Curve&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="climbing_science.frontends.notebook.plot_strength_benchmark" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">plot_strength_benchmark</span><span class="p">(</span><span class="n">mvc_bw_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Plot MVC/BW ratio against benchmark categories.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>mvc_bw_ratio</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Your MVC/BW ratio to highlight (optional).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>figsize</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span>[<span title="float">float</span>, <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Figure size.</p>
+              </div>
+            </td>
+            <td>
+                  <code>(10, 4)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to call <code>plt.show()</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>matplotlib Figure object.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Hörst (2016) :cite:<code>horst2016</code> — Table 4.2.
+Banaszczyk 2020 (:cite:<code>banaszczyk2020</code>).</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/climbing_science/frontends/notebook.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">plot_strength_benchmark</span><span class="p">(</span>
+    <span class="n">mvc_bw_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot MVC/BW ratio against benchmark categories.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mvc_bw_ratio: Your MVC/BW ratio to highlight (optional).</span>
+<span class="sd">        figsize: Figure size.</span>
+<span class="sd">        show: Whether to call ``plt.show()``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matplotlib Figure object.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Hörst (2016) :cite:`horst2016` — Table 4.2.</span>
+<span class="sd">        Banaszczyk 2020 (:cite:`banaszczyk2020`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span> <span class="o">=</span> <span class="n">_require_matplotlib</span><span class="p">()</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BENCHMARKS</span><span class="p">]</span>
+    <span class="n">thresholds</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BENCHMARKS</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BENCHMARKS</span><span class="p">]</span>
+
+    <span class="c1"># Horizontal bar chart of thresholds</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">thresh</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_BENCHMARKS</span><span class="p">):</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">thresh</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.4</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="n">thresh</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">thresh</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mvc_bw_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">mvc_bw_ratio</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1E293B&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="n">mvc_bw_ratio</span><span class="p">,</span>
+            <span class="mf">0.4</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;You: </span><span class="si">{</span><span class="n">mvc_bw_ratio</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+            <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;MVC / BW Ratio&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Finger Strength Benchmark&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="climbing_science.frontends.notebook.session_to_dataframe" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">session_to_dataframe</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">sample_rate_hz</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">80.0</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert force data to a pandas DataFrame.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>values</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Force values in kg.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sample_rate_hz</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sampling rate in Hz.</p>
+              </div>
+            </td>
+            <td>
+                  <code>80.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>columns</code>
+            </td>
+            <td>
+                  <code><span title="dict">dict</span>[<span title="str">str</span>, <span title="str">str</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Column name mapping (default: <code>{"time": "time_s",
+"force": "force_kg"}</code>).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>pandas DataFrame with time and force columns.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ImportError">ImportError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If pandas is not installed.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="references" open>
+  <summary>References</summary>
+  <p>Levernier &amp; Laffaye (2019) :cite:<code>levernier2019</code>
+— force-time data format conventions.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/climbing_science/frontends/notebook.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">session_to_dataframe</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">sample_rate_hz</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">80.0</span><span class="p">,</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert force data to a pandas DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        values: Force values in kg.</span>
+<span class="sd">        sample_rate_hz: Sampling rate in Hz.</span>
+<span class="sd">        columns: Column name mapping (default: ``{&quot;time&quot;: &quot;time_s&quot;,</span>
+<span class="sd">            &quot;force&quot;: &quot;force_kg&quot;}``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas DataFrame with time and force columns.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If pandas is not installed.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Levernier &amp; Laffaye (2019) :cite:`levernier2019`</span>
+<span class="sd">        — force-time data format conventions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pd</span> <span class="o">=</span> <span class="n">_require_pandas</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;time_s&quot;</span><span class="p">,</span> <span class="s2">&quot;force&quot;</span><span class="p">:</span> <span class="s2">&quot;force_kg&quot;</span><span class="p">}</span>
+
+    <span class="n">time_col</span> <span class="o">=</span> <span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;time_s&quot;</span><span class="p">)</span>
+    <span class="n">force_col</span> <span class="o">=</span> <span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;force_kg&quot;</span><span class="p">)</span>
+
+    <span class="n">time_s</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="n">sample_rate_hz</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))]</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">time_col</span><span class="p">:</span> <span class="n">time_s</span><span class="p">,</span> <span class="n">force_col</span><span class="p">:</span> <span class="n">values</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

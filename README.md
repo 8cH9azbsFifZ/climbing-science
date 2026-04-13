@@ -6,7 +6,7 @@
 [![Docs](https://github.com/8cH9azbsFifZ/climbing-science/actions/workflows/docs.yml/badge.svg)](https://8cH9azbsFifZ.github.io/climbing-science/)
 [![PyPI](https://img.shields.io/pypi/v/climbing-science)](https://pypi.org/project/climbing-science/)
 [![Python](https://img.shields.io/pypi/pyversions/climbing-science)](https://pypi.org/project/climbing-science/)
-[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/LICENSE)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/8cH9azbsFifZ/climbing-science/main?labpath=notebooks%2Fgrade_conversion.ipynb)
 
 Convert grades, predict strength-to-grade, compute Critical Force, plan periodisation, pick protocols — all from peer-reviewed science, all in one `pip install`.
@@ -138,7 +138,7 @@ climbing-science endurance --intensities 80 60 45 --durations 77 136 323
 | **edge_depth** | Edge-depth correction factors | Amca et al. 2012 |
 | **io** | Export assessments as JSON / Markdown | — |
 
-Every function cites its source paper. Full bibliography: [`docs/references.bib`](docs/references.bib).
+Every function cites its source paper. Full bibliography: [`docs/references.bib`](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/docs/references.bib).
 
 ---
 
@@ -157,13 +157,13 @@ Explore the science hands-on (click the Binder badge above, or run locally):
 
 | Notebook | Topic |
 |---|---|
-| [01 — My Climbing Assessment](notebooks/01_my_climbing_assessment.ipynb) | Full strength + endurance assessment |
-| [02 — Rohmert Curve](notebooks/02_rohmert_curve_explained.ipynb) | Isometric fatigue model explained |
-| [03 — Critical Force](notebooks/03_critical_force_analysis.ipynb) | CF/W' from 3-point test |
-| [04 — Protocol Comparison](notebooks/04_protocol_comparison.ipynb) | Compare 21 hangboard protocols |
-| [05 — Session Deep Dive](notebooks/05_session_deep_dive.ipynb) | Analyse a single session |
-| [06 — Progress Tracker](notebooks/06_progress_tracker.ipynb) | Track gains over time |
-| [07 — Edge Depth Science](notebooks/07_edge_depth_science.ipynb) | Edge-depth correction factors |
+| [01 — My Climbing Assessment](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/01_my_climbing_assessment.ipynb) | Full strength + endurance assessment |
+| [02 — Rohmert Curve](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/02_rohmert_curve_explained.ipynb) | Isometric fatigue model explained |
+| [03 — Critical Force](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/03_critical_force_analysis.ipynb) | CF/W' from 3-point test |
+| [04 — Protocol Comparison](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/04_protocol_comparison.ipynb) | Compare 21 hangboard protocols |
+| [05 — Session Deep Dive](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/05_session_deep_dive.ipynb) | Analyse a single session |
+| [06 — Progress Tracker](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/06_progress_tracker.ipynb) | Track gains over time |
+| [07 — Edge Depth Science](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/notebooks/07_edge_depth_science.ipynb) | Edge-depth correction factors |
 
 ---
 
@@ -209,4 +209,4 @@ make bump-patch  # release: 0.4.1 → 0.4.2
 
 ## License
 
-GPL-3.0-or-later — see [LICENSE](LICENSE).
+GPL-3.0-or-later — see [LICENSE](https://github.com/8cH9azbsFifZ/climbing-science/blob/main/LICENSE).

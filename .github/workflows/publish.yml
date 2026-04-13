@@ -57,7 +57,7 @@ jobs:
       - name: Smoke test
         run: |
           python -c "import climbing_science; print(climbing_science.__version__)"
-          python -c "from climbing_science import GradeSystem, convert; print(convert('7a', GradeSystem.FRENCH, GradeSystem.YDS))"
+          python -c "from climbing_science import RouteSystem, convert; print(convert('7a', RouteSystem.FRENCH, RouteSystem.YDS))"
 
   publish:
     needs: [build, test-install]
